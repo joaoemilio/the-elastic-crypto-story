@@ -82,9 +82,10 @@ def fetch1d( symbol, start, end=None ):
         _id = f"{symbol}_{ot}_1d"
         if not su.es_exists("symbols", _id):
             kline = fetch_candles(symbol, day, "1d", 1)
-            obj = kline[0]
-            obj["cs"] = "1d"
-            su.es_create( "symbols", _id, obj )
+            if kline: 
+                obj = kline[0]
+                obj["cs"] = "1d"
+                su.es_create( "symbols", _id, obj )
         
         day += 3600*24
 
