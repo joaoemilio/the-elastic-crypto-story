@@ -123,18 +123,31 @@ def fetch(symbol:str, cs:str, start:str):
 
 def main(argv):
     print('--------------------------------------------------------------------------------')
-    print(f" python3 FetchSymbolData.py BTCUSDT 20210801")
+    print(f" python3 FetchSymbolData.py BTCUSDT 20210801 <-- only BTCUSDT starting from")
+    print(f" python3 FetchSymbolData.py 20210801 <-- ALL symbols in symbols.json")
     print('--------------------------------------------------------------------------------')
 
-    symbol = argv[0]
-    start = argv[1]
+    if len(argv) == 1:
+        symbols = su.read_json("symbols.json")
+        start = argv[0]
+        for symbol in symbols:
+            fetch1d( symbol, start )
+            fetch( symbol, "4h", start)
+            fetch(symbol, "1h", start)
+            fetch(symbol, "15m", start)
+            fetch(symbol, "5m", start)
+            print('\n\n\n')
 
-    fetch1d( symbol, start )
-    fetch( symbol, "4h", start)
-    fetch(symbol, "1h", start)
-    fetch(symbol, "15m", start)
-    fetch(symbol, "5m", start)
-    print('\n\n\n')
+    elif len(argv) == 2:
+        symbol = argv[0]
+        start = argv[1]
+
+        fetch1d( symbol, start )
+        fetch( symbol, "4h", start)
+        fetch(symbol, "1h", start)
+        fetch(symbol, "15m", start)
+        fetch(symbol, "5m", start)
+        print('\n\n\n')
 
 if __name__ == "__main__":
    main(sys.argv[1:])
