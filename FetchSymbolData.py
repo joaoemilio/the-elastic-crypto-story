@@ -131,6 +131,7 @@ def main(argv):
         symbols = su.read_json("symbols.json")
         start = argv[0]
         for symbol in symbols:
+            info(f"start fetching data for {symbol}")
             fetch1d( symbol, start )
             fetch( symbol, "4h", start)
             fetch(symbol, "1h", start)
