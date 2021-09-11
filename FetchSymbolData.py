@@ -151,7 +151,7 @@ def main(argv):
             fetch(symbol, "5m", start, end)
             print('\n\n\n')
 
-    elif len(argv) == 2:
+    else:
         symbol = argv[0]
         start = argv[1]
         if len(argv) == 3:
