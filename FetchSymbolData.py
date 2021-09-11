@@ -66,8 +66,12 @@ def log(info):
 # 1d Logic
 ##################################################
 
-def fetch1d( symbol, start ):
-    ts_end = int(time.time()/(24*3600))*24*3600
+def fetch1d( symbol, start, end=None ):
+    if not end:
+        ts_end = int(time.time()/(24*3600))*24*3600
+    else:
+        ts_end = su.get_ts( end )
+
     ts_start = su.get_ts( start )
 
     day = ts_start
@@ -91,9 +95,13 @@ def fetch1d( symbol, start ):
 def iso(t):
     return su.get_iso_datetime(t)
 
-def fetch(symbol:str, cs:str, start:str):
+def fetch(symbol:str, cs:str, start:str, end=None):
 
-    ts_end = int(time.time()/(24*3600))*24*3600
+    if not end:
+        ts_end = int(time.time()/(24*3600))*24*3600
+    else:
+        ts_end = su.get_ts( end )
+
     ts_start = su.get_ts( start )+24*3600
 
     log(f"Lets fetch {symbol} cs={cs}")
@@ -123,31 +131,39 @@ def fetch(symbol:str, cs:str, start:str):
 
 def main(argv):
     print('--------------------------------------------------------------------------------')
-    print(f" python3 FetchSymbolData.py BTCUSDT 20210801 <-- only BTCUSDT starting from")
-    print(f" python3 FetchSymbolData.py 20210801 <-- ALL symbols in symbols.json")
+    print(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
+    print(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     print('--------------------------------------------------------------------------------')
 
-    if len(argv) == 1:
+    if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
-        start = argv[0]
+        start = argv[1]
+        if len(argv) == 3:
+            end = argv[2]
+        else:
+            end = None
         for symbol in symbols:
             info(f"start fetching data for {symbol}")
-            fetch1d( symbol, start )
-            fetch( symbol, "4h", start)
-            fetch(symbol, "1h", start)
-            fetch(symbol, "15m", start)
-            fetch(symbol, "5m", start)
+            fetch1d( symbol, start, end )
+            fetch( symbol, "4h", start, end)
+            fetch(symbol, "1h", start, end)
+            fetch(symbol, "15m", start, end)
+            fetch(symbol, "5m", start, end)
             print('\n\n\n')
 
     elif len(argv) == 2:
         symbol = argv[0]
         start = argv[1]
+        if len(argv) == 3:
+            end = argv[2]
+        else:
+            end = None
 
-        fetch1d( symbol, start )
-        fetch( symbol, "4h", start)
-        fetch(symbol, "1h", start)
-        fetch(symbol, "15m", start)
-        fetch(symbol, "5m", start)
+        fetch1d( symbol, start, end )
+        fetch( symbol, "4h", start, end)
+        fetch(symbol, "1h", start, end)
+        fetch(symbol, "15m", start, end)
+        fetch(symbol, "5m", start, end)
         print('\n\n\n')
 
 if __name__ == "__main__":
