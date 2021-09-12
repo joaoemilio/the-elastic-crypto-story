@@ -1,5 +1,7 @@
 
 from logging import error, warn, info
+import logging
+from logging.handlers import TimedRotatingFileHandler
 from os import strerror
 import os.path
 import time
@@ -76,7 +78,7 @@ def fetch1d( symbol, start, end=None ):
 
     day = ts_start
     while day < ts_end:
-        print(f'\tprocessing {su.get_yyyymmdd(day)}', end='\r')
+        info(f'\tprocessing {su.get_yyyymmdd(day)}', end='\r')
         # download data from <start>
         ot = su.get_yyyymmdd(day)
         _id = f"{symbol}_{ot}_1d"
@@ -123,19 +125,32 @@ def fetch(symbol:str, cs:str, start:str, end=None):
                     #su.es_create( "symbols", _id, o )
                     data[_id] = o
                 else:
-                    print(f"Doc {_id} already exists. Skiping")
+                    info(f"Doc {_id} already exists. Skiping")
         
             if len(data) > 0:
-                print(f"Bulk upload {len(data)} docs")
+                info(f"Bulk upload {len(data)} docs")
                 su.es_bulk_create("symbols", data, partial=500)
 
         day += 3600*24
 
 def main(argv):
-    print('--------------------------------------------------------------------------------')
-    print(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    print(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
-    print('--------------------------------------------------------------------------------')
+    info('--------------------------------------------------------------------------------')
+    info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
+    info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
+    info('--------------------------------------------------------------------------------')
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            TimedRotatingFileHandler(f"logs/FetchSymbolData.log",
+                                        when="d",
+                                        interval=1,
+                                        backupCount=7),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
 
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
@@ -158,7 +173,7 @@ def main(argv):
                 fetch(symbol, "1h", start, end)
                 fetch(symbol, "15m", start, end)
                 fetch(symbol, "5m", start, end)
-                print('\n\n\n')
+                info('\n\n\n')
             else:
                 if cs == "1d": 
                     fetch1d( symbol, start, end )
@@ -184,7 +199,7 @@ def main(argv):
             fetch(symbol, "1h", start, end)
             fetch(symbol, "15m", start, end)
             fetch(symbol, "5m", start, end)
-            print('\n\n\n')
+            info('\n\n\n')
         else:
             if cs == "1d": 
                 fetch1d( symbol, start, end )
