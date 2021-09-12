@@ -114,19 +114,20 @@ def fetch(symbol:str, cs:str, start:str, end=None):
         periods = int((24*3600)/candle_sizes[cs])
         r = fetch_candles(symbol, day, cs, periods)
         data = {}
-        for o in r:
-            ot = su.get_yyyymmdd_hhmm(o['open_time'])
-            _id = f"{symbol}_{ot}_{cs}"
-            if not su.es_exists("symbols", _id):
-                o["cs"] = cs
-                #su.es_create( "symbols", _id, o )
-                data[_id] = o
-            else:
-                print(f"Doc {_id} already exists. Skiping")
+        if r:
+            for o in r:
+                ot = su.get_yyyymmdd_hhmm(o['open_time'])
+                _id = f"{symbol}_{ot}_{cs}"
+                if not su.es_exists("symbols", _id):
+                    o["cs"] = cs
+                    #su.es_create( "symbols", _id, o )
+                    data[_id] = o
+                else:
+                    print(f"Doc {_id} already exists. Skiping")
         
-        if len(data) > 0:
-            print(f"Bulk upload {len(data)} docs")
-            su.es_bulk_create("symbols", data, partial=500)
+            if len(data) > 0:
+                print(f"Bulk upload {len(data)} docs")
+                su.es_bulk_create("symbols", data, partial=500)
 
         day += 3600*24
 
