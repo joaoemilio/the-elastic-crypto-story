@@ -144,14 +144,26 @@ def main(argv):
             end = argv[2]
         else:
             end = None
+
+        if len(argv) == 4:
+            cs = argv[3]
+        else:
+            cs = None
+        
         for symbol in symbols:
             info(f"start fetching data for {symbol}")
-            fetch1d( symbol, start, end )
-            fetch( symbol, "4h", start, end)
-            fetch(symbol, "1h", start, end)
-            fetch(symbol, "15m", start, end)
-            fetch(symbol, "5m", start, end)
-            print('\n\n\n')
+            if not cs:
+                fetch1d( symbol, start, end )
+                fetch( symbol, "4h", start, end)
+                fetch(symbol, "1h", start, end)
+                fetch(symbol, "15m", start, end)
+                fetch(symbol, "5m", start, end)
+                print('\n\n\n')
+            else:
+                if cs == "1d": 
+                    fetch1d( symbol, start, end )
+                else:
+                    fetch(symbol, cs, start, end)
 
     else:
         symbol = argv[0]
@@ -161,12 +173,23 @@ def main(argv):
         else:
             end = None
 
-        fetch1d( symbol, start, end )
-        fetch( symbol, "4h", start, end)
-        fetch(symbol, "1h", start, end)
-        fetch(symbol, "15m", start, end)
-        fetch(symbol, "5m", start, end)
-        print('\n\n\n')
+        if len(argv) == 4:
+            cs = argv[3]
+        else:
+            cs = None
+
+        if not cs:
+            fetch1d( symbol, start, end )
+            fetch( symbol, "4h", start, end)
+            fetch(symbol, "1h", start, end)
+            fetch(symbol, "15m", start, end)
+            fetch(symbol, "5m", start, end)
+            print('\n\n\n')
+        else:
+            if cs == "1d": 
+                fetch1d( symbol, start, end )
+            else:
+                fetch(symbol, cs, start, end)
 
 if __name__ == "__main__":
    main(sys.argv[1:])
