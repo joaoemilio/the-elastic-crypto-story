@@ -26,12 +26,12 @@ def download_klines(symbol, cs, periods, end_time):
     lines = None
     for i in (1,2,3):
         try:
-            info(f"trying binance call #{i}")
+            logging.info(f"trying binance call #{i}")
             lines = su.call_binance(url)
             break
         except ConnectionError as ce:
             error(f"ConnectionError {ce.strerror}")
-            info("waiting 5 seconds to call binance again")
+            logging.info("waiting 5 seconds to call binance again")
             time.sleep(5)
 
 
@@ -78,7 +78,7 @@ def fetch1d( symbol, start, end=None ):
 
     day = ts_start
     while day < ts_end:
-        info(f'\tprocessing {su.get_yyyymmdd(day)}', end='\r')
+        logging.info(f'\tprocessing {su.get_yyyymmdd(day)}', end='\r')
         # download data from <start>
         ot = su.get_yyyymmdd(day)
         _id = f"{symbol}_{ot}_1d"
@@ -125,19 +125,19 @@ def fetch(symbol:str, cs:str, start:str, end=None):
                     #su.es_create( "symbols", _id, o )
                     data[_id] = o
                 else:
-                    info(f"Doc {_id} already exists. Skiping")
+                    logging.info(f"Doc {_id} already exists. Skiping")
         
             if len(data) > 0:
-                info(f"Bulk upload {len(data)} docs")
+                logging.info(f"Bulk upload {len(data)} docs")
                 su.es_bulk_create("symbols", data, partial=500)
 
         day += 3600*24
 
 def main(argv):
-    info('--------------------------------------------------------------------------------')
-    info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
-    info('--------------------------------------------------------------------------------')
+    logging.info('--------------------------------------------------------------------------------')
+    logging.info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
+    logging.info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
+    logging.info('--------------------------------------------------------------------------------')
 
     logging.basicConfig(
         level=logging.INFO,
@@ -166,14 +166,14 @@ def main(argv):
             cs = None
         
         for symbol in symbols:
-            info(f"start fetching data for {symbol}")
+            logging.info(f"start fetching data for {symbol}")
             if not cs:
                 fetch1d( symbol, start, end )
                 fetch( symbol, "4h", start, end)
                 fetch(symbol, "1h", start, end)
                 fetch(symbol, "15m", start, end)
                 fetch(symbol, "5m", start, end)
-                info('\n\n\n')
+                logging.info('\n\n\n')
             else:
                 if cs == "1d": 
                     fetch1d( symbol, start, end )
@@ -199,7 +199,7 @@ def main(argv):
             fetch(symbol, "1h", start, end)
             fetch(symbol, "15m", start, end)
             fetch(symbol, "5m", start, end)
-            info('\n\n\n')
+            logging.info('\n\n\n')
         else:
             if cs == "1d": 
                 fetch1d( symbol, start, end )
