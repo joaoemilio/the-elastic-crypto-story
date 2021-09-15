@@ -120,7 +120,7 @@ def fetch1m(symbol, day:str, end:None):
             for o in rall:                
                 ot = su.get_yyyymmdd_hhmm(o['open_time'])
                 _id = f"{symbol}_{ot}_1m"
-                logging.info(f"Does {_id} exist? {o['open_time_iso']}")
+                #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
                 if not su.es_exists("symbols", _id):
                     o["cs"] = "1m"
                     data[_id] = o
