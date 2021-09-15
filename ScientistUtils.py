@@ -3,6 +3,7 @@
 import json 
 from elasticsearch import helpers, Elasticsearch
 import elasticsearch
+import logging
 import requests
 import pathlib
 from os import listdir
@@ -32,25 +33,22 @@ def notify(msg, code=None, channel="alerts"):
     try:
         requests.post(url, json=b)
     except requests.exceptions.SSLError as e:
-        print(f"Error posting to {url} e={e}") # use proper logging
+        logging.error(f"Error posting to {url} e={e}") # use proper logging
 
 ############ ELASTICSEARCH ##############
 
 def es_exists(iname, id):
-    global es
     return es.exists( id=id, index=iname)
 
 def es_create( iname, _id, obj ):
-    global es
     es.create( id=_id, body=obj, index=iname)
 
 def es_bulk_create(iname, data, partial=100):
-    global es
     count = 1
     if not partial: partial = len(data)
     actions = []
     for k in data:
-        action = { "_index": iname, "_source": data[k], "id": k }
+        action = { "_index": iname, "_source": data[k], "id": k, "_id": k }
         actions.append( action )
         if partial and count == partial:
 
@@ -59,8 +57,8 @@ def es_bulk_create(iname, data, partial=100):
                     helpers.bulk(client=es,actions=actions)
                     break
                 except elasticsearch.exceptions.ConnectionTimeout as cte:
-                    log( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
-                    log("waiting 10s before retry sending docs to elasticsearch")
+                    logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+                    logging.info( "waiting 10s before retry sending docs to elasticsearch")
                     time.sleep(10)
             actions = []
             count = 0
@@ -104,13 +102,13 @@ last = start
 def print_timer(fn=''):
     global last
     now = time.time()
-    print(f'TIMER {fn} total={(now - start):.2f} delta={(now - last):.2f}')
+    logging.info(f'TIMER {fn} total={(now - start):.2f} delta={(now - last):.2f}')
     last = now
 
 def log(msg, fn=''):
     global last
     now = time.time()
-    print(f'LOG {fn} {msg} total={(now - start):.2f} delta={(now - last):.2f}')
+    logging.info(f'LOG {fn} {msg} total={(now - start):.2f} delta={(now - last):.2f}')
     last = now
 
 total_count = None
@@ -124,13 +122,13 @@ def start_progress(_total_count, _interval_log=1):
     
 def log_progress(current_count):
     if not interval_log or not total_count:
-        print('ERROR in log_progress, call start_progress first')
+        logging.info('ERROR in log_progress, call start_progress first')
         return 
     global log_count
     progress = current_count/total_count
     if  progress > log_count*interval_log/100:
         log_count += 1
-        print(f'\tProgress: {int(progress*100)}%', end='\r')
+        logging.info(f'\tProgress: {int(progress*100)}%', end='\r')
 
 
 def call_binance(url):
@@ -152,7 +150,7 @@ def call_binance(url):
         if status_code == 429:
             if backoff > 100:
                 raise BaseException("ERROR: Too many HTTP 429 responses")
-            print(f'WARN: Sleeping {backoff}s due to HTTP 429 response')
+            logging.warn(f'WARN: Sleeping {backoff}s due to HTTP 429 response')
             time.sleep(backoff)
             backoff = 2*backoff
 
@@ -160,7 +158,7 @@ def call_binance(url):
         err = f"ERROR: HTTP {status_code} response for {url}"
         if status_code == 418:
             err = "ERROR: Binance API has banned this current IP"    
-        print(err)
+        logging.error(err)
         raise BaseException(err)
     return response.json()   
 
@@ -373,7 +371,7 @@ def add_customer_keys( customer, key, secret ):
         customers_keys[customer] = { "api_key": key, "api_secret" : secret }
         write_json( customers_keys, f"config/isengard.json")
     else:
-        print(f"{customer} already have registered keys.")
+        logging.info(f"{customer} already have registered keys.")
 
 def create_disciple(customer, obj, key, secret):
     write_json( obj, f"config/disciple/{customer}.json")
@@ -398,4 +396,3 @@ es = Elasticsearch(
     cloud_id= config["cloud_id"] ,
     http_auth=("elastic", config["cloud_password"])
 )
-

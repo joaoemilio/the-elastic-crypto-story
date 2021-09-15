@@ -35,14 +35,6 @@ def download_klines(symbol, cs, periods, end_time):
             time.sleep(5)
 
 
-    if len(lines) < periods:
-        # NOTE missing data for a symbol is expected
-        # returns the exact number of periods, repeating the open_time -> fill_the_gaps solve it
-        log(f"ERROR lines={len(lines)} periods={periods}")
-        times = [su.get_iso_datetime(int(l[0]/1000))[-5:] for l in lines]
-        log(f"DIAGNOSTIC s={symbol} times: {times}")
-        return 
-
     results = []
     for i2, l in enumerate(lines):
         obj = {
@@ -54,9 +46,10 @@ def download_klines(symbol, cs, periods, end_time):
     
     return results
 
-def fetch_candles(symbol, day, cs, periods):
+def fetch_candles(symbol, day, cs, periods, end_time=None):
     # cs cannot be 1m
-    end_time = day + 24*3600
+    if not end_time:
+        end_time = day + 24*3600
     results = download_klines(symbol, cs, periods, end_time*1000 - 1)
 
     return results
@@ -98,6 +91,49 @@ def fetch1d( symbol, start, end=None ):
 def iso(t):
     return su.get_iso_datetime(t)
 
+def fetch1m(symbol, day:str, end:None):
+    # prepare empty result
+    if not end:
+        ts_end = int(time.time()/(24*3600))*24*3600
+    else:
+        ts_end = su.get_ts( end )
+
+    ts_start = su.get_ts( day )+24*3600
+
+    log(f"Lets fetch {symbol} cs=1m")
+    day = ts_start
+
+    while day < ts_end:
+        end_time = day + 24*3600 # in seconds
+        pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
+
+        rall = []
+        for periods, end_time in pairs:
+            logging.info(f"fetching {periods} to {end_time}")
+            r = fetch_candles(symbol, day, "1m", periods, end_time=end_time)
+            rall += r
+
+        logging.info(f"{len(rall)} lines fetched")
+
+        data = {}
+        if rall:
+            for o in rall:                
+                ot = su.get_yyyymmdd_hhmm(o['open_time'])
+                _id = f"{symbol}_{ot}_1m"
+                logging.info(f"Does {_id} exist? {o['open_time_iso']}")
+                if not su.es_exists("symbols", _id):
+                    o["cs"] = "1m"
+                    data[_id] = o
+                else:
+                    logging.info(f"Doc {_id} already exists. Skiping")
+
+        if len(rall) > 0:
+            logging.info(f"Bulk upload {len(rall)} docs")
+            su.es_bulk_create("symbols", data, partial=500)
+
+        su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'download_candle')
+        day += 3600*24
+
 def fetch(symbol:str, cs:str, start:str, end=None):
 
     if not end:
@@ -134,10 +170,6 @@ def fetch(symbol:str, cs:str, start:str, end=None):
         day += 3600*24
 
 def main(argv):
-    logging.info('--------------------------------------------------------------------------------')
-    logging.info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    logging.info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
-    logging.info('--------------------------------------------------------------------------------')
 
     logging.basicConfig(
         level=logging.INFO,
@@ -151,6 +183,10 @@ def main(argv):
         ]
     )
 
+    logging.info('--------------------------------------------------------------------------------')
+    logging.info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
+    logging.info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
+    logging.info('--------------------------------------------------------------------------------')
 
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
@@ -173,10 +209,13 @@ def main(argv):
                 fetch(symbol, "1h", start, end)
                 fetch(symbol, "15m", start, end)
                 fetch(symbol, "5m", start, end)
+                fetch1m(symbol, start, end)
                 logging.info('\n\n\n')
             else:
                 if cs == "1d": 
                     fetch1d( symbol, start, end )
+                elif cs == "1m":
+                    fetch1m(symbol, start, end)
                 else:
                     fetch(symbol, cs, start, end)
 
@@ -199,10 +238,13 @@ def main(argv):
             fetch(symbol, "1h", start, end)
             fetch(symbol, "15m", start, end)
             fetch(symbol, "5m", start, end)
+            fetch1m(symbol, start, end)
             logging.info('\n\n\n')
         else:
             if cs == "1d": 
                 fetch1d( symbol, start, end )
+            elif cs == "1m":
+                fetch1m(symbol, start, end)
             else:
                 fetch(symbol, cs, start, end)
 
