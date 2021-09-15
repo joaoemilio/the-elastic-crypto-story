@@ -137,7 +137,10 @@ def fetch1m(symbol, day:str, end:None):
                 logging.info(f"Bulk upload {len(rall)} docs")
                 su.es_bulk_create("symbols", data, partial=500)
 
-            su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'download_candle')
+            su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'fetch_candle')
+        else:
+            su.log(f'Day is downloaded {su.get_yyyymmdd(day)} for 1m. Skipping', 'fetch_candle')
+            
         day += 3600*24
 
 def fetch(symbol:str, cs:str, start:str, end=None):
