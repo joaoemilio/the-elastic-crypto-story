@@ -107,31 +107,37 @@ def fetch1m(symbol, day:str, end:None):
         end_time = day + 24*3600 # in seconds
         pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
 
-        rall = []
-        for periods, end_time in pairs:
-            logging.info(f"fetching {periods} to {end_time}")
-            r = fetch_candles(symbol, day, "1m", periods, end_time=end_time)
-            rall += r
+        # check if open_time 00:00 and minute 23:59 exists
+        id_start = f"{symbol}_{su.get_yyyymmdd_hhmm(day)}_1m"
+        id_end = f"{symbol}_{su.get_yyyymmdd_hhmm(end_time)}_1m"
+        start_exists = su.es_exists("symbols", id_start)
+        end_exists = su.es_exists("symbols", id_end)
+        if not start_exists or not end_exists: 
+            rall = []
+            for periods, end_time in pairs:
+                logging.info(f"fetching {periods} to {end_time}")
+                r = fetch_candles(symbol, day, "1m", periods, end_time=end_time)
+                rall += r
 
-        logging.info(f"{len(rall)} lines fetched")
+            logging.info(f"{len(rall)} lines fetched")
 
-        data = {}
-        if rall:
-            for o in rall:                
-                ot = su.get_yyyymmdd_hhmm(o['open_time'])
-                _id = f"{symbol}_{ot}_1m"
-                #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
-                if not su.es_exists("symbols", _id):
-                    o["cs"] = "1m"
-                    data[_id] = o
-                else:
-                    logging.info(f"Doc {_id} already exists. Skiping")
+            data = {}
+            if rall:
+                for o in rall:                
+                    ot = su.get_yyyymmdd_hhmm(o['open_time'])
+                    _id = f"{symbol}_{ot}_1m"
+                    #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
+                    if not su.es_exists("symbols", _id):
+                        o["cs"] = "1m"
+                        data[_id] = o
+                    else:
+                        logging.info(f"Doc {_id} already exists. Skiping")
 
-        if len(rall) > 0:
-            logging.info(f"Bulk upload {len(rall)} docs")
-            su.es_bulk_create("symbols", data, partial=500)
+            if len(rall) > 0:
+                logging.info(f"Bulk upload {len(rall)} docs")
+                su.es_bulk_create("symbols", data, partial=500)
 
-        su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'download_candle')
+            su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'download_candle')
         day += 3600*24
 
 def fetch(symbol:str, cs:str, start:str, end=None):
