@@ -148,7 +148,7 @@ def enrich(symbol, cs, ts_start, ts_end):
     #su.es_bulk_update(iname=f"symbols", data=aug, partial=1000)
 
 def get_closes( symbol, cs, ts_start, window_size):
-    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/4 }
+    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/4, "1d": 1 }
     ts_window_size = ts_start-window_size*periods[cs]*3600
 
     query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
