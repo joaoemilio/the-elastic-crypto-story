@@ -182,11 +182,11 @@ def enrichDay(symbol, day):
     #enrich1m(symbol, data, ts_start, ts_end)
 
     logging.info(f"enriching {len(data)} of {symbol} cs: 4h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
-    enrich(symbol, "5m", ts_start, ts_end)
-    enrich(symbol, "15m", ts_start, ts_end)
-    enrich(symbol, "1h", ts_start, ts_end)
-    enrich(symbol, "4h", ts_start, ts_end)
     enrich(symbol, "1d", ts_start, ts_end)
+    enrich(symbol, "4h", ts_start, ts_end)
+    enrich(symbol, "1h", ts_start, ts_end)
+    enrich(symbol, "15m", ts_start, ts_end)
+    enrich(symbol, "5m", ts_start, ts_end)
 
 def main(argv):
 
