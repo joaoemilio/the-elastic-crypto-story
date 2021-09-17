@@ -1602,3 +1602,1095 @@
 2021-09-16 22:07:59,809 [INFO] GET https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols/_doc/BTCUSDT_20210902_0236_1m [status:200 request:0.180s]
 2021-09-16 22:08:00,017 [INFO] GET https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols/_doc/BTCUSDT_20210902_0237_1m [status:200 request:0.207s]
 2021-09-16 22:08:00,199 [INFO] GET https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols/_doc/BTCUSDT_20210902_0238_1m [status:200 request:0.180s]
+2021-09-17 13:10:54,138 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:10:54,139 [INFO]  python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]
+2021-09-17 13:10:54,140 [INFO]  python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]
+2021-09-17 13:10:54,140 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:10:54,140 [INFO] start fetching data for BTCUSDT
+2021-09-17 13:11:26,948 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:11:26,949 [INFO]  python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]
+2021-09-17 13:11:26,950 [INFO]  python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]
+2021-09-17 13:11:26,950 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:11:26,950 [INFO] start fetching data for BTCUSDT
+2021-09-17 13:11:26,951 [INFO] 	processing 20210831
+2021-09-17 13:11:28,179 [INFO] trying binance call #1
+2021-09-17 13:11:31,790 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210831_1d [status:201 request:3.253s]
+2021-09-17 13:11:31,792 [INFO] 	processing 20210901
+2021-09-17 13:11:31,984 [INFO] trying binance call #1
+2021-09-17 13:11:33,283 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210901_1d [status:201 request:0.463s]
+2021-09-17 13:11:33,284 [INFO] 	processing 20210902
+2021-09-17 13:11:33,478 [INFO] trying binance call #1
+2021-09-17 13:11:34,415 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210902_1d [status:201 request:0.584s]
+2021-09-17 13:11:34,416 [INFO] 	processing 20210903
+2021-09-17 13:11:34,984 [INFO] trying binance call #1
+2021-09-17 13:11:35,779 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210903_1d [status:201 request:0.463s]
+2021-09-17 13:11:35,779 [INFO] 	processing 20210904
+2021-09-17 13:11:35,986 [INFO] trying binance call #1
+2021-09-17 13:11:36,677 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210904_1d [status:201 request:0.362s]
+2021-09-17 13:11:36,678 [INFO] 	processing 20210905
+2021-09-17 13:11:37,192 [INFO] trying binance call #1
+2021-09-17 13:11:37,995 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210905_1d [status:201 request:0.475s]
+2021-09-17 13:11:37,996 [INFO] 	processing 20210906
+2021-09-17 13:11:38,382 [INFO] trying binance call #1
+2021-09-17 13:11:39,178 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210906_1d [status:201 request:0.438s]
+2021-09-17 13:11:39,178 [INFO] 	processing 20210907
+2021-09-17 13:11:39,682 [INFO] trying binance call #1
+2021-09-17 13:11:40,685 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210907_1d [status:201 request:0.680s]
+2021-09-17 13:11:40,686 [INFO] 	processing 20210908
+2021-09-17 13:11:41,177 [INFO] trying binance call #1
+2021-09-17 13:11:41,988 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210908_1d [status:201 request:0.479s]
+2021-09-17 13:11:41,988 [INFO] 	processing 20210909
+2021-09-17 13:11:42,287 [INFO] trying binance call #1
+2021-09-17 13:11:43,470 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210909_1d [status:201 request:0.849s]
+2021-09-17 13:11:43,470 [INFO] 	processing 20210910
+2021-09-17 13:11:43,794 [INFO] trying binance call #1
+2021-09-17 13:11:44,498 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210910_1d [status:201 request:0.379s]
+2021-09-17 13:11:44,499 [INFO] 	processing 20210911
+2021-09-17 13:11:44,682 [INFO] trying binance call #1
+2021-09-17 13:11:45,683 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210911_1d [status:201 request:0.671s]
+2021-09-17 13:11:45,684 [INFO] 	processing 20210912
+2021-09-17 13:11:45,882 [INFO] trying binance call #1
+2021-09-17 13:11:47,086 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210912_1d [status:201 request:0.334s]
+2021-09-17 13:11:47,088 [INFO] 	processing 20210913
+2021-09-17 13:11:47,382 [INFO] trying binance call #1
+2021-09-17 13:11:48,073 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210913_1d [status:201 request:0.362s]
+2021-09-17 13:11:48,073 [INFO] 	processing 20210914
+2021-09-17 13:11:48,581 [INFO] trying binance call #1
+2021-09-17 13:11:49,284 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210914_1d [status:201 request:0.345s]
+2021-09-17 13:11:49,285 [INFO] 	processing 20210915
+2021-09-17 13:11:49,485 [INFO] trying binance call #1
+2021-09-17 13:11:50,086 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210915_1d [status:201 request:0.272s]
+2021-09-17 13:11:50,087 [INFO] 	processing 20210916
+2021-09-17 13:11:50,285 [INFO] trying binance call #1
+2021-09-17 13:11:50,786 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:12:34,585 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:12:34,585 [INFO]  python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]
+2021-09-17 13:12:34,586 [INFO]  python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]
+2021-09-17 13:12:34,587 [INFO] --------------------------------------------------------------------------------
+2021-09-17 13:12:34,596 [INFO] start fetching data for ETHUSDT
+2021-09-17 13:12:34,597 [INFO] 	processing 20210916
+2021-09-17 13:12:35,398 [INFO] trying binance call #1
+2021-09-17 13:12:35,998 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ETHUSDT_20210916_1d [status:201 request:0.229s]
+2021-09-17 13:12:35,999 [INFO] start fetching data for BTCUSDT
+2021-09-17 13:12:36,000 [INFO] 	processing 20210916
+2021-09-17 13:12:36,180 [INFO] HEAD https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_doc/BTCUSDT_20210916_1d [status:200 request:0.180s]
+2021-09-17 13:12:36,181 [INFO] start fetching data for SOLUSDT
+2021-09-17 13:12:36,181 [INFO] 	processing 20210916
+2021-09-17 13:12:36,395 [INFO] trying binance call #1
+2021-09-17 13:12:37,197 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SOLUSDT_20210916_1d [status:201 request:0.222s]
+2021-09-17 13:12:37,199 [INFO] start fetching data for DOTUSDT
+2021-09-17 13:12:37,203 [INFO] 	processing 20210916
+2021-09-17 13:12:37,385 [INFO] trying binance call #1
+2021-09-17 13:12:38,209 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DOTUSDT_20210916_1d [status:201 request:0.255s]
+2021-09-17 13:12:38,209 [INFO] start fetching data for XRPUSDT
+2021-09-17 13:12:38,210 [INFO] 	processing 20210916
+2021-09-17 13:12:38,403 [INFO] trying binance call #1
+2021-09-17 13:12:39,001 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XRPUSDT_20210916_1d [status:201 request:0.242s]
+2021-09-17 13:12:39,002 [INFO] start fetching data for BNBUSDT
+2021-09-17 13:12:39,002 [INFO] 	processing 20210916
+2021-09-17 13:12:39,182 [INFO] trying binance call #1
+2021-09-17 13:12:39,700 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BNBUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:12:39,701 [INFO] start fetching data for FTTUSDT
+2021-09-17 13:12:39,702 [INFO] 	processing 20210916
+2021-09-17 13:12:39,892 [INFO] trying binance call #1
+2021-09-17 13:12:40,701 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FTTUSDT_20210916_1d [status:201 request:0.452s]
+2021-09-17 13:12:40,702 [INFO] start fetching data for ADAUSDT
+2021-09-17 13:12:40,703 [INFO] 	processing 20210916
+2021-09-17 13:12:40,888 [INFO] trying binance call #1
+2021-09-17 13:12:41,595 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ADAUSDT_20210916_1d [status:201 request:0.355s]
+2021-09-17 13:12:41,595 [INFO] start fetching data for FTMUSDT
+2021-09-17 13:12:41,595 [INFO] 	processing 20210916
+2021-09-17 13:12:41,803 [INFO] trying binance call #1
+2021-09-17 13:12:43,200 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FTMUSDT_20210916_1d [status:201 request:1.062s]
+2021-09-17 13:12:43,201 [INFO] start fetching data for MATICUSDT
+2021-09-17 13:12:43,202 [INFO] 	processing 20210916
+2021-09-17 13:12:43,390 [INFO] trying binance call #1
+2021-09-17 13:12:43,986 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MATICUSDT_20210916_1d [status:201 request:0.259s]
+2021-09-17 13:12:43,986 [INFO] start fetching data for AVAXUSDT
+2021-09-17 13:12:43,986 [INFO] 	processing 20210916
+2021-09-17 13:12:44,195 [INFO] trying binance call #1
+2021-09-17 13:12:44,800 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AVAXUSDT_20210916_1d [status:201 request:0.261s]
+2021-09-17 13:12:44,800 [INFO] start fetching data for VETUSDT
+2021-09-17 13:12:44,800 [INFO] 	processing 20210916
+2021-09-17 13:12:44,974 [INFO] trying binance call #1
+2021-09-17 13:12:45,603 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/VETUSDT_20210916_1d [status:201 request:0.268s]
+2021-09-17 13:12:45,603 [INFO] start fetching data for DOGEUSDT
+2021-09-17 13:12:45,603 [INFO] 	processing 20210916
+2021-09-17 13:12:45,791 [INFO] trying binance call #1
+2021-09-17 13:12:46,497 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DOGEUSDT_20210916_1d [status:201 request:0.358s]
+2021-09-17 13:12:46,497 [INFO] start fetching data for MTLUSDT
+2021-09-17 13:12:46,497 [INFO] 	processing 20210916
+2021-09-17 13:12:46,668 [INFO] trying binance call #1
+2021-09-17 13:12:47,381 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MTLUSDT_20210916_1d [status:201 request:0.362s]
+2021-09-17 13:12:47,397 [INFO] start fetching data for LUNAUSDT
+2021-09-17 13:12:47,398 [INFO] 	processing 20210916
+2021-09-17 13:12:50,496 [INFO] trying binance call #1
+2021-09-17 13:12:51,100 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LUNAUSDT_20210916_1d [status:201 request:0.243s]
+2021-09-17 13:12:51,100 [INFO] start fetching data for SANDUSDT
+2021-09-17 13:12:51,101 [INFO] 	processing 20210916
+2021-09-17 13:12:51,282 [INFO] trying binance call #1
+2021-09-17 13:12:51,901 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SANDUSDT_20210916_1d [status:201 request:0.275s]
+2021-09-17 13:12:51,902 [INFO] start fetching data for LINKUSDT
+2021-09-17 13:12:51,903 [INFO] 	processing 20210916
+2021-09-17 13:12:52,098 [INFO] trying binance call #1
+2021-09-17 13:12:52,699 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LINKUSDT_20210916_1d [status:201 request:0.251s]
+2021-09-17 13:12:52,700 [INFO] start fetching data for FILUSDT
+2021-09-17 13:12:52,700 [INFO] 	processing 20210916
+2021-09-17 13:12:52,878 [INFO] trying binance call #1
+2021-09-17 13:12:53,500 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FILUSDT_20210916_1d [status:201 request:0.258s]
+2021-09-17 13:12:53,501 [INFO] start fetching data for KSMUSDT
+2021-09-17 13:12:53,502 [INFO] 	processing 20210916
+2021-09-17 13:12:53,701 [INFO] trying binance call #1
+2021-09-17 13:12:54,299 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KSMUSDT_20210916_1d [status:201 request:0.249s]
+2021-09-17 13:12:54,301 [INFO] start fetching data for ETCUSDT
+2021-09-17 13:12:54,302 [INFO] 	processing 20210916
+2021-09-17 13:12:54,480 [INFO] trying binance call #1
+2021-09-17 13:12:55,102 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ETCUSDT_20210916_1d [status:201 request:0.270s]
+2021-09-17 13:12:55,102 [INFO] start fetching data for ATOMUSDT
+2021-09-17 13:12:55,102 [INFO] 	processing 20210916
+2021-09-17 13:12:55,300 [INFO] trying binance call #1
+2021-09-17 13:12:55,889 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ATOMUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:12:55,889 [INFO] start fetching data for UNIUSDT
+2021-09-17 13:12:55,889 [INFO] 	processing 20210916
+2021-09-17 13:12:56,071 [INFO] trying binance call #1
+2021-09-17 13:12:56,903 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/UNIUSDT_20210916_1d [status:201 request:0.240s]
+2021-09-17 13:12:56,904 [INFO] start fetching data for MINAUSDT
+2021-09-17 13:12:56,904 [INFO] 	processing 20210916
+2021-09-17 13:12:57,090 [INFO] trying binance call #1
+2021-09-17 13:12:57,701 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MINAUSDT_20210916_1d [status:201 request:0.251s]
+2021-09-17 13:12:57,701 [INFO] start fetching data for ICPUSDT
+2021-09-17 13:12:57,701 [INFO] 	processing 20210916
+2021-09-17 13:12:57,884 [INFO] trying binance call #1
+2021-09-17 13:12:58,500 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ICPUSDT_20210916_1d [status:201 request:0.274s]
+2021-09-17 13:12:58,501 [INFO] start fetching data for YFIIUSDT
+2021-09-17 13:12:58,502 [INFO] 	processing 20210916
+2021-09-17 13:12:58,699 [INFO] trying binance call #1
+2021-09-17 13:12:59,301 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/YFIIUSDT_20210916_1d [status:201 request:0.233s]
+2021-09-17 13:12:59,302 [INFO] start fetching data for ALICEUSDT
+2021-09-17 13:12:59,303 [INFO] 	processing 20210916
+2021-09-17 13:12:59,478 [INFO] trying binance call #1
+2021-09-17 13:13:01,101 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ALICEUSDT_20210916_1d [status:201 request:0.265s]
+2021-09-17 13:13:01,101 [INFO] start fetching data for C98USDT
+2021-09-17 13:13:01,102 [INFO] 	processing 20210916
+2021-09-17 13:13:01,302 [INFO] trying binance call #1
+2021-09-17 13:13:01,902 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/C98USDT_20210916_1d [status:201 request:0.244s]
+2021-09-17 13:13:01,903 [INFO] start fetching data for AXSUSDT
+2021-09-17 13:13:01,904 [INFO] 	processing 20210916
+2021-09-17 13:13:02,077 [INFO] trying binance call #1
+2021-09-17 13:13:02,695 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AXSUSDT_20210916_1d [status:201 request:0.272s]
+2021-09-17 13:13:02,695 [INFO] start fetching data for AAVEUSDT
+2021-09-17 13:13:02,695 [INFO] 	processing 20210916
+2021-09-17 13:13:03,095 [INFO] trying binance call #1
+2021-09-17 13:13:04,003 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AAVEUSDT_20210916_1d [status:201 request:0.566s]
+2021-09-17 13:13:04,003 [INFO] start fetching data for CELOUSDT
+2021-09-17 13:13:04,004 [INFO] 	processing 20210916
+2021-09-17 13:13:04,182 [INFO] trying binance call #1
+2021-09-17 13:13:04,903 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CELOUSDT_20210916_1d [status:201 request:0.363s]
+2021-09-17 13:13:04,904 [INFO] start fetching data for LTCUSDT
+2021-09-17 13:13:04,904 [INFO] 	processing 20210916
+2021-09-17 13:13:05,104 [INFO] trying binance call #1
+2021-09-17 13:13:05,706 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LTCUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:13:05,707 [INFO] start fetching data for EOSUSDT
+2021-09-17 13:13:05,708 [INFO] 	processing 20210916
+2021-09-17 13:13:05,901 [INFO] trying binance call #1
+2021-09-17 13:13:06,702 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/EOSUSDT_20210916_1d [status:201 request:0.438s]
+2021-09-17 13:13:06,703 [INFO] start fetching data for ARUSDT
+2021-09-17 13:13:06,704 [INFO] 	processing 20210916
+2021-09-17 13:13:06,918 [INFO] trying binance call #1
+2021-09-17 13:13:07,506 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ARUSDT_20210916_1d [status:201 request:0.239s]
+2021-09-17 13:13:07,507 [INFO] start fetching data for SRMUSDT
+2021-09-17 13:13:07,508 [INFO] 	processing 20210916
+2021-09-17 13:13:07,700 [INFO] trying binance call #1
+2021-09-17 13:13:08,308 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SRMUSDT_20210916_1d [status:201 request:0.266s]
+2021-09-17 13:13:08,309 [INFO] start fetching data for CAKEUSDT
+2021-09-17 13:13:08,310 [INFO] 	processing 20210916
+2021-09-17 13:13:08,501 [INFO] trying binance call #1
+2021-09-17 13:13:09,105 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CAKEUSDT_20210916_1d [status:201 request:0.247s]
+2021-09-17 13:13:09,106 [INFO] start fetching data for SLPUSDT
+2021-09-17 13:13:09,107 [INFO] 	processing 20210916
+2021-09-17 13:13:09,307 [INFO] trying binance call #1
+2021-09-17 13:13:09,902 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SLPUSDT_20210916_1d [status:201 request:0.245s]
+2021-09-17 13:13:09,903 [INFO] start fetching data for TLMUSDT
+2021-09-17 13:13:09,903 [INFO] 	processing 20210916
+2021-09-17 13:13:10,107 [INFO] trying binance call #1
+2021-09-17 13:13:10,705 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TLMUSDT_20210916_1d [status:201 request:0.250s]
+2021-09-17 13:13:10,706 [INFO] start fetching data for TRXUSDT
+2021-09-17 13:13:10,706 [INFO] 	processing 20210916
+2021-09-17 13:13:10,900 [INFO] trying binance call #1
+2021-09-17 13:13:11,505 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TRXUSDT_20210916_1d [status:201 request:0.259s]
+2021-09-17 13:13:11,506 [INFO] start fetching data for SUSHIUSDT
+2021-09-17 13:13:11,506 [INFO] 	processing 20210916
+2021-09-17 13:13:12,006 [INFO] trying binance call #1
+2021-09-17 13:13:12,604 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SUSHIUSDT_20210916_1d [status:201 request:0.249s]
+2021-09-17 13:13:12,604 [INFO] start fetching data for RUNEUSDT
+2021-09-17 13:13:12,605 [INFO] 	processing 20210916
+2021-09-17 13:13:12,784 [INFO] trying binance call #1
+2021-09-17 13:13:13,404 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RUNEUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:13:13,405 [INFO] start fetching data for RAYUSDT
+2021-09-17 13:13:13,405 [INFO] 	processing 20210916
+2021-09-17 13:13:13,605 [INFO] trying binance call #1
+2021-09-17 13:13:14,209 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RAYUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:13:14,209 [INFO] start fetching data for EGLDUSDT
+2021-09-17 13:13:14,210 [INFO] 	processing 20210916
+2021-09-17 13:13:14,388 [INFO] trying binance call #1
+2021-09-17 13:13:14,906 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/EGLDUSDT_20210916_1d [status:201 request:0.180s]
+2021-09-17 13:13:14,907 [INFO] start fetching data for ALPHAUSDT
+2021-09-17 13:13:14,908 [INFO] 	processing 20210916
+2021-09-17 13:13:15,103 [INFO] trying binance call #1
+2021-09-17 13:13:15,709 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ALPHAUSDT_20210916_1d [status:201 request:0.261s]
+2021-09-17 13:13:15,710 [INFO] start fetching data for THETAUSDT
+2021-09-17 13:13:15,710 [INFO] 	processing 20210916
+2021-09-17 13:13:15,923 [INFO] trying binance call #1
+2021-09-17 13:13:16,806 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/THETAUSDT_20210916_1d [status:201 request:0.525s]
+2021-09-17 13:13:16,807 [INFO] start fetching data for CHZUSDT
+2021-09-17 13:13:16,808 [INFO] 	processing 20210916
+2021-09-17 13:13:17,024 [INFO] trying binance call #1
+2021-09-17 13:13:17,615 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CHZUSDT_20210916_1d [status:201 request:0.252s]
+2021-09-17 13:13:17,616 [INFO] start fetching data for MBOXUSDT
+2021-09-17 13:13:17,617 [INFO] 	processing 20210916
+2021-09-17 13:13:17,800 [INFO] trying binance call #1
+2021-09-17 13:13:18,319 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MBOXUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:13:18,320 [INFO] start fetching data for BTTUSDT
+2021-09-17 13:13:18,321 [INFO] 	processing 20210916
+2021-09-17 13:13:18,510 [INFO] trying binance call #1
+2021-09-17 13:13:19,108 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTTUSDT_20210916_1d [status:201 request:0.256s]
+2021-09-17 13:13:19,109 [INFO] start fetching data for TWTUSDT
+2021-09-17 13:13:19,110 [INFO] 	processing 20210916
+2021-09-17 13:13:19,288 [INFO] trying binance call #1
+2021-09-17 13:13:19,908 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TWTUSDT_20210916_1d [status:201 request:0.279s]
+2021-09-17 13:13:19,909 [INFO] start fetching data for NEOUSDT
+2021-09-17 13:13:19,909 [INFO] 	processing 20210916
+2021-09-17 13:13:20,106 [INFO] trying binance call #1
+2021-09-17 13:13:20,635 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NEOUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:13:20,636 [INFO] start fetching data for IOTAUSDT
+2021-09-17 13:13:20,636 [INFO] 	processing 20210916
+2021-09-17 13:13:20,817 [INFO] trying binance call #1
+2021-09-17 13:13:21,410 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/IOTAUSDT_20210916_1d [status:201 request:0.242s]
+2021-09-17 13:13:21,411 [INFO] start fetching data for ALGOUSDT
+2021-09-17 13:13:21,411 [INFO] 	processing 20210916
+2021-09-17 13:13:21,612 [INFO] trying binance call #1
+2021-09-17 13:13:22,210 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ALGOUSDT_20210916_1d [status:201 request:0.244s]
+2021-09-17 13:13:22,211 [INFO] start fetching data for BCHUSDT
+2021-09-17 13:13:22,212 [INFO] 	processing 20210916
+2021-09-17 13:13:22,390 [INFO] trying binance call #1
+2021-09-17 13:13:23,008 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BCHUSDT_20210916_1d [status:201 request:0.261s]
+2021-09-17 13:13:23,009 [INFO] start fetching data for BAKEUSDT
+2021-09-17 13:13:23,009 [INFO] 	processing 20210916
+2021-09-17 13:13:23,628 [INFO] trying binance call #1
+2021-09-17 13:13:24,407 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BAKEUSDT_20210916_1d [status:201 request:0.248s]
+2021-09-17 13:13:24,408 [INFO] start fetching data for SHIBUSDT
+2021-09-17 13:13:24,409 [INFO] 	processing 20210916
+2021-09-17 13:13:24,716 [INFO] trying binance call #1
+2021-09-17 13:13:25,324 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SHIBUSDT_20210916_1d [status:201 request:0.200s]
+2021-09-17 13:13:25,325 [INFO] start fetching data for YFIUSDT
+2021-09-17 13:13:25,325 [INFO] 	processing 20210916
+2021-09-17 13:13:25,533 [INFO] trying binance call #1
+2021-09-17 13:13:26,216 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/YFIUSDT_20210916_1d [status:201 request:0.341s]
+2021-09-17 13:13:26,218 [INFO] start fetching data for ATAUSDT
+2021-09-17 13:13:26,220 [INFO] 	processing 20210916
+2021-09-17 13:13:26,398 [INFO] trying binance call #1
+2021-09-17 13:13:27,007 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ATAUSDT_20210916_1d [status:201 request:0.245s]
+2021-09-17 13:13:27,008 [INFO] start fetching data for XLMUSDT
+2021-09-17 13:13:27,008 [INFO] 	processing 20210916
+2021-09-17 13:13:27,208 [INFO] trying binance call #1
+2021-09-17 13:13:27,816 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XLMUSDT_20210916_1d [status:201 request:0.252s]
+2021-09-17 13:13:27,817 [INFO] start fetching data for DENTUSDT
+2021-09-17 13:13:27,818 [INFO] 	processing 20210916
+2021-09-17 13:13:28,002 [INFO] trying binance call #1
+2021-09-17 13:13:28,613 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DENTUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:13:28,613 [INFO] start fetching data for SXPUSDT
+2021-09-17 13:13:28,614 [INFO] 	processing 20210916
+2021-09-17 13:13:28,814 [INFO] trying binance call #1
+2021-09-17 13:13:29,410 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SXPUSDT_20210916_1d [status:201 request:0.246s]
+2021-09-17 13:13:29,411 [INFO] start fetching data for KAVAUSDT
+2021-09-17 13:13:29,412 [INFO] 	processing 20210916
+2021-09-17 13:13:29,591 [INFO] trying binance call #1
+2021-09-17 13:13:30,212 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KAVAUSDT_20210916_1d [status:201 request:0.249s]
+2021-09-17 13:13:30,213 [INFO] start fetching data for EPSUSDT
+2021-09-17 13:13:30,214 [INFO] 	processing 20210916
+2021-09-17 13:13:30,410 [INFO] trying binance call #1
+2021-09-17 13:13:31,011 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/EPSUSDT_20210916_1d [status:201 request:0.256s]
+2021-09-17 13:13:31,012 [INFO] start fetching data for ARPAUSDT
+2021-09-17 13:13:31,013 [INFO] 	processing 20210916
+2021-09-17 13:13:31,192 [INFO] trying binance call #1
+2021-09-17 13:13:31,910 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ARPAUSDT_20210916_1d [status:201 request:0.206s]
+2021-09-17 13:13:31,910 [INFO] start fetching data for FETUSDT
+2021-09-17 13:13:31,912 [INFO] 	processing 20210916
+2021-09-17 13:13:32,109 [INFO] trying binance call #1
+2021-09-17 13:13:33,210 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FETUSDT_20210916_1d [status:201 request:0.236s]
+2021-09-17 13:13:33,211 [INFO] start fetching data for GRTUSDT
+2021-09-17 13:13:33,212 [INFO] 	processing 20210916
+2021-09-17 13:13:33,392 [INFO] trying binance call #1
+2021-09-17 13:13:34,109 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GRTUSDT_20210916_1d [status:201 request:0.365s]
+2021-09-17 13:13:34,109 [INFO] start fetching data for XTZUSDT
+2021-09-17 13:13:34,110 [INFO] 	processing 20210916
+2021-09-17 13:13:34,726 [INFO] trying binance call #1
+2021-09-17 13:13:35,331 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XTZUSDT_20210916_1d [status:201 request:0.257s]
+2021-09-17 13:13:35,332 [INFO] start fetching data for COTIUSDT
+2021-09-17 13:13:35,333 [INFO] 	processing 20210916
+2021-09-17 13:13:35,516 [INFO] trying binance call #1
+2021-09-17 13:13:36,610 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/COTIUSDT_20210916_1d [status:201 request:0.742s]
+2021-09-17 13:13:36,611 [INFO] start fetching data for CHRUSDT
+2021-09-17 13:13:36,612 [INFO] 	processing 20210916
+2021-09-17 13:13:36,920 [INFO] trying binance call #1
+2021-09-17 13:13:38,138 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CHRUSDT_20210916_1d [status:201 request:0.362s]
+2021-09-17 13:13:38,139 [INFO] start fetching data for COMPUSDT
+2021-09-17 13:13:38,148 [INFO] 	processing 20210916
+2021-09-17 13:13:38,331 [INFO] trying binance call #1
+2021-09-17 13:13:39,010 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/COMPUSDT_20210916_1d [status:201 request:0.354s]
+2021-09-17 13:13:39,011 [INFO] start fetching data for OMGUSDT
+2021-09-17 13:13:39,012 [INFO] 	processing 20210916
+2021-09-17 13:13:39,211 [INFO] trying binance call #1
+2021-09-17 13:13:40,314 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OMGUSDT_20210916_1d [status:201 request:0.239s]
+2021-09-17 13:13:40,315 [INFO] start fetching data for ONEUSDT
+2021-09-17 13:13:40,316 [INFO] 	processing 20210916
+2021-09-17 13:13:40,498 [INFO] trying binance call #1
+2021-09-17 13:13:41,115 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ONEUSDT_20210916_1d [status:201 request:0.278s]
+2021-09-17 13:13:41,115 [INFO] start fetching data for ENJUSDT
+2021-09-17 13:13:41,116 [INFO] 	processing 20210916
+2021-09-17 13:13:41,306 [INFO] trying binance call #1
+2021-09-17 13:13:42,415 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ENJUSDT_20210916_1d [status:201 request:0.775s]
+2021-09-17 13:13:42,416 [INFO] start fetching data for REEFUSDT
+2021-09-17 13:13:42,417 [INFO] 	processing 20210916
+2021-09-17 13:13:42,595 [INFO] trying binance call #1
+2021-09-17 13:13:43,117 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/REEFUSDT_20210916_1d [status:201 request:0.188s]
+2021-09-17 13:13:43,119 [INFO] start fetching data for MASKUSDT
+2021-09-17 13:13:43,120 [INFO] 	processing 20210916
+2021-09-17 13:13:43,315 [INFO] trying binance call #1
+2021-09-17 13:13:45,313 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MASKUSDT_20210916_1d [status:201 request:1.668s]
+2021-09-17 13:13:45,314 [INFO] start fetching data for DODOUSDT
+2021-09-17 13:13:45,315 [INFO] 	processing 20210916
+2021-09-17 13:13:45,493 [INFO] trying binance call #1
+2021-09-17 13:13:46,036 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DODOUSDT_20210916_1d [status:201 request:0.205s]
+2021-09-17 13:13:46,037 [INFO] start fetching data for WANUSDT
+2021-09-17 13:13:46,037 [INFO] 	processing 20210916
+2021-09-17 13:13:46,313 [INFO] trying binance call #1
+2021-09-17 13:13:46,913 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WANUSDT_20210916_1d [status:201 request:0.277s]
+2021-09-17 13:13:46,914 [INFO] start fetching data for NEARUSDT
+2021-09-17 13:13:46,914 [INFO] 	processing 20210916
+2021-09-17 13:13:47,094 [INFO] trying binance call #1
+2021-09-17 13:13:47,626 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NEARUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:13:47,627 [INFO] start fetching data for WAVESUSDT
+2021-09-17 13:13:47,628 [INFO] 	processing 20210916
+2021-09-17 13:13:47,813 [INFO] trying binance call #1
+2021-09-17 13:13:48,330 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WAVESUSDT_20210916_1d [status:201 request:0.186s]
+2021-09-17 13:13:48,331 [INFO] start fetching data for AUDIOUSDT
+2021-09-17 13:13:48,331 [INFO] 	processing 20210916
+2021-09-17 13:13:48,514 [INFO] trying binance call #1
+2021-09-17 13:13:49,034 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AUDIOUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:13:49,035 [INFO] start fetching data for LRCUSDT
+2021-09-17 13:13:49,036 [INFO] 	processing 20210916
+2021-09-17 13:13:49,214 [INFO] trying binance call #1
+2021-09-17 13:13:49,822 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LRCUSDT_20210916_1d [status:201 request:0.266s]
+2021-09-17 13:13:49,823 [INFO] start fetching data for HNTUSDT
+2021-09-17 13:13:49,824 [INFO] 	processing 20210916
+2021-09-17 13:13:50,015 [INFO] trying binance call #1
+2021-09-17 13:13:50,616 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/HNTUSDT_20210916_1d [status:201 request:0.262s]
+2021-09-17 13:13:50,617 [INFO] start fetching data for CRVUSDT
+2021-09-17 13:13:50,618 [INFO] 	processing 20210916
+2021-09-17 13:13:51,013 [INFO] trying binance call #1
+2021-09-17 13:13:51,619 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CRVUSDT_20210916_1d [status:201 request:0.277s]
+2021-09-17 13:13:51,619 [INFO] start fetching data for CLVUSDT
+2021-09-17 13:13:51,620 [INFO] 	processing 20210916
+2021-09-17 13:13:51,799 [INFO] trying binance call #1
+2021-09-17 13:13:52,319 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CLVUSDT_20210916_1d [status:201 request:0.195s]
+2021-09-17 13:13:52,320 [INFO] start fetching data for TORNUSDT
+2021-09-17 13:13:52,321 [INFO] 	processing 20210916
+2021-09-17 13:13:52,518 [INFO] trying binance call #1
+2021-09-17 13:13:53,215 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TORNUSDT_20210916_1d [status:201 request:0.359s]
+2021-09-17 13:13:53,216 [INFO] start fetching data for STMXUSDT
+2021-09-17 13:13:53,217 [INFO] 	processing 20210916
+2021-09-17 13:13:53,406 [INFO] trying binance call #1
+2021-09-17 13:13:53,917 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/STMXUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:13:53,918 [INFO] start fetching data for MANAUSDT
+2021-09-17 13:13:53,919 [INFO] 	processing 20210916
+2021-09-17 13:13:54,116 [INFO] trying binance call #1
+2021-09-17 13:13:54,629 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MANAUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:13:54,630 [INFO] start fetching data for 1INCHUSDT
+2021-09-17 13:13:54,632 [INFO] 	processing 20210916
+2021-09-17 13:13:54,815 [INFO] trying binance call #1
+2021-09-17 13:13:55,332 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/1INCHUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:13:55,333 [INFO] start fetching data for XMRUSDT
+2021-09-17 13:13:55,335 [INFO] 	processing 20210916
+2021-09-17 13:13:55,516 [INFO] trying binance call #1
+2021-09-17 13:13:56,123 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XMRUSDT_20210916_1d [status:201 request:0.281s]
+2021-09-17 13:13:56,123 [INFO] start fetching data for CELRUSDT
+2021-09-17 13:13:56,124 [INFO] 	processing 20210916
+2021-09-17 13:13:56,312 [INFO] trying binance call #1
+2021-09-17 13:13:57,018 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CELRUSDT_20210916_1d [status:201 request:0.345s]
+2021-09-17 13:13:57,019 [INFO] start fetching data for LITUSDT
+2021-09-17 13:13:57,019 [INFO] 	processing 20210916
+2021-09-17 13:13:57,326 [INFO] trying binance call #1
+2021-09-17 13:13:57,917 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LITUSDT_20210916_1d [status:201 request:0.259s]
+2021-09-17 13:13:57,918 [INFO] start fetching data for OGNUSDT
+2021-09-17 13:13:57,918 [INFO] 	processing 20210916
+2021-09-17 13:13:58,096 [INFO] trying binance call #1
+2021-09-17 13:13:58,720 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OGNUSDT_20210916_1d [status:201 request:0.293s]
+2021-09-17 13:13:58,721 [INFO] start fetching data for DASHUSDT
+2021-09-17 13:13:58,722 [INFO] 	processing 20210916
+2021-09-17 13:13:58,913 [INFO] trying binance call #1
+2021-09-17 13:13:59,526 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DASHUSDT_20210916_1d [status:201 request:0.263s]
+2021-09-17 13:13:59,526 [INFO] start fetching data for SNXUSDT
+2021-09-17 13:13:59,526 [INFO] 	processing 20210916
+2021-09-17 13:13:59,705 [INFO] trying binance call #1
+2021-09-17 13:14:00,218 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SNXUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:14:00,218 [INFO] start fetching data for HBARUSDT
+2021-09-17 13:14:00,218 [INFO] 	processing 20210916
+2021-09-17 13:14:00,419 [INFO] trying binance call #1
+2021-09-17 13:14:01,419 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/HBARUSDT_20210916_1d [status:201 request:0.669s]
+2021-09-17 13:14:01,420 [INFO] start fetching data for LINAUSDT
+2021-09-17 13:14:01,421 [INFO] 	processing 20210916
+2021-09-17 13:14:01,598 [INFO] trying binance call #1
+2021-09-17 13:14:02,423 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LINAUSDT_20210916_1d [status:201 request:0.496s]
+2021-09-17 13:14:02,424 [INFO] start fetching data for ZECUSDT
+2021-09-17 13:14:02,424 [INFO] 	processing 20210916
+2021-09-17 13:14:02,633 [INFO] trying binance call #1
+2021-09-17 13:14:03,216 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ZECUSDT_20210916_1d [status:201 request:0.252s]
+2021-09-17 13:14:03,217 [INFO] start fetching data for HOTUSDT
+2021-09-17 13:14:03,217 [INFO] 	processing 20210916
+2021-09-17 13:14:03,396 [INFO] trying binance call #1
+2021-09-17 13:14:04,022 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/HOTUSDT_20210916_1d [status:201 request:0.284s]
+2021-09-17 13:14:04,023 [INFO] start fetching data for WINUSDT
+2021-09-17 13:14:04,024 [INFO] 	processing 20210916
+2021-09-17 13:14:04,224 [INFO] trying binance call #1
+2021-09-17 13:14:04,819 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WINUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:14:04,819 [INFO] start fetching data for ZILUSDT
+2021-09-17 13:14:04,820 [INFO] 	processing 20210916
+2021-09-17 13:14:04,998 [INFO] trying binance call #1
+2021-09-17 13:14:05,528 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ZILUSDT_20210916_1d [status:201 request:0.207s]
+2021-09-17 13:14:05,528 [INFO] start fetching data for RENUSDT
+2021-09-17 13:14:05,528 [INFO] 	processing 20210916
+2021-09-17 13:14:05,716 [INFO] trying binance call #1
+2021-09-17 13:14:06,227 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RENUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:14:06,228 [INFO] start fetching data for IOSTUSDT
+2021-09-17 13:14:06,229 [INFO] 	processing 20210916
+2021-09-17 13:14:06,410 [INFO] trying binance call #1
+2021-09-17 13:14:06,920 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/IOSTUSDT_20210916_1d [status:201 request:0.188s]
+2021-09-17 13:14:06,921 [INFO] start fetching data for FUNUSDT
+2021-09-17 13:14:06,922 [INFO] 	processing 20210916
+2021-09-17 13:14:07,138 [INFO] trying binance call #1
+2021-09-17 13:14:08,235 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FUNUSDT_20210916_1d [status:201 request:0.742s]
+2021-09-17 13:14:08,236 [INFO] start fetching data for RSRUSDT
+2021-09-17 13:14:08,237 [INFO] 	processing 20210916
+2021-09-17 13:14:08,418 [INFO] trying binance call #1
+2021-09-17 13:14:08,928 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RSRUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:14:08,928 [INFO] start fetching data for FLOWUSDT
+2021-09-17 13:14:08,929 [INFO] 	processing 20210916
+2021-09-17 13:14:09,118 [INFO] trying binance call #1
+2021-09-17 13:14:09,719 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FLOWUSDT_20210916_1d [status:201 request:0.277s]
+2021-09-17 13:14:09,720 [INFO] start fetching data for KEEPUSDT
+2021-09-17 13:14:09,721 [INFO] 	processing 20210916
+2021-09-17 13:14:09,901 [INFO] trying binance call #1
+2021-09-17 13:14:10,424 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KEEPUSDT_20210916_1d [status:201 request:0.186s]
+2021-09-17 13:14:10,425 [INFO] start fetching data for UNFIUSDT
+2021-09-17 13:14:10,427 [INFO] 	processing 20210916
+2021-09-17 13:14:10,620 [INFO] trying binance call #1
+2021-09-17 13:14:11,134 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/UNFIUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:14:11,135 [INFO] start fetching data for TRIBEUSDT
+2021-09-17 13:14:11,136 [INFO] 	processing 20210916
+2021-09-17 13:14:11,316 [INFO] trying binance call #1
+2021-09-17 13:14:11,831 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TRIBEUSDT_20210916_1d [status:201 request:0.186s]
+2021-09-17 13:14:11,832 [INFO] start fetching data for PERPUSDT
+2021-09-17 13:14:11,832 [INFO] 	processing 20210916
+2021-09-17 13:14:12,017 [INFO] trying binance call #1
+2021-09-17 13:14:12,552 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PERPUSDT_20210916_1d [status:201 request:0.189s]
+2021-09-17 13:14:12,553 [INFO] start fetching data for RVNUSDT
+2021-09-17 13:14:12,554 [INFO] 	processing 20210916
+2021-09-17 13:14:12,733 [INFO] trying binance call #1
+2021-09-17 13:14:13,242 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RVNUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:14:13,243 [INFO] start fetching data for TKOUSDT
+2021-09-17 13:14:13,243 [INFO] 	processing 20210916
+2021-09-17 13:14:13,423 [INFO] trying binance call #1
+2021-09-17 13:14:14,022 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TKOUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:14:14,023 [INFO] start fetching data for ONTUSDT
+2021-09-17 13:14:14,023 [INFO] 	processing 20210916
+2021-09-17 13:14:14,207 [INFO] trying binance call #1
+2021-09-17 13:14:14,722 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ONTUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:14:14,723 [INFO] start fetching data for IOTXUSDT
+2021-09-17 13:14:14,723 [INFO] 	processing 20210916
+2021-09-17 13:14:14,926 [INFO] trying binance call #1
+2021-09-17 13:14:15,434 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/IOTXUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:14:15,435 [INFO] start fetching data for ICXUSDT
+2021-09-17 13:14:15,436 [INFO] 	processing 20210916
+2021-09-17 13:14:15,615 [INFO] trying binance call #1
+2021-09-17 13:14:16,130 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ICXUSDT_20210916_1d [status:201 request:0.188s]
+2021-09-17 13:14:16,131 [INFO] start fetching data for QTUMUSDT
+2021-09-17 13:14:16,132 [INFO] 	processing 20210916
+2021-09-17 13:14:16,322 [INFO] trying binance call #1
+2021-09-17 13:14:16,833 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/QTUMUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:14:16,834 [INFO] start fetching data for ZENUSDT
+2021-09-17 13:14:16,835 [INFO] 	processing 20210916
+2021-09-17 13:14:17,018 [INFO] trying binance call #1
+2021-09-17 13:14:17,621 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ZENUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:14:17,621 [INFO] start fetching data for OCEANUSDT
+2021-09-17 13:14:17,622 [INFO] 	processing 20210916
+2021-09-17 13:14:17,832 [INFO] trying binance call #1
+2021-09-17 13:14:18,420 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OCEANUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:14:18,421 [INFO] start fetching data for VTHOUSDT
+2021-09-17 13:14:18,421 [INFO] 	processing 20210916
+2021-09-17 13:14:18,600 [INFO] trying binance call #1
+2021-09-17 13:14:19,323 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/VTHOUSDT_20210916_1d [status:201 request:0.389s]
+2021-09-17 13:14:19,324 [INFO] start fetching data for DEXEUSDT
+2021-09-17 13:14:19,325 [INFO] 	processing 20210916
+2021-09-17 13:14:19,522 [INFO] trying binance call #1
+2021-09-17 13:14:20,226 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DEXEUSDT_20210916_1d [status:201 request:0.366s]
+2021-09-17 13:14:20,227 [INFO] start fetching data for SUPERUSDT
+2021-09-17 13:14:20,228 [INFO] 	processing 20210916
+2021-09-17 13:14:20,412 [INFO] trying binance call #1
+2021-09-17 13:14:21,022 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SUPERUSDT_20210916_1d [status:201 request:0.275s]
+2021-09-17 13:14:21,022 [INFO] start fetching data for SKLUSDT
+2021-09-17 13:14:21,023 [INFO] 	processing 20210916
+2021-09-17 13:14:21,628 [INFO] trying binance call #1
+2021-09-17 13:14:22,225 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SKLUSDT_20210916_1d [status:201 request:0.272s]
+2021-09-17 13:14:22,226 [INFO] start fetching data for PNTUSDT
+2021-09-17 13:14:22,227 [INFO] 	processing 20210916
+2021-09-17 13:14:22,408 [INFO] trying binance call #1
+2021-09-17 13:14:23,126 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PNTUSDT_20210916_1d [status:201 request:0.369s]
+2021-09-17 13:14:23,127 [INFO] start fetching data for XVSUSDT
+2021-09-17 13:14:23,127 [INFO] 	processing 20210916
+2021-09-17 13:14:23,322 [INFO] trying binance call #1
+2021-09-17 13:14:23,823 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XVSUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:14:23,824 [INFO] start fetching data for BANDUSDT
+2021-09-17 13:14:23,825 [INFO] 	processing 20210916
+2021-09-17 13:14:24,003 [INFO] trying binance call #1
+2021-09-17 13:14:24,632 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BANDUSDT_20210916_1d [status:201 request:0.290s]
+2021-09-17 13:14:24,633 [INFO] start fetching data for GTCUSDT
+2021-09-17 13:14:24,634 [INFO] 	processing 20210916
+2021-09-17 13:14:24,829 [INFO] trying binance call #1
+2021-09-17 13:14:25,423 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GTCUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:14:25,424 [INFO] start fetching data for ROSEUSDT
+2021-09-17 13:14:25,429 [INFO] 	processing 20210916
+2021-09-17 13:14:25,610 [INFO] trying binance call #1
+2021-09-17 13:14:26,124 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ROSEUSDT_20210916_1d [status:201 request:0.195s]
+2021-09-17 13:14:26,124 [INFO] start fetching data for FLMUSDT
+2021-09-17 13:14:26,125 [INFO] 	processing 20210916
+2021-09-17 13:14:26,322 [INFO] trying binance call #1
+2021-09-17 13:14:26,930 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FLMUSDT_20210916_1d [status:201 request:0.275s]
+2021-09-17 13:14:26,930 [INFO] start fetching data for CTKUSDT
+2021-09-17 13:14:26,931 [INFO] 	processing 20210916
+2021-09-17 13:14:27,116 [INFO] trying binance call #1
+2021-09-17 13:14:27,725 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CTKUSDT_20210916_1d [status:201 request:0.269s]
+2021-09-17 13:14:27,726 [INFO] start fetching data for TFUELUSDT
+2021-09-17 13:14:27,726 [INFO] 	processing 20210916
+2021-09-17 13:14:27,927 [INFO] trying binance call #1
+2021-09-17 13:14:28,523 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TFUELUSDT_20210916_1d [status:201 request:0.267s]
+2021-09-17 13:14:28,524 [INFO] start fetching data for ANKRUSDT
+2021-09-17 13:14:28,525 [INFO] 	processing 20210916
+2021-09-17 13:14:28,704 [INFO] trying binance call #1
+2021-09-17 13:14:29,623 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ANKRUSDT_20210916_1d [status:201 request:0.595s]
+2021-09-17 13:14:29,624 [INFO] start fetching data for BZRXUSDT
+2021-09-17 13:14:29,624 [INFO] 	processing 20210916
+2021-09-17 13:14:29,824 [INFO] trying binance call #1
+2021-09-17 13:14:30,428 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BZRXUSDT_20210916_1d [status:201 request:0.274s]
+2021-09-17 13:14:30,431 [INFO] start fetching data for SCUSDT
+2021-09-17 13:14:30,431 [INFO] 	processing 20210916
+2021-09-17 13:14:30,613 [INFO] trying binance call #1
+2021-09-17 13:14:31,224 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SCUSDT_20210916_1d [status:201 request:0.278s]
+2021-09-17 13:14:31,225 [INFO] start fetching data for RLCUSDT
+2021-09-17 13:14:31,226 [INFO] 	processing 20210916
+2021-09-17 13:14:31,427 [INFO] trying binance call #1
+2021-09-17 13:14:32,025 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RLCUSDT_20210916_1d [status:201 request:0.267s]
+2021-09-17 13:14:32,026 [INFO] start fetching data for DEGOUSDT
+2021-09-17 13:14:32,027 [INFO] 	processing 20210916
+2021-09-17 13:14:32,205 [INFO] trying binance call #1
+2021-09-17 13:14:32,724 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DEGOUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:14:32,725 [INFO] start fetching data for WAXPUSDT
+2021-09-17 13:14:32,725 [INFO] 	processing 20210916
+2021-09-17 13:14:32,926 [INFO] trying binance call #1
+2021-09-17 13:14:33,530 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WAXPUSDT_20210916_1d [status:201 request:0.276s]
+2021-09-17 13:14:33,531 [INFO] start fetching data for MKRUSDT
+2021-09-17 13:14:33,532 [INFO] 	processing 20210916
+2021-09-17 13:14:33,709 [INFO] trying binance call #1
+2021-09-17 13:14:34,228 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MKRUSDT_20210916_1d [status:201 request:0.191s]
+2021-09-17 13:14:34,228 [INFO] start fetching data for FARMUSDT
+2021-09-17 13:14:34,229 [INFO] 	processing 20210916
+2021-09-17 13:14:34,426 [INFO] trying binance call #1
+2021-09-17 13:14:34,935 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FARMUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:14:34,935 [INFO] start fetching data for SFPUSDT
+2021-09-17 13:14:34,937 [INFO] 	processing 20210916
+2021-09-17 13:14:35,119 [INFO] trying binance call #1
+2021-09-17 13:14:35,642 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SFPUSDT_20210916_1d [status:201 request:0.190s]
+2021-09-17 13:14:35,643 [INFO] start fetching data for WRXUSDT
+2021-09-17 13:14:35,643 [INFO] 	processing 20210916
+2021-09-17 13:14:35,860 [INFO] trying binance call #1
+2021-09-17 13:14:36,432 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WRXUSDT_20210916_1d [status:201 request:0.249s]
+2021-09-17 13:14:36,434 [INFO] start fetching data for CTSIUSDT
+2021-09-17 13:14:36,435 [INFO] 	processing 20210916
+2021-09-17 13:14:36,613 [INFO] trying binance call #1
+2021-09-17 13:14:37,128 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CTSIUSDT_20210916_1d [status:201 request:0.191s]
+2021-09-17 13:14:37,128 [INFO] start fetching data for KNCUSDT
+2021-09-17 13:14:37,129 [INFO] 	processing 20210916
+2021-09-17 13:14:37,330 [INFO] trying binance call #1
+2021-09-17 13:14:37,918 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KNCUSDT_20210916_1d [status:201 request:0.243s]
+2021-09-17 13:14:37,918 [INFO] start fetching data for TVKUSDT
+2021-09-17 13:14:37,918 [INFO] 	processing 20210916
+2021-09-17 13:14:38,106 [INFO] trying binance call #1
+2021-09-17 13:14:38,626 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TVKUSDT_20210916_1d [status:201 request:0.216s]
+2021-09-17 13:14:38,627 [INFO] start fetching data for ZRXUSDT
+2021-09-17 13:14:38,627 [INFO] 	processing 20210916
+2021-09-17 13:14:38,825 [INFO] trying binance call #1
+2021-09-17 13:14:39,332 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ZRXUSDT_20210916_1d [status:201 request:0.190s]
+2021-09-17 13:14:39,333 [INFO] start fetching data for ANTUSDT
+2021-09-17 13:14:39,334 [INFO] 	processing 20210916
+2021-09-17 13:14:39,513 [INFO] trying binance call #1
+2021-09-17 13:14:40,022 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ANTUSDT_20210916_1d [status:201 request:0.189s]
+2021-09-17 13:14:40,022 [INFO] start fetching data for BATUSDT
+2021-09-17 13:14:40,022 [INFO] 	processing 20210916
+2021-09-17 13:14:40,227 [INFO] trying binance call #1
+2021-09-17 13:14:40,829 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BATUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:14:40,829 [INFO] start fetching data for XEMUSDT
+2021-09-17 13:14:40,830 [INFO] 	processing 20210916
+2021-09-17 13:14:41,007 [INFO] trying binance call #1
+2021-09-17 13:14:41,528 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XEMUSDT_20210916_1d [status:201 request:0.209s]
+2021-09-17 13:14:41,529 [INFO] start fetching data for INJUSDT
+2021-09-17 13:14:41,530 [INFO] 	processing 20210916
+2021-09-17 13:14:41,714 [INFO] trying binance call #1
+2021-09-17 13:14:42,337 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/INJUSDT_20210916_1d [status:201 request:0.284s]
+2021-09-17 13:14:42,338 [INFO] start fetching data for FIROUSDT
+2021-09-17 13:14:42,338 [INFO] 	processing 20210916
+2021-09-17 13:14:42,516 [INFO] trying binance call #1
+2021-09-17 13:14:43,132 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FIROUSDT_20210916_1d [status:201 request:0.254s]
+2021-09-17 13:14:43,132 [INFO] start fetching data for POLSUSDT
+2021-09-17 13:14:43,134 [INFO] 	processing 20210916
+2021-09-17 13:14:43,319 [INFO] trying binance call #1
+2021-09-17 13:14:43,927 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/POLSUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:14:43,928 [INFO] start fetching data for PSGUSDT
+2021-09-17 13:14:43,928 [INFO] 	processing 20210916
+2021-09-17 13:14:44,108 [INFO] trying binance call #1
+2021-09-17 13:14:47,034 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PSGUSDT_20210916_1d [status:201 request:2.590s]
+2021-09-17 13:14:47,035 [INFO] start fetching data for ALPACAUSDT
+2021-09-17 13:14:47,036 [INFO] 	processing 20210916
+2021-09-17 13:14:47,233 [INFO] trying binance call #1
+2021-09-17 13:14:47,839 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ALPACAUSDT_20210916_1d [status:201 request:0.270s]
+2021-09-17 13:14:47,840 [INFO] start fetching data for NANOUSDT
+2021-09-17 13:14:47,841 [INFO] 	processing 20210916
+2021-09-17 13:14:48,017 [INFO] trying binance call #1
+2021-09-17 13:14:48,630 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NANOUSDT_20210916_1d [status:201 request:0.279s]
+2021-09-17 13:14:48,631 [INFO] start fetching data for GNOUSDT
+2021-09-17 13:14:48,631 [INFO] 	processing 20210916
+2021-09-17 13:14:50,228 [INFO] trying binance call #1
+2021-09-17 13:14:50,733 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GNOUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:14:50,733 [INFO] start fetching data for BALUSDT
+2021-09-17 13:14:50,738 [INFO] 	processing 20210916
+2021-09-17 13:14:50,918 [INFO] trying binance call #1
+2021-09-17 13:14:52,123 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BALUSDT_20210916_1d [status:201 request:0.366s]
+2021-09-17 13:14:52,123 [INFO] start fetching data for BLZUSDT
+2021-09-17 13:14:52,133 [INFO] 	processing 20210916
+2021-09-17 13:14:52,339 [INFO] trying binance call #1
+2021-09-17 13:14:52,931 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BLZUSDT_20210916_1d [status:201 request:0.249s]
+2021-09-17 13:14:52,932 [INFO] start fetching data for BURGERUSDT
+2021-09-17 13:14:52,932 [INFO] 	processing 20210916
+2021-09-17 13:14:53,112 [INFO] trying binance call #1
+2021-09-17 13:14:53,630 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BURGERUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:14:53,631 [INFO] start fetching data for MIRUSDT
+2021-09-17 13:14:53,631 [INFO] 	processing 20210916
+2021-09-17 13:14:53,829 [INFO] trying binance call #1
+2021-09-17 13:14:54,347 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MIRUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:14:54,347 [INFO] start fetching data for COSUSDT
+2021-09-17 13:14:54,348 [INFO] 	processing 20210916
+2021-09-17 13:14:54,527 [INFO] trying binance call #1
+2021-09-17 13:14:55,433 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/COSUSDT_20210916_1d [status:201 request:0.578s]
+2021-09-17 13:14:55,434 [INFO] start fetching data for LTOUSDT
+2021-09-17 13:14:55,435 [INFO] 	processing 20210916
+2021-09-17 13:14:55,640 [INFO] trying binance call #1
+2021-09-17 13:14:56,230 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LTOUSDT_20210916_1d [status:201 request:0.268s]
+2021-09-17 13:14:56,231 [INFO] start fetching data for STORJUSDT
+2021-09-17 13:14:56,232 [INFO] 	processing 20210916
+2021-09-17 13:14:56,409 [INFO] trying binance call #1
+2021-09-17 13:14:56,937 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/STORJUSDT_20210916_1d [status:201 request:0.206s]
+2021-09-17 13:14:56,938 [INFO] start fetching data for FISUSDT
+2021-09-17 13:14:56,939 [INFO] 	processing 20210916
+2021-09-17 13:14:57,130 [INFO] trying binance call #1
+2021-09-17 13:14:57,726 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FISUSDT_20210916_1d [status:201 request:0.253s]
+2021-09-17 13:14:57,726 [INFO] start fetching data for CKBUSDT
+2021-09-17 13:14:57,726 [INFO] 	processing 20210916
+2021-09-17 13:14:57,911 [INFO] trying binance call #1
+2021-09-17 13:14:58,434 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CKBUSDT_20210916_1d [status:201 request:0.204s]
+2021-09-17 13:14:58,436 [INFO] start fetching data for TRUUSDT
+2021-09-17 13:14:58,437 [INFO] 	processing 20210916
+2021-09-17 13:14:59,634 [INFO] trying binance call #1
+2021-09-17 13:15:00,131 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TRUUSDT_20210916_1d [status:201 request:0.173s]
+2021-09-17 13:15:00,131 [INFO] start fetching data for FORUSDT
+2021-09-17 13:15:00,131 [INFO] 	processing 20210916
+2021-09-17 13:15:00,319 [INFO] trying binance call #1
+2021-09-17 13:15:00,834 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FORUSDT_20210916_1d [status:201 request:0.191s]
+2021-09-17 13:15:00,834 [INFO] start fetching data for HARDUSDT
+2021-09-17 13:15:00,835 [INFO] 	processing 20210916
+2021-09-17 13:15:01,044 [INFO] trying binance call #1
+2021-09-17 13:15:01,634 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/HARDUSDT_20210916_1d [status:201 request:0.256s]
+2021-09-17 13:15:01,634 [INFO] start fetching data for MDXUSDT
+2021-09-17 13:15:01,635 [INFO] 	processing 20210916
+2021-09-17 13:15:01,812 [INFO] trying binance call #1
+2021-09-17 13:15:02,334 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MDXUSDT_20210916_1d [status:201 request:0.198s]
+2021-09-17 13:15:02,335 [INFO] start fetching data for PHAUSDT
+2021-09-17 13:15:02,335 [INFO] 	processing 20210916
+2021-09-17 13:15:02,533 [INFO] trying binance call #1
+2021-09-17 13:15:03,134 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PHAUSDT_20210916_1d [status:201 request:0.243s]
+2021-09-17 13:15:03,134 [INFO] start fetching data for PONDUSDT
+2021-09-17 13:15:03,135 [INFO] 	processing 20210916
+2021-09-17 13:15:03,315 [INFO] trying binance call #1
+2021-09-17 13:15:03,933 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PONDUSDT_20210916_1d [status:201 request:0.275s]
+2021-09-17 13:15:03,933 [INFO] start fetching data for ORNUSDT
+2021-09-17 13:15:03,934 [INFO] 	processing 20210916
+2021-09-17 13:15:04,138 [INFO] trying binance call #1
+2021-09-17 13:15:04,743 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ORNUSDT_20210916_1d [status:201 request:0.281s]
+2021-09-17 13:15:04,743 [INFO] start fetching data for DGBUSDT
+2021-09-17 13:15:04,744 [INFO] 	processing 20210916
+2021-09-17 13:15:04,934 [INFO] trying binance call #1
+2021-09-17 13:15:05,943 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DGBUSDT_20210916_1d [status:201 request:0.683s]
+2021-09-17 13:15:05,943 [INFO] start fetching data for AKROUSDT
+2021-09-17 13:15:05,944 [INFO] 	processing 20210916
+2021-09-17 13:15:06,136 [INFO] trying binance call #1
+2021-09-17 13:15:07,140 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AKROUSDT_20210916_1d [status:201 request:0.681s]
+2021-09-17 13:15:07,140 [INFO] start fetching data for UTKUSDT
+2021-09-17 13:15:07,141 [INFO] 	processing 20210916
+2021-09-17 13:15:07,320 [INFO] trying binance call #1
+2021-09-17 13:15:07,941 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/UTKUSDT_20210916_1d [status:201 request:0.274s]
+2021-09-17 13:15:07,942 [INFO] start fetching data for XVGUSDT
+2021-09-17 13:15:07,943 [INFO] 	processing 20210916
+2021-09-17 13:15:08,135 [INFO] trying binance call #1
+2021-09-17 13:15:08,735 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XVGUSDT_20210916_1d [status:201 request:0.270s]
+2021-09-17 13:15:08,736 [INFO] start fetching data for QNTUSDT
+2021-09-17 13:15:08,737 [INFO] 	processing 20210916
+2021-09-17 13:15:08,919 [INFO] trying binance call #1
+2021-09-17 13:15:09,436 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/QNTUSDT_20210916_1d [status:201 request:0.197s]
+2021-09-17 13:15:09,438 [INFO] start fetching data for AIONUSDT
+2021-09-17 13:15:09,439 [INFO] 	processing 20210916
+2021-09-17 13:15:09,641 [INFO] trying binance call #1
+2021-09-17 13:15:10,238 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AIONUSDT_20210916_1d [status:201 request:0.257s]
+2021-09-17 13:15:10,239 [INFO] start fetching data for TUSDUSDT
+2021-09-17 13:15:10,239 [INFO] 	processing 20210916
+2021-09-17 13:15:10,417 [INFO] trying binance call #1
+2021-09-17 13:15:11,035 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TUSDUSDT_20210916_1d [status:201 request:0.295s]
+2021-09-17 13:15:11,035 [INFO] start fetching data for DIAUSDT
+2021-09-17 13:15:11,036 [INFO] 	processing 20210916
+2021-09-17 13:15:11,234 [INFO] trying binance call #1
+2021-09-17 13:15:11,941 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DIAUSDT_20210916_1d [status:201 request:0.387s]
+2021-09-17 13:15:11,942 [INFO] start fetching data for DATAUSDT
+2021-09-17 13:15:11,942 [INFO] 	processing 20210916
+2021-09-17 13:15:12,120 [INFO] trying binance call #1
+2021-09-17 13:15:12,734 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DATAUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:15:12,735 [INFO] start fetching data for ERNUSDT
+2021-09-17 13:15:12,736 [INFO] 	processing 20210916
+2021-09-17 13:15:12,937 [INFO] trying binance call #1
+2021-09-17 13:15:13,535 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ERNUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:15:13,536 [INFO] start fetching data for NKNUSDT
+2021-09-17 13:15:13,537 [INFO] 	processing 20210916
+2021-09-17 13:15:13,727 [INFO] trying binance call #1
+2021-09-17 13:15:14,248 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NKNUSDT_20210916_1d [status:201 request:0.193s]
+2021-09-17 13:15:14,249 [INFO] start fetching data for BADGERUSDT
+2021-09-17 13:15:14,250 [INFO] 	processing 20210916
+2021-09-17 13:15:14,557 [INFO] trying binance call #1
+2021-09-17 13:15:15,736 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BADGERUSDT_20210916_1d [status:201 request:0.335s]
+2021-09-17 13:15:15,737 [INFO] start fetching data for TRBUSDT
+2021-09-17 13:15:15,738 [INFO] 	processing 20210916
+2021-09-17 13:15:15,928 [INFO] trying binance call #1
+2021-09-17 13:15:16,439 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TRBUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:15:16,440 [INFO] start fetching data for NUUSDT
+2021-09-17 13:15:16,441 [INFO] 	processing 20210916
+2021-09-17 13:15:16,643 [INFO] trying binance call #1
+2021-09-17 13:15:17,275 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NUUSDT_20210916_1d [status:201 request:0.311s]
+2021-09-17 13:15:17,276 [INFO] start fetching data for AVAUSDT
+2021-09-17 13:15:17,277 [INFO] 	processing 20210916
+2021-09-17 13:15:17,459 [INFO] trying binance call #1
+2021-09-17 13:15:18,042 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AVAUSDT_20210916_1d [status:201 request:0.239s]
+2021-09-17 13:15:18,043 [INFO] start fetching data for UMAUSDT
+2021-09-17 13:15:18,044 [INFO] 	processing 20210916
+2021-09-17 13:15:18,240 [INFO] trying binance call #1
+2021-09-17 13:15:18,743 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/UMAUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:15:18,744 [INFO] start fetching data for HIVEUSDT
+2021-09-17 13:15:18,745 [INFO] 	processing 20210916
+2021-09-17 13:15:18,922 [INFO] trying binance call #1
+2021-09-17 13:15:19,442 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/HIVEUSDT_20210916_1d [status:201 request:0.196s]
+2021-09-17 13:15:19,443 [INFO] start fetching data for BNTUSDT
+2021-09-17 13:15:19,443 [INFO] 	processing 20210916
+2021-09-17 13:15:19,641 [INFO] trying binance call #1
+2021-09-17 13:15:20,157 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BNTUSDT_20210916_1d [status:201 request:0.182s]
+2021-09-17 13:15:20,158 [INFO] start fetching data for OMUSDT
+2021-09-17 13:15:20,158 [INFO] 	processing 20210916
+2021-09-17 13:15:20,336 [INFO] trying binance call #1
+2021-09-17 13:15:20,856 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OMUSDT_20210916_1d [status:201 request:0.195s]
+2021-09-17 13:15:20,871 [INFO] start fetching data for MFTUSDT
+2021-09-17 13:15:20,871 [INFO] 	processing 20210916
+2021-09-17 13:15:21,241 [INFO] trying binance call #1
+2021-09-17 13:15:21,937 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MFTUSDT_20210916_1d [status:201 request:0.368s]
+2021-09-17 13:15:21,937 [INFO] start fetching data for TOMOUSDT
+2021-09-17 13:15:21,938 [INFO] 	processing 20210916
+2021-09-17 13:15:22,123 [INFO] trying binance call #1
+2021-09-17 13:15:22,668 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TOMOUSDT_20210916_1d [status:201 request:0.202s]
+2021-09-17 13:15:22,669 [INFO] start fetching data for BELUSDT
+2021-09-17 13:15:22,670 [INFO] 	processing 20210916
+2021-09-17 13:15:22,945 [INFO] trying binance call #1
+2021-09-17 13:15:23,487 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BELUSDT_20210916_1d [status:201 request:0.213s]
+2021-09-17 13:15:23,488 [INFO] start fetching data for STXUSDT
+2021-09-17 13:15:23,488 [INFO] 	processing 20210916
+2021-09-17 13:15:23,670 [INFO] trying binance call #1
+2021-09-17 13:15:24,341 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/STXUSDT_20210916_1d [status:201 request:0.354s]
+2021-09-17 13:15:24,342 [INFO] start fetching data for WNXMUSDT
+2021-09-17 13:15:24,343 [INFO] 	processing 20210916
+2021-09-17 13:15:24,540 [INFO] trying binance call #1
+2021-09-17 13:15:25,054 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WNXMUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:15:25,055 [INFO] start fetching data for CVCUSDT
+2021-09-17 13:15:25,055 [INFO] 	processing 20210916
+2021-09-17 13:15:25,238 [INFO] trying binance call #1
+2021-09-17 13:15:25,849 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CVCUSDT_20210916_1d [status:201 request:0.277s]
+2021-09-17 13:15:25,850 [INFO] start fetching data for CFXUSDT
+2021-09-17 13:15:25,850 [INFO] 	processing 20210916
+2021-09-17 13:15:26,037 [INFO] trying binance call #1
+2021-09-17 13:15:26,640 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CFXUSDT_20210916_1d [status:201 request:0.282s]
+2021-09-17 13:15:26,640 [INFO] start fetching data for FIOUSDT
+2021-09-17 13:15:26,641 [INFO] 	processing 20210916
+2021-09-17 13:15:26,821 [INFO] trying binance call #1
+2021-09-17 13:15:27,440 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FIOUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:15:27,441 [INFO] start fetching data for REPUSDT
+2021-09-17 13:15:27,441 [INFO] 	processing 20210916
+2021-09-17 13:15:27,641 [INFO] trying binance call #1
+2021-09-17 13:15:28,738 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/REPUSDT_20210916_1d [status:201 request:0.773s]
+2021-09-17 13:15:28,739 [INFO] start fetching data for LSKUSDT
+2021-09-17 13:15:28,740 [INFO] 	processing 20210916
+2021-09-17 13:15:28,917 [INFO] trying binance call #1
+2021-09-17 13:15:29,443 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LSKUSDT_20210916_1d [status:201 request:0.194s]
+2021-09-17 13:15:29,443 [INFO] start fetching data for SUNUSDT
+2021-09-17 13:15:29,444 [INFO] 	processing 20210916
+2021-09-17 13:15:29,630 [INFO] trying binance call #1
+2021-09-17 13:15:30,248 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SUNUSDT_20210916_1d [status:201 request:0.273s]
+2021-09-17 13:15:30,249 [INFO] start fetching data for FORTHUSDT
+2021-09-17 13:15:30,249 [INFO] 	processing 20210916
+2021-09-17 13:15:30,431 [INFO] trying binance call #1
+2021-09-17 13:15:31,542 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/FORTHUSDT_20210916_1d [status:201 request:0.272s]
+2021-09-17 13:15:31,543 [INFO] start fetching data for PAXGUSDT
+2021-09-17 13:15:31,544 [INFO] 	processing 20210916
+2021-09-17 13:15:31,741 [INFO] trying binance call #1
+2021-09-17 13:15:32,840 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PAXGUSDT_20210916_1d [status:201 request:0.238s]
+2021-09-17 13:15:32,841 [INFO] start fetching data for DOCKUSDT
+2021-09-17 13:15:32,842 [INFO] 	processing 20210916
+2021-09-17 13:15:33,023 [INFO] trying binance call #1
+2021-09-17 13:15:33,544 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DOCKUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:15:33,546 [INFO] start fetching data for LPTUSDT
+2021-09-17 13:15:33,546 [INFO] 	processing 20210916
+2021-09-17 13:15:33,743 [INFO] trying binance call #1
+2021-09-17 13:15:34,264 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/LPTUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:15:34,265 [INFO] start fetching data for OXTUSDT
+2021-09-17 13:15:34,265 [INFO] 	processing 20210916
+2021-09-17 13:15:34,447 [INFO] trying binance call #1
+2021-09-17 13:15:34,952 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OXTUSDT_20210916_1d [status:201 request:0.181s]
+2021-09-17 13:15:34,952 [INFO] start fetching data for MITHUSDT
+2021-09-17 13:15:34,952 [INFO] 	processing 20210916
+2021-09-17 13:15:35,135 [INFO] trying binance call #1
+2021-09-17 13:15:35,660 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MITHUSDT_20210916_1d [status:201 request:0.186s]
+2021-09-17 13:15:35,661 [INFO] start fetching data for MLNUSDT
+2021-09-17 13:15:35,662 [INFO] 	processing 20210916
+2021-09-17 13:15:35,844 [INFO] trying binance call #1
+2021-09-17 13:15:36,443 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MLNUSDT_20210916_1d [status:201 request:0.258s]
+2021-09-17 13:15:36,443 [INFO] start fetching data for WTCUSDT
+2021-09-17 13:15:36,444 [INFO] 	processing 20210916
+2021-09-17 13:15:36,644 [INFO] trying binance call #1
+2021-09-17 13:15:37,200 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WTCUSDT_20210916_1d [status:201 request:0.215s]
+2021-09-17 13:15:37,201 [INFO] start fetching data for TROYUSDT
+2021-09-17 13:15:37,201 [INFO] 	processing 20210916
+2021-09-17 13:15:37,380 [INFO] trying binance call #1
+2021-09-17 13:15:37,951 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TROYUSDT_20210916_1d [status:201 request:0.240s]
+2021-09-17 13:15:37,963 [INFO] start fetching data for BTSUSDT
+2021-09-17 13:15:37,964 [INFO] 	processing 20210916
+2021-09-17 13:15:38,146 [INFO] trying binance call #1
+2021-09-17 13:15:38,758 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTSUSDT_20210916_1d [status:201 request:0.258s]
+2021-09-17 13:15:38,772 [INFO] start fetching data for KLAYUSDT
+2021-09-17 13:15:38,776 [INFO] 	processing 20210916
+2021-09-17 13:15:38,956 [INFO] trying binance call #1
+2021-09-17 13:15:39,546 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KLAYUSDT_20210916_1d [status:201 request:0.275s]
+2021-09-17 13:15:39,547 [INFO] start fetching data for VITEUSDT
+2021-09-17 13:15:39,547 [INFO] 	processing 20210916
+2021-09-17 13:15:39,742 [INFO] trying binance call #1
+2021-09-17 13:15:40,347 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/VITEUSDT_20210916_1d [status:201 request:0.263s]
+2021-09-17 13:15:40,347 [INFO] start fetching data for KEYUSDT
+2021-09-17 13:15:40,348 [INFO] 	processing 20210916
+2021-09-17 13:15:40,527 [INFO] trying binance call #1
+2021-09-17 13:15:41,048 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KEYUSDT_20210916_1d [status:201 request:0.200s]
+2021-09-17 13:15:41,049 [INFO] start fetching data for PUNDIXUSDT
+2021-09-17 13:15:41,049 [INFO] 	processing 20210916
+2021-09-17 13:15:41,333 [INFO] trying binance call #1
+2021-09-17 13:15:42,837 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PUNDIXUSDT_20210916_1d [status:201 request:0.247s]
+2021-09-17 13:15:42,846 [INFO] start fetching data for PERLUSDT
+2021-09-17 13:15:42,846 [INFO] 	processing 20210916
+2021-09-17 13:15:43,020 [INFO] trying binance call #1
+2021-09-17 13:15:43,703 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PERLUSDT_20210916_1d [status:201 request:0.324s]
+2021-09-17 13:15:43,703 [INFO] start fetching data for KMDUSDT
+2021-09-17 13:15:43,704 [INFO] 	processing 20210916
+2021-09-17 13:15:43,948 [INFO] trying binance call #1
+2021-09-17 13:15:44,645 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/KMDUSDT_20210916_1d [status:201 request:0.372s]
+2021-09-17 13:15:44,645 [INFO] start fetching data for STRAXUSDT
+2021-09-17 13:15:44,646 [INFO] 	processing 20210916
+2021-09-17 13:15:44,827 [INFO] trying binance call #1
+2021-09-17 13:15:45,350 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/STRAXUSDT_20210916_1d [status:201 request:0.194s]
+2021-09-17 13:15:45,351 [INFO] start fetching data for BTCSTUSDT
+2021-09-17 13:15:45,352 [INFO] 	processing 20210916
+2021-09-17 13:15:45,548 [INFO] trying binance call #1
+2021-09-17 13:15:46,142 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTCSTUSDT_20210916_1d [status:201 request:0.265s]
+2021-09-17 13:15:46,144 [INFO] start fetching data for ONGUSDT
+2021-09-17 13:15:46,145 [INFO] 	processing 20210916
+2021-09-17 13:15:46,328 [INFO] trying binance call #1
+2021-09-17 13:15:46,898 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ONGUSDT_20210916_1d [status:201 request:0.217s]
+2021-09-17 13:15:46,898 [INFO] start fetching data for NMRUSDT
+2021-09-17 13:15:46,899 [INFO] 	processing 20210916
+2021-09-17 13:15:47,154 [INFO] trying binance call #1
+2021-09-17 13:15:47,752 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NMRUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:15:47,754 [INFO] start fetching data for WINGUSDT
+2021-09-17 13:15:47,755 [INFO] 	processing 20210916
+2021-09-17 13:15:47,939 [INFO] trying binance call #1
+2021-09-17 13:15:48,490 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/WINGUSDT_20210916_1d [status:201 request:0.193s]
+2021-09-17 13:15:48,491 [INFO] start fetching data for QUICKUSDT
+2021-09-17 13:15:48,492 [INFO] 	processing 20210916
+2021-09-17 13:15:48,750 [INFO] trying binance call #1
+2021-09-17 13:15:49,346 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/QUICKUSDT_20210916_1d [status:201 request:0.268s]
+2021-09-17 13:15:49,347 [INFO] start fetching data for PAXUSDT
+2021-09-17 13:15:49,347 [INFO] 	processing 20210916
+2021-09-17 13:15:49,528 [INFO] trying binance call #1
+2021-09-17 13:15:50,046 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/PAXUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:15:50,047 [INFO] start fetching data for AUTOUSDT
+2021-09-17 13:15:50,047 [INFO] 	processing 20210916
+2021-09-17 13:15:50,247 [INFO] trying binance call #1
+2021-09-17 13:15:50,845 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/AUTOUSDT_20210916_1d [status:201 request:0.252s]
+2021-09-17 13:15:50,846 [INFO] start fetching data for ATMUSDT
+2021-09-17 13:15:50,847 [INFO] 	processing 20210916
+2021-09-17 13:15:51,027 [INFO] trying binance call #1
+2021-09-17 13:15:51,557 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ATMUSDT_20210916_1d [status:201 request:0.195s]
+2021-09-17 13:15:51,558 [INFO] start fetching data for MBLUSDT
+2021-09-17 13:15:51,559 [INFO] 	processing 20210916
+2021-09-17 13:15:51,738 [INFO] trying binance call #1
+2021-09-17 13:15:52,264 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MBLUSDT_20210916_1d [status:201 request:0.200s]
+2021-09-17 13:15:52,265 [INFO] start fetching data for GTOUSDT
+2021-09-17 13:15:52,266 [INFO] 	processing 20210916
+2021-09-17 13:15:52,444 [INFO] trying binance call #1
+2021-09-17 13:15:52,971 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GTOUSDT_20210916_1d [status:201 request:0.192s]
+2021-09-17 13:15:52,971 [INFO] start fetching data for BEAMUSDT
+2021-09-17 13:15:52,973 [INFO] 	processing 20210916
+2021-09-17 13:15:53,155 [INFO] trying binance call #1
+2021-09-17 13:15:53,716 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BEAMUSDT_20210916_1d [status:201 request:0.189s]
+2021-09-17 13:15:53,717 [INFO] start fetching data for RAMPUSDT
+2021-09-17 13:15:53,717 [INFO] 	processing 20210916
+2021-09-17 13:15:53,905 [INFO] trying binance call #1
+2021-09-17 13:15:54,448 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RAMPUSDT_20210916_1d [status:201 request:0.200s]
+2021-09-17 13:15:54,450 [INFO] start fetching data for ARDRUSDT
+2021-09-17 13:15:54,450 [INFO] 	processing 20210916
+2021-09-17 13:15:54,653 [INFO] trying binance call #1
+2021-09-17 13:15:55,164 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ARDRUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:15:55,164 [INFO] start fetching data for DREPUSDT
+2021-09-17 13:15:55,165 [INFO] 	processing 20210916
+2021-09-17 13:15:55,344 [INFO] trying binance call #1
+2021-09-17 13:15:55,949 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DREPUSDT_20210916_1d [status:201 request:0.272s]
+2021-09-17 13:15:55,950 [INFO] start fetching data for COCOSUSDT
+2021-09-17 13:15:55,950 [INFO] 	processing 20210916
+2021-09-17 13:15:56,152 [INFO] trying binance call #1
+2021-09-17 13:15:56,750 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/COCOSUSDT_20210916_1d [status:201 request:0.257s]
+2021-09-17 13:15:56,751 [INFO] start fetching data for BARUSDT
+2021-09-17 13:15:56,752 [INFO] 	processing 20210916
+2021-09-17 13:15:56,935 [INFO] trying binance call #1
+2021-09-17 13:15:57,550 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BARUSDT_20210916_1d [status:201 request:0.253s]
+2021-09-17 13:15:57,551 [INFO] start fetching data for MDTUSDT
+2021-09-17 13:15:57,551 [INFO] 	processing 20210916
+2021-09-17 13:15:57,751 [INFO] trying binance call #1
+2021-09-17 13:15:58,350 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/MDTUSDT_20210916_1d [status:201 request:0.253s]
+2021-09-17 13:15:58,350 [INFO] start fetching data for DCRUSDT
+2021-09-17 13:15:58,351 [INFO] 	processing 20210916
+2021-09-17 13:15:58,531 [INFO] trying binance call #1
+2021-09-17 13:15:59,149 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DCRUSDT_20210916_1d [status:201 request:0.250s]
+2021-09-17 13:15:59,150 [INFO] start fetching data for TCTUSDT
+2021-09-17 13:15:59,151 [INFO] 	processing 20210916
+2021-09-17 13:15:59,351 [INFO] trying binance call #1
+2021-09-17 13:15:59,950 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/TCTUSDT_20210916_1d [status:201 request:0.264s]
+2021-09-17 13:15:59,951 [INFO] start fetching data for BTGUSDT
+2021-09-17 13:15:59,951 [INFO] 	processing 20210916
+2021-09-17 13:16:00,130 [INFO] trying binance call #1
+2021-09-17 13:16:00,651 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BTGUSDT_20210916_1d [status:201 request:0.197s]
+2021-09-17 13:16:00,652 [INFO] start fetching data for BONDUSDT
+2021-09-17 13:16:00,653 [INFO] 	processing 20210916
+2021-09-17 13:16:00,854 [INFO] trying binance call #1
+2021-09-17 13:16:01,752 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/BONDUSDT_20210916_1d [status:201 request:0.549s]
+2021-09-17 13:16:01,753 [INFO] start fetching data for IRISUSDT
+2021-09-17 13:16:01,753 [INFO] 	processing 20210916
+2021-09-17 13:16:01,932 [INFO] trying binance call #1
+2021-09-17 13:16:02,461 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/IRISUSDT_20210916_1d [status:201 request:0.205s]
+2021-09-17 13:16:02,461 [INFO] start fetching data for GHSTUSDT
+2021-09-17 13:16:02,462 [INFO] 	processing 20210916
+2021-09-17 13:16:02,664 [INFO] trying binance call #1
+2021-09-17 13:16:03,353 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GHSTUSDT_20210916_1d [status:201 request:0.339s]
+2021-09-17 13:16:03,353 [INFO] start fetching data for REQUSDT
+2021-09-17 13:16:03,356 [INFO] 	processing 20210916
+2021-09-17 13:16:03,535 [INFO] trying binance call #1
+2021-09-17 13:16:04,151 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/REQUSDT_20210916_1d [status:201 request:0.266s]
+2021-09-17 13:16:04,151 [INFO] start fetching data for DNTUSDT
+2021-09-17 13:16:04,152 [INFO] 	processing 20210916
+2021-09-17 13:16:04,467 [INFO] trying binance call #1
+2021-09-17 13:16:05,052 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DNTUSDT_20210916_1d [status:201 request:0.260s]
+2021-09-17 13:16:05,052 [INFO] start fetching data for JUVUSDT
+2021-09-17 13:16:05,053 [INFO] 	processing 20210916
+2021-09-17 13:16:05,234 [INFO] trying binance call #1
+2021-09-17 13:16:05,854 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/JUVUSDT_20210916_1d [status:201 request:0.280s]
+2021-09-17 13:16:05,854 [INFO] start fetching data for RIFUSDT
+2021-09-17 13:16:05,855 [INFO] 	processing 20210916
+2021-09-17 13:16:06,051 [INFO] trying binance call #1
+2021-09-17 13:16:06,651 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/RIFUSDT_20210916_1d [status:201 request:0.268s]
+2021-09-17 13:16:06,651 [INFO] start fetching data for CTXCUSDT
+2021-09-17 13:16:06,652 [INFO] 	processing 20210916
+2021-09-17 13:16:06,838 [INFO] trying binance call #1
+2021-09-17 13:16:07,449 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/CTXCUSDT_20210916_1d [status:201 request:0.252s]
+2021-09-17 13:16:07,450 [INFO] start fetching data for NULSUSDT
+2021-09-17 13:16:07,450 [INFO] 	processing 20210916
+2021-09-17 13:16:07,648 [INFO] trying binance call #1
+2021-09-17 13:16:08,169 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NULSUSDT_20210916_1d [status:201 request:0.193s]
+2021-09-17 13:16:08,170 [INFO] start fetching data for DUSKUSDT
+2021-09-17 13:16:08,170 [INFO] 	processing 20210916
+2021-09-17 13:16:08,349 [INFO] trying binance call #1
+2021-09-17 13:16:08,879 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DUSKUSDT_20210916_1d [status:201 request:0.189s]
+2021-09-17 13:16:08,879 [INFO] start fetching data for STPTUSDT
+2021-09-17 13:16:08,880 [INFO] 	processing 20210916
+2021-09-17 13:16:09,064 [INFO] trying binance call #1
+2021-09-17 13:16:09,580 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/STPTUSDT_20210916_1d [status:201 request:0.183s]
+2021-09-17 13:16:09,584 [INFO] start fetching data for ACMUSDT
+2021-09-17 13:16:09,585 [INFO] 	processing 20210916
+2021-09-17 13:16:09,769 [INFO] trying binance call #1
+2021-09-17 13:16:10,285 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ACMUSDT_20210916_1d [status:201 request:0.184s]
+2021-09-17 13:16:10,285 [INFO] start fetching data for GXSUSDT
+2021-09-17 13:16:10,286 [INFO] 	processing 20210916
+2021-09-17 13:16:10,476 [INFO] trying binance call #1
+2021-09-17 13:16:11,053 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/GXSUSDT_20210916_1d [status:201 request:0.255s]
+2021-09-17 13:16:11,053 [INFO] start fetching data for ASRUSDT
+2021-09-17 13:16:11,055 [INFO] 	processing 20210916
+2021-09-17 13:16:11,244 [INFO] trying binance call #1
+2021-09-17 13:16:11,754 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ASRUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:16:11,754 [INFO] start fetching data for NBSUSDT
+2021-09-17 13:16:11,755 [INFO] 	processing 20210916
+2021-09-17 13:16:11,939 [INFO] trying binance call #1
+2021-09-17 13:16:12,476 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/NBSUSDT_20210916_1d [status:201 request:0.193s]
+2021-09-17 13:16:12,476 [INFO] start fetching data for OGUSDT
+2021-09-17 13:16:12,477 [INFO] 	processing 20210916
+2021-09-17 13:16:12,658 [INFO] trying binance call #1
+2021-09-17 13:16:13,182 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/OGUSDT_20210916_1d [status:201 request:0.187s]
+2021-09-17 13:16:13,183 [INFO] start fetching data for SUSDUSDT
+2021-09-17 13:16:13,184 [INFO] 	processing 20210916
+2021-09-17 13:16:13,366 [INFO] trying binance call #1
+2021-09-17 13:16:13,952 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/SUSDUSDT_20210916_1d [status:201 request:0.245s]
+2021-09-17 13:16:13,953 [INFO] start fetching data for DYDXUSDT
+2021-09-17 13:16:13,954 [INFO] 	processing 20210916
+2021-09-17 13:16:14,130 [INFO] trying binance call #1
+2021-09-17 13:16:14,666 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/DYDXUSDT_20210916_1d [status:201 request:0.192s]
+2021-09-17 13:16:14,666 [INFO] start fetching data for XECUSDT
+2021-09-17 13:16:14,667 [INFO] 	processing 20210916
+2021-09-17 13:16:14,853 [INFO] trying binance call #1
+2021-09-17 13:16:15,448 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/XECUSDT_20210916_1d [status:201 request:0.256s]
+2021-09-17 13:16:15,448 [INFO] start fetching data for IDEXUSDT
+2021-09-17 13:16:15,448 [INFO] 	processing 20210916
+2021-09-17 13:16:15,625 [INFO] trying binance call #1
+2021-09-17 13:16:16,152 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/IDEXUSDT_20210916_1d [status:201 request:0.205s]
+2021-09-17 13:16:16,154 [INFO] start fetching data for ELFUSDT
+2021-09-17 13:16:16,154 [INFO] 	processing 20210916
+2021-09-17 13:16:16,351 [INFO] trying binance call #1
+2021-09-17 13:16:16,880 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/ELFUSDT_20210916_1d [status:201 request:0.190s]
+2021-09-17 13:16:16,881 [INFO] start fetching data for VIDTUSDT
+2021-09-17 13:16:16,881 [INFO] 	processing 20210916
+2021-09-17 13:16:17,052 [INFO] trying binance call #1
+2021-09-17 13:16:17,568 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/VIDTUSDT_20210916_1d [status:201 request:0.185s]
+2021-09-17 13:16:17,569 [INFO] start fetching data for POLYUSDT
+2021-09-17 13:16:17,569 [INFO] 	processing 20210916
+2021-09-17 13:16:17,752 [INFO] trying binance call #1
+2021-09-17 13:16:18,255 [INFO] PUT https://df524dc4e2fa4a47b892cbb3cb0c4755.us-west1.gcp.cloud.es.io/symbols-1d/_create/POLYUSDT_20210916_1d [status:201 request:0.185s]

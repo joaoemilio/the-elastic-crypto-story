@@ -70,16 +70,16 @@ def fetch1d( symbol, start, end=None ):
 
     day = ts_start
     while day < ts_end:
-        logging.info(f'\tprocessing {su.get_yyyymmdd(day)}', end='\r')
+        logging.info(f'\tprocessing {su.get_yyyymmdd(day)}' )
         # download data from <start>
         ot = su.get_yyyymmdd(day)
         _id = f"{symbol}_{ot}_1d"
-        if not su.es_exists("symbols", _id):
+        if not su.es_exists("symbols-1d", _id):
             kline = fetch_candles(symbol, day, "1d", 1)
             if kline: 
                 obj = kline[0]
                 obj["cs"] = "1d"
-                su.es_create( "symbols", _id, obj )
+                su.es_create( "symbols-1d", _id, obj )
         
         day += 3600*24
 
@@ -164,7 +164,7 @@ def fetch(symbol:str, cs:str, start:str, end=None):
             for o in r:
                 ot = su.get_yyyymmdd_hhmm(o['open_time'])
                 _id = f"{symbol}_{ot}_{cs}"
-                if not su.es_exists("symbols", _id):
+                if not su.es_exists(f"symbols-{cs}", _id):
                     o["cs"] = cs
                     #su.es_create( "symbols", _id, o )
                     data[_id] = o
@@ -173,7 +173,7 @@ def fetch(symbol:str, cs:str, start:str, end=None):
         
             if len(data) > 0:
                 logging.info(f"Bulk upload {len(data)} docs")
-                su.es_bulk_create("symbols", data, partial=500)
+                su.es_bulk_create(f"symbols-{cs}", data, partial=500)
 
         day += 3600*24
 
@@ -198,26 +198,39 @@ def main(argv):
 
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
-        start = argv[1]
-        if len(argv) == 3:
-            end = argv[2]
+        cs = argv[1]
+        start = argv[2]
+        if len(argv) == 4:
+            end = argv[3]
         else:
             end = None
         
+        count = 1
         for symbol in symbols:
-            logging.info(f"start fetching data for {symbol}")
-            fetch1m(symbol, start, end)
+            logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)}")
+            if cs == "1m":
+                fetch1m(symbol, start, end)
+            elif cs == "1d":
+                fetch1d( symbol, start, end )
+            else:
+                fetch( symbol, cs, start, end )
+            count += 1
     else:
         symbol = argv[0]
-        start = argv[1]
-        if len(argv) == 3:
-            end = argv[2]
+        cs = argv[1]
+        start = argv[2]
+        if len(argv) == 4:
+            end = argv[3]
         else:
             end = None
 
-        fetch1m(symbol, start, end)
+        logging.info(f"start fetching data for {symbol}")
+        if cs == "1m":
+            fetch1m(symbol, start, end)
+        elif cs == "1d":
+            fetch1d( symbol, start, end )
+        else:
+            fetch( symbol, cs, start, end )
 
 if __name__ == "__main__":
    main(sys.argv[1:])
-
-
