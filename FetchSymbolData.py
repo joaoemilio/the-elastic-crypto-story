@@ -9,7 +9,6 @@ import ScientistUtils as su
 from collections import deque
 import sys
 import numpy as np
-import Calculations as ca
 
 ##################################################
 # Download
@@ -204,30 +203,10 @@ def main(argv):
             end = argv[2]
         else:
             end = None
-
-        if len(argv) == 4:
-            cs = argv[3]
-        else:
-            cs = None
         
         for symbol in symbols:
             logging.info(f"start fetching data for {symbol}")
-            if not cs:
-                fetch1d( symbol, start, end )
-                fetch( symbol, "4h", start, end)
-                fetch(symbol, "1h", start, end)
-                fetch(symbol, "15m", start, end)
-                fetch(symbol, "5m", start, end)
-                fetch1m(symbol, start, end)
-                logging.info('\n\n\n')
-            else:
-                if cs == "1d": 
-                    fetch1d( symbol, start, end )
-                elif cs == "1m":
-                    fetch1m(symbol, start, end)
-                else:
-                    fetch(symbol, cs, start, end)
-
+            fetch1m(symbol, start, end)
     else:
         symbol = argv[0]
         start = argv[1]
@@ -236,26 +215,7 @@ def main(argv):
         else:
             end = None
 
-        if len(argv) == 4:
-            cs = argv[3]
-        else:
-            cs = None
-
-        if not cs:
-            fetch1d( symbol, start, end )
-            fetch( symbol, "4h", start, end)
-            fetch(symbol, "1h", start, end)
-            fetch(symbol, "15m", start, end)
-            fetch(symbol, "5m", start, end)
-            fetch1m(symbol, start, end)
-            logging.info('\n\n\n')
-        else:
-            if cs == "1d": 
-                fetch1d( symbol, start, end )
-            elif cs == "1m":
-                fetch1m(symbol, start, end)
-            else:
-                fetch(symbol, cs, start, end)
+        fetch1m(symbol, start, end)
 
 if __name__ == "__main__":
    main(sys.argv[1:])

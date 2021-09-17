@@ -36,9 +36,14 @@ def notify(msg, code=None, channel="alerts"):
         logging.error(f"Error posting to {url} e={e}") # use proper logging
 
 ############ ELASTICSEARCH ##############
+def es_search( iname, query ):
+    return es.search( index=iname, body=query)
 
 def es_exists(iname, id):
     return es.exists( id=id, index=iname)
+
+def es_get(iname, id):
+    return es.get( id=id, index=iname)
 
 def es_create( iname, _id, obj ):
     es.create( id=_id, body=obj, index=iname)
@@ -65,6 +70,31 @@ def es_bulk_create(iname, data, partial=100):
         else:
             count += 1
 
+    helpers.bulk(client=es,actions=actions)        
+
+def es_bulk_update(iname, data, partial=100):
+    count = 1
+    if not partial: partial = len(data)
+    actions = []
+    for k in data:
+        action = { "_op_type": "update", "_index": iname, "_id": k, "doc": data[k] } 
+        actions.append( action )
+        if partial and count == partial:
+
+            for i in (1,2,3):
+                try:
+                    helpers.bulk(client=es,actions=actions)
+                    break
+                except elasticsearch.exceptions.ConnectionTimeout as cte:
+                    logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+                    logging.info( "waiting 10s before retry sending docs to elasticsearch")
+                    time.sleep(10)
+            actions = []
+            count = 0
+        else:
+            count += 1
+
+    print(actions)
     helpers.bulk(client=es,actions=actions)        
 
 ############################### IO ############################

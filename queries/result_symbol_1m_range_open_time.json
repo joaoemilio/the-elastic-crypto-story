@@ -1,0 +1,893 @@
+{
+    "took": 1246,
+    "timed_out": False,
+    "_shards": {
+        "total": 1,
+        "successful": 1,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": {
+            "value": 46,
+            "relation": "eq"
+        },
+        "max_score": 0.0,
+        "hits": [
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "vHqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2570.37,
+                    "high": 2578.02,
+                    "low": 2570.33,
+                    "close": 2576.98,
+                    "q_volume": 5769667.4513116,
+                    "trades": 8758.0,
+                    "open_time": 1627784700,
+                    "open_time_ms": 1627784700000,
+                    "open_time_iso": "2021-08-01T02:25:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "vXqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.98,
+                    "high": 2578.95,
+                    "low": 2571.72,
+                    "close": 2571.81,
+                    "q_volume": 6796912.1781083,
+                    "trades": 7481.0,
+                    "open_time": 1627785000,
+                    "open_time_ms": 1627785000000,
+                    "open_time_iso": "2021-08-01T02:30:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "vnqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2571.81,
+                    "high": 2578.79,
+                    "low": 2571.38,
+                    "close": 2577.2,
+                    "q_volume": 4261899.7665392,
+                    "trades": 7453.0,
+                    "open_time": 1627785300,
+                    "open_time_ms": 1627785300000,
+                    "open_time_iso": "2021-08-01T02:35:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "v3qM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2577.21,
+                    "high": 2585.96,
+                    "low": 2577.02,
+                    "close": 2584.92,
+                    "q_volume": 7218563.7257863,
+                    "trades": 10710.0,
+                    "open_time": 1627785600,
+                    "open_time_ms": 1627785600000,
+                    "open_time_iso": "2021-08-01T02:40:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "wHqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2584.81,
+                    "high": 2587.97,
+                    "low": 2581.04,
+                    "close": 2581.4,
+                    "q_volume": 6143559.6175963,
+                    "trades": 9984.0,
+                    "open_time": 1627785900,
+                    "open_time_ms": 1627785900000,
+                    "open_time_iso": "2021-08-01T02:45:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "wXqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2581.4,
+                    "high": 2582.77,
+                    "low": 2575.95,
+                    "close": 2580.01,
+                    "q_volume": 4754934.9043152,
+                    "trades": 12730.0,
+                    "open_time": 1627786200,
+                    "open_time_ms": 1627786200000,
+                    "open_time_iso": "2021-08-01T02:50:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "wnqM6XsBulMwvJvUQ_qG",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.01,
+                    "high": 2581.57,
+                    "low": 2578.01,
+                    "close": 2580.15,
+                    "q_volume": 3892286.7848339,
+                    "trades": 6501.0,
+                    "open_time": 1627786500,
+                    "open_time_ms": 1627786500000,
+                    "open_time_iso": "2021-08-01T02:55:00",
+                    "cs": "5m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0222_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2567.69,
+                    "high": 2569.0,
+                    "low": 2566.3,
+                    "close": 2568.99,
+                    "q_volume": 596679.8096343,
+                    "trades": 775.0,
+                    "open_time": 1627784520,
+                    "open_time_ms": 1627784520000,
+                    "open_time_iso": "2021-08-01T02:22:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0223_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2568.99,
+                    "high": 2570.0,
+                    "low": 2567.53,
+                    "close": 2568.95,
+                    "q_volume": 884449.2623847,
+                    "trades": 2072.0,
+                    "open_time": 1627784580,
+                    "open_time_ms": 1627784580000,
+                    "open_time_iso": "2021-08-01T02:23:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0224_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2568.96,
+                    "high": 2570.4,
+                    "low": 2568.95,
+                    "close": 2570.33,
+                    "q_volume": 585440.7922145,
+                    "trades": 914.0,
+                    "open_time": 1627784640,
+                    "open_time_ms": 1627784640000,
+                    "open_time_iso": "2021-08-01T02:24:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0225_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2570.37,
+                    "high": 2574.84,
+                    "low": 2570.33,
+                    "close": 2574.5,
+                    "q_volume": 1359253.1591762,
+                    "trades": 1697.0,
+                    "open_time": 1627784700,
+                    "open_time_ms": 1627784700000,
+                    "open_time_iso": "2021-08-01T02:25:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0226_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2574.51,
+                    "high": 2577.81,
+                    "low": 2572.8,
+                    "close": 2576.0,
+                    "q_volume": 1938809.5398478,
+                    "trades": 1850.0,
+                    "open_time": 1627784760,
+                    "open_time_ms": 1627784760000,
+                    "open_time_iso": "2021-08-01T02:26:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0227_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.01,
+                    "high": 2578.02,
+                    "low": 2574.11,
+                    "close": 2576.63,
+                    "q_volume": 819440.5440851,
+                    "trades": 2090.0,
+                    "open_time": 1627784820,
+                    "open_time_ms": 1627784820000,
+                    "open_time_iso": "2021-08-01T02:27:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0228_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.63,
+                    "high": 2577.96,
+                    "low": 2575.0,
+                    "close": 2577.02,
+                    "q_volume": 710881.1010421,
+                    "trades": 1022.0,
+                    "open_time": 1627784880,
+                    "open_time_ms": 1627784880000,
+                    "open_time_iso": "2021-08-01T02:28:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0229_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2577.01,
+                    "high": 2577.54,
+                    "low": 2574.82,
+                    "close": 2576.98,
+                    "q_volume": 941283.1071604,
+                    "trades": 2099.0,
+                    "open_time": 1627784940,
+                    "open_time_ms": 1627784940000,
+                    "open_time_iso": "2021-08-01T02:29:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0230_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.98,
+                    "high": 2578.95,
+                    "low": 2575.16,
+                    "close": 2578.16,
+                    "q_volume": 3218740.5632629,
+                    "trades": 1234.0,
+                    "open_time": 1627785000,
+                    "open_time_ms": 1627785000000,
+                    "open_time_iso": "2021-08-01T02:30:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0231_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2578.15,
+                    "high": 2578.66,
+                    "low": 2576.94,
+                    "close": 2577.63,
+                    "q_volume": 623632.5626928,
+                    "trades": 1697.0,
+                    "open_time": 1627785060,
+                    "open_time_ms": 1627785060000,
+                    "open_time_iso": "2021-08-01T02:31:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0232_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2577.63,
+                    "high": 2578.27,
+                    "low": 2577.3,
+                    "close": 2577.55,
+                    "q_volume": 448648.8958698,
+                    "trades": 1318.0,
+                    "open_time": 1627785120,
+                    "open_time_ms": 1627785120000,
+                    "open_time_iso": "2021-08-01T02:32:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0233_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2577.55,
+                    "high": 2577.69,
+                    "low": 2574.56,
+                    "close": 2575.99,
+                    "q_volume": 1539172.4222479,
+                    "trades": 1546.0,
+                    "open_time": 1627785180,
+                    "open_time_ms": 1627785180000,
+                    "open_time_iso": "2021-08-01T02:33:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0234_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.03,
+                    "high": 2576.61,
+                    "low": 2571.72,
+                    "close": 2571.81,
+                    "q_volume": 966717.7340349,
+                    "trades": 1686.0,
+                    "open_time": 1627785240,
+                    "open_time_ms": 1627785240000,
+                    "open_time_iso": "2021-08-01T02:34:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0235_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2571.81,
+                    "high": 2576.31,
+                    "low": 2571.38,
+                    "close": 2576.03,
+                    "q_volume": 975977.590075,
+                    "trades": 2191.0,
+                    "open_time": 1627785300,
+                    "open_time_ms": 1627785300000,
+                    "open_time_iso": "2021-08-01T02:35:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0236_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.03,
+                    "high": 2576.95,
+                    "low": 2574.09,
+                    "close": 2575.79,
+                    "q_volume": 1057458.2953795,
+                    "trades": 1012.0,
+                    "open_time": 1627785360,
+                    "open_time_ms": 1627785360000,
+                    "open_time_iso": "2021-08-01T02:36:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0237_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2575.79,
+                    "high": 2575.97,
+                    "low": 2573.2,
+                    "close": 2574.73,
+                    "q_volume": 441367.6773649,
+                    "trades": 1161.0,
+                    "open_time": 1627785420,
+                    "open_time_ms": 1627785420000,
+                    "open_time_iso": "2021-08-01T02:37:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0238_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2574.73,
+                    "high": 2576.5,
+                    "low": 2574.49,
+                    "close": 2575.3,
+                    "q_volume": 1002049.1794492,
+                    "trades": 1200.0,
+                    "open_time": 1627785480,
+                    "open_time_ms": 1627785480000,
+                    "open_time_iso": "2021-08-01T02:38:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0239_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2575.27,
+                    "high": 2578.79,
+                    "low": 2575.15,
+                    "close": 2577.2,
+                    "q_volume": 785047.0242706,
+                    "trades": 1889.0,
+                    "open_time": 1627785540,
+                    "open_time_ms": 1627785540000,
+                    "open_time_iso": "2021-08-01T02:39:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0240_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2577.21,
+                    "high": 2580.0,
+                    "low": 2577.02,
+                    "close": 2580.0,
+                    "q_volume": 974860.5198886,
+                    "trades": 1098.0,
+                    "open_time": 1627785600,
+                    "open_time_ms": 1627785600000,
+                    "open_time_iso": "2021-08-01T02:40:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0241_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.0,
+                    "high": 2584.39,
+                    "low": 2579.5,
+                    "close": 2582.7,
+                    "q_volume": 2502716.9804483,
+                    "trades": 4429.0,
+                    "open_time": 1627785660,
+                    "open_time_ms": 1627785660000,
+                    "open_time_iso": "2021-08-01T02:41:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0242_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2582.71,
+                    "high": 2584.76,
+                    "low": 2582.71,
+                    "close": 2583.08,
+                    "q_volume": 1360184.400232,
+                    "trades": 1324.0,
+                    "open_time": 1627785720,
+                    "open_time_ms": 1627785720000,
+                    "open_time_iso": "2021-08-01T02:42:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0243_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2583.08,
+                    "high": 2585.96,
+                    "low": 2582.02,
+                    "close": 2583.68,
+                    "q_volume": 1831990.5152964,
+                    "trades": 2435.0,
+                    "open_time": 1627785780,
+                    "open_time_ms": 1627785780000,
+                    "open_time_iso": "2021-08-01T02:43:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0244_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2583.68,
+                    "high": 2584.95,
+                    "low": 2582.77,
+                    "close": 2584.92,
+                    "q_volume": 548811.309921,
+                    "trades": 1424.0,
+                    "open_time": 1627785840,
+                    "open_time_ms": 1627785840000,
+                    "open_time_iso": "2021-08-01T02:44:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0245_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2584.81,
+                    "high": 2585.06,
+                    "low": 2582.89,
+                    "close": 2584.28,
+                    "q_volume": 969476.0837266,
+                    "trades": 1589.0,
+                    "open_time": 1627785900,
+                    "open_time_ms": 1627785900000,
+                    "open_time_iso": "2021-08-01T02:45:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0246_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2584.16,
+                    "high": 2587.97,
+                    "low": 2583.92,
+                    "close": 2587.05,
+                    "q_volume": 1319917.0421957,
+                    "trades": 1676.0,
+                    "open_time": 1627785960,
+                    "open_time_ms": 1627785960000,
+                    "open_time_iso": "2021-08-01T02:46:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0247_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2587.05,
+                    "high": 2587.05,
+                    "low": 2583.0,
+                    "close": 2583.64,
+                    "q_volume": 1965077.3420835,
+                    "trades": 3139.0,
+                    "open_time": 1627786020,
+                    "open_time_ms": 1627786020000,
+                    "open_time_iso": "2021-08-01T02:47:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0248_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2583.64,
+                    "high": 2584.7,
+                    "low": 2582.0,
+                    "close": 2583.2,
+                    "q_volume": 1002228.0905195,
+                    "trades": 1916.0,
+                    "open_time": 1627786080,
+                    "open_time_ms": 1627786080000,
+                    "open_time_iso": "2021-08-01T02:48:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0249_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2583.26,
+                    "high": 2584.97,
+                    "low": 2581.04,
+                    "close": 2581.4,
+                    "q_volume": 886861.059071,
+                    "trades": 1664.0,
+                    "open_time": 1627786140,
+                    "open_time_ms": 1627786140000,
+                    "open_time_iso": "2021-08-01T02:49:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0250_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2581.4,
+                    "high": 2582.77,
+                    "low": 2578.89,
+                    "close": 2579.22,
+                    "q_volume": 1220148.7636153,
+                    "trades": 6280.0,
+                    "open_time": 1627786200,
+                    "open_time_ms": 1627786200000,
+                    "open_time_iso": "2021-08-01T02:50:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0251_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2579.21,
+                    "high": 2580.0,
+                    "low": 2575.95,
+                    "close": 2578.42,
+                    "q_volume": 1322088.5778177,
+                    "trades": 2119.0,
+                    "open_time": 1627786260,
+                    "open_time_ms": 1627786260000,
+                    "open_time_iso": "2021-08-01T02:51:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0252_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2578.29,
+                    "high": 2578.42,
+                    "low": 2575.98,
+                    "close": 2578.06,
+                    "q_volume": 507222.360776,
+                    "trades": 911.0,
+                    "open_time": 1627786320,
+                    "open_time_ms": 1627786320000,
+                    "open_time_iso": "2021-08-01T02:52:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0253_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2578.07,
+                    "high": 2580.67,
+                    "low": 2578.07,
+                    "close": 2580.45,
+                    "q_volume": 622054.4581991,
+                    "trades": 2171.0,
+                    "open_time": 1627786380,
+                    "open_time_ms": 1627786380000,
+                    "open_time_iso": "2021-08-01T02:53:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0254_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.45,
+                    "high": 2581.57,
+                    "low": 2579.59,
+                    "close": 2580.01,
+                    "q_volume": 1083420.7439071,
+                    "trades": 1249.0,
+                    "open_time": 1627786440,
+                    "open_time_ms": 1627786440000,
+                    "open_time_iso": "2021-08-01T02:54:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0255_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.01,
+                    "high": 2581.18,
+                    "low": 2578.09,
+                    "close": 2580.5,
+                    "q_volume": 651552.1113889,
+                    "trades": 1635.0,
+                    "open_time": 1627786500,
+                    "open_time_ms": 1627786500000,
+                    "open_time_iso": "2021-08-01T02:55:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0256_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.5,
+                    "high": 2581.57,
+                    "low": 2579.57,
+                    "close": 2580.07,
+                    "q_volume": 641352.6380264,
+                    "trades": 1386.0,
+                    "open_time": 1627786560,
+                    "open_time_ms": 1627786560000,
+                    "open_time_iso": "2021-08-01T02:56:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0257_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2580.08,
+                    "high": 2580.84,
+                    "low": 2578.01,
+                    "close": 2578.51,
+                    "q_volume": 944800.0511626,
+                    "trades": 1485.0,
+                    "open_time": 1627786620,
+                    "open_time_ms": 1627786620000,
+                    "open_time_iso": "2021-08-01T02:57:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ETHUSDT_20210801_0258_1m",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2578.51,
+                    "high": 2580.84,
+                    "low": 2578.51,
+                    "close": 2580.13,
+                    "q_volume": 834615.0012174,
+                    "trades": 1198.0,
+                    "open_time": 1627786680,
+                    "open_time_ms": 1627786680000,
+                    "open_time_iso": "2021-08-01T02:58:00",
+                    "cs": "1m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "yXqK6XsBulMwvJvURekA",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2576.98,
+                    "high": 2585.96,
+                    "low": 2571.38,
+                    "close": 2584.92,
+                    "q_volume": 18277375.6704338,
+                    "trades": 25644.0,
+                    "open_time": 1627785000,
+                    "open_time_ms": 1627785000000,
+                    "open_time_iso": "2021-08-01T02:30:00",
+                    "cs": "15m"
+                }
+            },
+            {
+                "_index": "symbols",
+                "_type": "_doc",
+                "_id": "ynqK6XsBulMwvJvURekA",
+                "_score": 0.0,
+                "_source": {
+                    "symbol": "ETHUSDT",
+                    "open": 2584.81,
+                    "high": 2587.97,
+                    "low": 2575.95,
+                    "close": 2580.15,
+                    "q_volume": 14790781.3067454,
+                    "trades": 29215.0,
+                    "open_time": 1627785900,
+                    "open_time_ms": 1627785900000,
+                    "open_time_iso": "2021-08-01T02:45:00",
+                    "cs": "15m"
+                }
+            }
+        ]
+    }
+}
