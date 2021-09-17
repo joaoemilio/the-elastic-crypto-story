@@ -30,10 +30,48 @@ def dp( current_price, previous_price, ):
 def bb( current_price, mov_avg_price, std_price ):
     return ( current_price - mov_avg_price) / std_price
 
-def enrich1m(symbol, ts_start, ts_end):
+def enrich1m(symbol, data, ts_start, ts_end, q, closes):
 
-    window_size = 200
-    ts_window_size = ts_start-200*60
+    minute = ts_start
+    mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
+    aug = {}
+    while minute < ts_end:
+        _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
+
+        try:
+            doc = data[_id]
+            close = doc['close']
+            if "1m" not in doc: doc["1m"] = {}
+            if "aug" in doc and doc["aug"]["1m"] == "1.0.0": 
+                logging.debug(f"{_id} already augmented 1m: {doc['aug']['1m']}")
+            else:
+                for mm in mms:
+                    doc["1m"][f"close_mm{mm}"] = moving_avg( close, closes[-mm:] , mm)
+                    doc["1m"][f"std{mm}"] = std_dev( close, closes[-mm:], mm )
+                    doc["1m"][f"mid_bb{mm}"] = mean( close, closes[-mm:], mm )
+                    doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
+
+                doc["1m"]["dp"] = dp( close, closes[-1])
+                doc["1m"]['d0'] = delta( doc['open'], doc['close'] )
+                doc["aug"] = { "1m": "1.0.0" }
+
+                q.append(close)
+                q.popleft()
+
+                aug[_id] = doc
+                if len(aug) == 1000:
+                    logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 1000 docs. Last ID: {_id}")
+                    su.es_bulk_update(iname="symbols", data=data, partial=1000)
+                    aug = {}
+        except Exception as ex:
+            logging.error(ex)
+
+        minute += 60
+
+    su.es_bulk_update(iname="symbols", data=aug, partial=1000)
+
+def get_closes_1m( symbol, ts_start, window_size):
+    ts_window_size = ts_start-window_size*60
 
     query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
     data = su.es_search("symbols", query)['hits']['hits']
@@ -46,48 +84,25 @@ def enrich1m(symbol, ts_start, ts_end):
         q.append( { "_id": _id, "close": s['close'] } )
 
     closes = [ v['close'] for v in q ]
+    return closes, q
 
-    logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} Lets enrich {symbol} cs=1m")
-    minute = ts_start
+def enrichDay(symbol, day):
+    window_size = 24*60
+    ts_start = day
+    ts_end = ts_start + 24*3600
 
-    mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
+    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    results = su.es_search("symbols", query)['hits']['hits']
     data = {}
-    while minute < ts_end:
-        _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
+    for d in results:
+        doc = d['_source']
+        data[d['_id']] = doc
 
-        try:
-            source = su.es_get( "symbols", _id )
-            if source: 
-                doc = source['_source']
-                close = doc['close']
-                if "1m" not in doc: doc["1m"] = {}
-                if "aug" in doc and doc["aug"]["1m"] == "1.0.0": 
-                    print(f"{_id} already augmented 1m: {doc['aug']['1m']}")
-                else:
-                    for mm in mms:
-                        doc["1m"][f"close_mm{mm}"] = moving_avg( close, closes[-mm:] , mm)
-                        doc["1m"][f"std{mm}"] = std_dev( close, closes[-mm:], mm )
-                        doc["1m"][f"mid_bb{mm}"] = mean( close, closes[-mm:], mm )
-                        doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
+    closes, q = get_closes_1m( symbol, ts_start, 200 )
 
-                    doc["1m"]["dp"] = dp( close, closes[-1])
-                    doc["1m"]['d0'] = delta( doc['open'], doc['close'] )
-                    doc["aug"] = { "1m": "1.0.0" }
+    logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    enrich1m(symbol, data, ts_start, ts_end, q, closes)
 
-                    q.append(close)
-                    q.popleft()
-
-                    data[_id] = doc
-                    if len(data) == 1000:
-                        logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 1000 docs. Last ID: {_id}")
-                        su.es_bulk_update(iname="symbols", data=data, partial=1000)
-                        data = {}
-        except Exception as ex:
-            print(ex)
-
-        minute += 60
-
-    su.es_bulk_update(iname="symbols", data=data, partial=1000)
 
 def main(argv):
 
@@ -109,16 +124,23 @@ def main(argv):
     logging.info('--------------------------------------------------------------------------------')
 
     start = su.get_ts(argv[1])
+    day = start
     end = su.get_ts(argv[2])
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
-        
-        for symbol in symbols:
-            logging.info(f"start fetching data for {symbol}")
-            enrich1m( symbol, start, end )
+        while day < end:
+            for symbol in symbols:
+                logging.info(f"start fetching data from day {su.get_iso_datetime(day)} for {symbol}")
+                enrichDay( symbol, day )
+
+            day += 24*3600
     else:
         symbol = argv[0]
-        enrich1m( symbol, start, end )
+        while day < end:
+            logging.info(f"start fetching data from day {su.get_iso_datetime(day)} for {symbol}")
+            enrichDay( symbol, day )
+
+            day += 24*3600
 
 if __name__ == "__main__":
    main(sys.argv[1:])
