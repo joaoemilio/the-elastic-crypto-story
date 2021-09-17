@@ -60,13 +60,7 @@ def log(info):
 # 1d Logic
 ##################################################
 
-def fetch1d( symbol, start, end=None ):
-    if not end:
-        ts_end = int(time.time()/(24*3600))*24*3600
-    else:
-        ts_end = su.get_ts( end )
-
-    ts_start = su.get_ts( start )
+def fetch1d( symbol, ts_start, ts_end ):
 
     day = ts_start
     while day < ts_end:
@@ -90,20 +84,12 @@ def fetch1d( symbol, start, end=None ):
 def iso(t):
     return su.get_iso_datetime(t)
 
-def fetch1m(symbol, day:str, end:None):
-    # prepare empty result
-    if not end:
-        ts_end = int(time.time()/(24*3600))*24*3600
-    else:
-        ts_end = su.get_ts( end )
-
-    ts_start = su.get_ts( day )+24*3600
+def fetch1m(symbol, ts_start, ts_end):
 
     log(f"Lets fetch {symbol} cs=1m")
-    day = ts_start
 
-    while day < ts_end:
-        end_time = day + 24*3600 # in seconds
+    while ts_start < ts_end:
+        end_time = ts_start + 24*3600 # in seconds
         pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
 
         # check if open_time 00:00 and minute 23:59 exists
@@ -142,14 +128,7 @@ def fetch1m(symbol, day:str, end:None):
             
         day += 3600*24
 
-def fetch(symbol:str, cs:str, start:str, end=None):
-
-    if not end:
-        ts_end = int(time.time()/(24*3600))*24*3600
-    else:
-        ts_end = su.get_ts( end )
-
-    ts_start = su.get_ts( start )+24*3600
+def fetch(symbol:str, cs:str, ts_start, ts_end):
 
     log(f"Lets fetch {symbol} cs={cs}")
     day = ts_start
@@ -196,37 +175,32 @@ def main(argv):
     logging.info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     logging.info('--------------------------------------------------------------------------------')
 
+    cs = argv[1]
+    start = su.get_ts(argv[2])
+    day = start
+    end = su.get_ts(argv[3])
+
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
-        cs = argv[1]
-        start = argv[2]
-        if len(argv) == 4:
-            end = argv[3]
-        else:
-            end = None
-        
-        count = 1
-        for symbol in symbols:
-            logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)}")
-            if cs == "1m":
-                fetch1m(symbol, start, end)
-            elif cs == "1d":
-                fetch1d( symbol, start, end )
-            else:
-                fetch( symbol, cs, start, end )
-            count += 1
+        while day < end:
+            count = 1
+            for symbol in symbols:
+                logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)}")
+                if cs == "1m":
+                    fetch1m(symbol, day, day+24*3600 )
+                elif cs == "1d":
+                    fetch1d( symbol, day, day+24*3600 )
+                else:
+                    fetch( symbol, cs, day, day+24*3600 )
+                count += 1
+
+            day += 24*3600
     else:
         symbol = argv[0]
-        cs = argv[1]
-        start = argv[2]
-        if len(argv) == 4:
-            end = argv[3]
-        else:
-            end = None
 
         logging.info(f"start fetching data for {symbol}")
         if cs == "1m":
-            fetch1m(symbol, start, end)
+            fetch1m(symbol, start, end )
         elif cs == "1d":
             fetch1d( symbol, start, end )
         else:
