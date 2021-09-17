@@ -49,8 +49,17 @@ def es_search( iname, query ):
     return results
 
 def es_exists(iname, id):
+    results = None
+    for i in (1,2,3):
+        try:
+            results = es.exists( index=iname, id=id)
+            break
+        except elasticsearch.exceptions.ConnectionTimeout as cte:
+            logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+            logging.info( "waiting 10s before retry sending docs to elasticsearch")
+            time.sleep(10)
 
-    return es.exists( id=id, index=iname)
+    return results
 
 def es_get(iname, id):
     results = None
