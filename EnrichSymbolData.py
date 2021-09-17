@@ -83,19 +83,41 @@ def enrich1m(symbol, ts_start, ts_end):
 
     su.es_bulk_update(iname="symbols", data=data, partial=1000)
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        TimedRotatingFileHandler(f"logs/EnrichSymbolData.log",
-                                    when="d",
-                                    interval=1,
-                                    backupCount=7),
-        logging.StreamHandler(sys.stdout)
-    ]
-)
+def main(argv):
 
-enrich1m( "BTCUSDT", 1630454400, 1631836800 )
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            TimedRotatingFileHandler(f"logs/EnrichSymbolData.log",
+                                        when="d",
+                                        interval=1,
+                                        backupCount=7),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
+    logging.info('--------------------------------------------------------------------------------')
+    logging.info(f" python3 EnrichSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
+    logging.info(f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
+    logging.info('--------------------------------------------------------------------------------')
+
+    start = su.get_ts(argv[1])
+    end = su.get_ts(argv[2])
+    if argv[0] == "ALL":
+        symbols = su.read_json("symbols.json")
+        
+        for symbol in symbols:
+            logging.info(f"start fetching data for {symbol}")
+            enrich1m( symbol, start, end )
+    else:
+        symbol = argv[0]
+        enrich1m( symbol, start, end )
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
+
+
 
 # query = su.read_json(f"queries/symbol_1m_range_open_time.json")
 # print( query['query'])
