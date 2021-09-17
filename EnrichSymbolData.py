@@ -54,32 +54,36 @@ def enrich1m(symbol, ts_start, ts_end):
     data = {}
     while minute < ts_end:
         _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
-        source = su.es_get( "symbols", _id )
-        if source: 
-            doc = source['_source']
-            close = doc['close']
-            if "1m" not in doc: doc["1m"] = {}
-            if "aug" in doc and doc["aug"]["1m"] == "1.0.0": 
-                print(f"{_id} already augmented 1m: {doc['aug']['1m']}")
-            else:
-                for mm in mms:
-                    doc["1m"][f"close_mm{mm}"] = moving_avg( close, closes[-mm:] , mm)
-                    doc["1m"][f"std{mm}"] = std_dev( close, closes[-mm:], mm )
-                    doc["1m"][f"mid_bb{mm}"] = mean( close, closes[-mm:], mm )
-                    doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
 
-                doc["1m"]["dp"] = dp( close, closes[-1])
-                doc["1m"]['d0'] = delta( doc['open'], doc['close'] )
-                doc["aug"] = { "1m": "1.0.0" }
+        try:
+            source = su.es_get( "symbols", _id )
+            if source: 
+                doc = source['_source']
+                close = doc['close']
+                if "1m" not in doc: doc["1m"] = {}
+                if "aug" in doc and doc["aug"]["1m"] == "1.0.0": 
+                    print(f"{_id} already augmented 1m: {doc['aug']['1m']}")
+                else:
+                    for mm in mms:
+                        doc["1m"][f"close_mm{mm}"] = moving_avg( close, closes[-mm:] , mm)
+                        doc["1m"][f"std{mm}"] = std_dev( close, closes[-mm:], mm )
+                        doc["1m"][f"mid_bb{mm}"] = mean( close, closes[-mm:], mm )
+                        doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
 
-                q.append(close)
-                q.popleft()
+                    doc["1m"]["dp"] = dp( close, closes[-1])
+                    doc["1m"]['d0'] = delta( doc['open'], doc['close'] )
+                    doc["aug"] = { "1m": "1.0.0" }
 
-                data[_id] = doc
-                if len(data) == 1000:
-                    logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 1000 docs. Last ID: {_id}")
-                    su.es_bulk_update(iname="symbols", data=data, partial=1000)
-                    data = {}
+                    q.append(close)
+                    q.popleft()
+
+                    data[_id] = doc
+                    if len(data) == 1000:
+                        logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 1000 docs. Last ID: {_id}")
+                        su.es_bulk_update(iname="symbols", data=data, partial=1000)
+                        data = {}
+        except Exception as ex:
+            print(ex)
 
         minute += 60
 
