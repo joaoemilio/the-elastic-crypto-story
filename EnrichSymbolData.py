@@ -87,7 +87,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        TimedRotatingFileHandler(f"logs/FetchSymbolData.log",
+        TimedRotatingFileHandler(f"logs/EnrichSymbolData.log",
                                     when="d",
                                     interval=1,
                                     backupCount=7),
