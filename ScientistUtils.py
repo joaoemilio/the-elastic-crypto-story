@@ -1,5 +1,6 @@
 
 
+from collections import deque
 import json 
 from elasticsearch import helpers, Elasticsearch
 import elasticsearch
@@ -82,6 +83,39 @@ def es_create( iname, _id, obj ):
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
+
+def es_bulk_create_multi_index(index_data, partial=1000):
+    actions = []
+    count = 0
+    for iname in index_data:
+        data = index_data[iname]
+        for k in data:
+            action = { "_index": iname, "_source": data[k], "id": k, "_id": k }
+            actions.append( action )
+            count += 1
+            if count >= partial:
+                for i in (1,2,3):
+                    try:
+                        helpers.bulk(client=es,actions=actions)
+                        actions = []
+                        count = 0
+                        break
+                    except elasticsearch.exceptions.ConnectionTimeout as cte:
+                        logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+                        logging.info( "waiting 10s before retry sending docs to elasticsearch")
+                        time.sleep(10)
+
+    for i in (1,2,3):
+        try:
+            helpers.bulk(client=es,actions=actions)
+            actions = []
+            count = 0
+            break
+        except elasticsearch.exceptions.ConnectionTimeout as cte:
+            logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+            logging.info( "waiting 10s before retry sending docs to elasticsearch")
+            time.sleep(10)
+
 
 def es_bulk_create(iname, data, partial=100):
     count = 1

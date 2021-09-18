@@ -30,9 +30,50 @@ def dp( current_price, previous_price, ):
 def bb( current_price, mov_avg_price, std_price ):
     return ( current_price - mov_avg_price) / std_price
 
+
+def get_closes_1m( symbol, ts_start, window_size):
+    ts_window_size = ts_start-window_size*60
+
+    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
+    data = su.es_search("symbols", query)['hits']['hits']
+
+    q_closes = deque()
+    q_volumes = deque()
+    q_trades = deque()
+    for d in data:
+        _id = d['_id']
+        if 'USDT' not in _id: continue
+        s = d['_source']
+        q_closes.append( s['close'] )
+        q_volumes.append( s['q_volume'] ) 
+        q_trades.append( s['trades'] ) 
+
+    return q_closes, q_volumes, q_trades
+
+
+def get_closes( symbol, cs, ts_start, window_size):
+    periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
+    ts_window_size = ts_start-window_size*periods[cs]
+
+    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
+    data = su.es_search(f"symbols-{cs}", query)['hits']['hits']
+
+    q_closes = deque()
+    q_volumes = deque()
+    q_trades = deque()
+    for d in data:
+        _id = d['_id']
+        if 'USDT' not in _id: continue
+        s = d['_source']
+        q_closes.append( s['close'] )
+        q_volumes.append( s['q_volume'] ) 
+        q_trades.append( s['trades'] ) 
+
+    return q_closes, q_volumes, q_trades
+
 def enrich1m(symbol, data, ts_start, ts_end):
 
-    closes, q = get_closes_1m( symbol, ts_start, 200 )
+    q_closes, q_volumes, q_trades = get_closes_1m( symbol, ts_start, 200 )
 
     minute = ts_start
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
@@ -48,17 +89,27 @@ def enrich1m(symbol, data, ts_start, ts_end):
                 logging.debug(f"{_id} already augmented 1m: {doc['aug']['1m']}")
             else:
                 for mm in mms:
-                    doc["1m"][f"close_mm{mm}"] = moving_avg( close, closes[-mm:] , mm)
-                    doc["1m"][f"std{mm}"] = std_dev( close, closes[-mm:], mm )
-                    doc["1m"][f"mid_bb{mm}"] = mean( close, closes[-mm:], mm )
-                    doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
+                    if mm <= len(q_closes):
+                        doc["1m"][f"close_mm{mm}"] = moving_avg( close, list(q_closes)[-mm:] , mm)
+                        doc["1m"][f"trades_mm{mm}"] = moving_avg( list(q_volumes)[-1], list(q_trades)[-mm:], mm)
+                        doc["1m"][f"q_volume_mm{mm}"] = moving_avg( list(q_volumes)[-1], list(q_volumes)[-mm:], mm)
+                        doc["1m"][f"std{mm}"] = std_dev( close, list(q_closes)[-mm:], mm )
+                        doc["1m"][f"mid_bb{mm}"] = mean( close, list(q_closes)[-mm:], mm )
+                        doc["1m"][f"bb{mm}"] = bb(close, doc["1m"][f"close_mm{mm}"], doc["1m"][f"std{mm}"] )
+                    else:
+                        doc["1m"][f"close_mm{mm}"] = 0
+                        doc["1m"][f"trades_mm{mm}"] = 0
+                        doc["1m"][f"q_volume_mm{mm}"] = 0
+                        doc["1m"][f"std{mm}"] = 0
+                        doc["1m"][f"mid_bb{mm}"] = 0
+                        doc["1m"][f"bb{mm}"] = 0
 
-                doc["1m"]["dp"] = dp( close, closes[-1])
+                doc["1m"]["dp"] = dp( close, q_closes[-1])
                 doc["1m"]['d0'] = delta( doc['open'], doc['close'] )
                 doc["aug"] = { "1m": "1.0.0" }
 
-                q.append(close)
-                q.popleft()
+                q_closes.append(close)
+                q_closes.popleft()
 
                 aug[_id] = doc
                 if len(aug) == 1000:
@@ -72,27 +123,10 @@ def enrich1m(symbol, data, ts_start, ts_end):
 
     su.es_bulk_update(iname="symbols", data=aug, partial=1000)
 
-def get_closes_1m( symbol, ts_start, window_size):
-    ts_window_size = ts_start-window_size*60
+def enrich(symbol, cs, data, ts_start, ts_end):
 
-    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
-    data = su.es_search("symbols", query)['hits']['hits']
-
-    q = deque()
-    for d in data:
-        _id = d['_id']
-        if 'USDT' not in _id: continue
-        s = d['_source']
-        q.append( { "_id": _id, "close": s['close'] } )
-
-    closes = [ v['close'] for v in q ]
-    return closes, q
-
-
-def enrich(symbol, cs, ts_start, ts_end):
-
-    closes, q = get_closes( symbol, cs, ts_start, 200 )
-    print(f"closes {cs}={closes}")
+    logging.info(f"Fetching {cs} closes for {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    q_closes, q_volumes, q_trades = get_closes( symbol, cs, ts_start, 200 )
 
     periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
     minute = ts_start
@@ -104,16 +138,21 @@ def enrich(symbol, cs, ts_start, ts_end):
         _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
 
         if minute % periods[cs] == 0:
-            _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
+            if cs == "1d":
+                _id_cs = f"{symbol}_{su.get_yyyymmdd(minute)}_{cs}"
+            else:
+                _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
+
             doc_cs = su.es_get(f"symbols-{cs}", _id_cs)
             if "_source" in doc_cs:
                 doc_cs = doc_cs['_source'] 
 
-        doc_1m = su.es_get("symbols", _id)
-        if "_source" in doc_1m: 
-            doc_1m = doc_1m["_source"]
+        if _id in data: 
+            doc_1m = data[_id]  #su.es_get("symbols", _id)
             close_1m = doc_1m['close']
             close_cs = doc_cs['close']
+            q_vol_cs = doc_cs['q_volume']
+            trades_cs = doc_cs['trades']
             
             if cs not in doc_1m: doc_1m[cs] = {}
             if "aug" not in doc_1m: doc_1m["aug"] = {}
@@ -121,23 +160,39 @@ def enrich(symbol, cs, ts_start, ts_end):
                 logging.debug(f"{_id} already augmented {cs}: {doc_1m['aug'][cs]}")
             else:
                 for mm in mms:
-                    doc_1m[cs][f"close_mm{mm}"] = moving_avg( close_1m, closes[-mm:] , mm)
-                    doc_1m[cs][f"std{mm}"] = std_dev( close_1m, closes[-mm:], mm )
-                    doc_1m[cs][f"mid_bb{mm}"] = mean( close_1m, closes[-mm:], mm )
-                    doc_1m[cs][f"bb{mm}"] = bb(close_1m, doc_1m[cs][f"close_mm{mm}"], doc_1m[cs][f"std{mm}"] )
+                    if mm <= len(q_closes):
+                        doc_1m[cs][f"close_mm{mm}"] = moving_avg( close_1m, list(q_closes)[-mm:], mm)
+                        doc_1m[cs][f"trades_mm{mm}"] = moving_avg( trades_cs, list(q_trades)[-mm:], mm)
+                        doc_1m[cs][f"q_volume_mm{mm}"] = moving_avg( q_vol_cs, list(q_volumes)[-mm:], mm)
+                        doc_1m[cs][f"std{mm}"] = std_dev( close_1m, list(q_closes)[-mm:], mm )
+                        doc_1m[cs][f"mid_bb{mm}"] = mean( close_1m, list(q_closes)[-mm:], mm )
+                        doc_1m[cs][f"bb{mm}"] = bb(close_1m, doc_1m[cs][f"close_mm{mm}"], doc_1m[cs][f"std{mm}"] )
+                    else:
+                        doc_1m[cs][f"close_mm{mm}"] = 0
+                        doc_1m[cs][f"std{mm}"] = 0
+                        doc_1m[cs][f"mid_bb{mm}"] = 0
+                        doc_1m[cs][f"bb{mm}"] = 0
 
                 doc_1m[cs]["dp"] = dp( close_1m, close_cs)
-                doc_1m[cs]['d0'] = delta( doc_cs['open'], doc_cs['close'] )
+                doc_1m[cs]['d0'] = delta( doc_cs['open'], close_cs )
+                doc_1m[cs]['q_volume_d0'] = delta( q_volumes[-1], q_vol_cs )
+                doc_1m[cs]['trades_d0'] = delta( q_trades[-1], trades_cs )
                 doc_1m["aug"] = { cs: "1.0.0" }
 
                 if not first and (minute % periods[cs] == 0):
-                    q.append(close_cs)
-                    q.popleft()
+                    q_closes.append(close_cs)
+                    q_closes.popleft()
+                    q_volumes.append(q_vol_cs)
+                    q_volumes.popleft()
+                    q_trades.append(trades_cs)
+                    q_trades.popleft()
+
+                print(f"{doc_1m}")
 
                 aug[_id] = doc_1m
                 if len(aug) == 100:
                     logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 100 docs. Last ID: {_id}")
-                    su.es_bulk_update(iname=f"symbols", data=aug, partial=100)
+                    #su.es_bulk_update(iname=f"symbols", data=aug, partial=100)
                     aug = {}
         else:
             logging.error(f"{_id} not found")
@@ -146,25 +201,6 @@ def enrich(symbol, cs, ts_start, ts_end):
         minute += 60
 
     #su.es_bulk_update(iname=f"symbols", data=aug, partial=1000)
-
-def get_closes( symbol, cs, ts_start, window_size):
-    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/4, "1d": 1 }
-    ts_window_size = ts_start-window_size*periods[cs]*3600
-
-    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
-    data = su.es_search(f"symbols-{cs}", query)['hits']['hits']
-    print(f"query {query}")
-    print(data)
-
-    q = deque()
-    for d in data:
-        _id = d['_id']
-        if 'USDT' not in _id: continue
-        s = d['_source']
-        q.append( { "_id": _id, "close": s['close'] } )
-
-    closes = [ v['close'] for v in q ]
-    return closes, q
 
 def enrichDay(symbol, day):
     window_size = 24*60
@@ -181,12 +217,12 @@ def enrichDay(symbol, day):
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
 
-    logging.info(f"enriching {len(data)} of {symbol} cs: 4h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
-    enrich(symbol, "1d", ts_start, ts_end)
-    enrich(symbol, "4h", ts_start, ts_end)
-    enrich(symbol, "1h", ts_start, ts_end)
-    enrich(symbol, "15m", ts_start, ts_end)
-    enrich(symbol, "5m", ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    enrich(symbol, "1d", data, ts_start, ts_end)
+    enrich(symbol, "4h", data, ts_start, ts_end)
+    enrich(symbol, "1h", data, ts_start, ts_end)
+    enrich(symbol, "15m", data, ts_start, ts_end)
+    enrich(symbol, "5m", data, ts_start, ts_end)
 
 def main(argv):
 
