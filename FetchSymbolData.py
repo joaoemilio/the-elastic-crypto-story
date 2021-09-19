@@ -80,11 +80,13 @@ def fetch1d( symbol, ts_start, ts_end ):
 
 def fetch1m(symbol, ts_start, ts_end):
 
-
-    query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}},"fields": ["id"], "_source": False}
+    ids = []
     if su.es.indices.exists( f"symbols-1m"):
         results = su.es_search("symbols-1m", query)
         if 'hits' in results: results = results['hits']['hits']
+        for h in results:
+            ids.append(h["_id"])
 
         if len(results) >= 24*60:
             su.log(f'Already downloaded {su.get_yyyymmdd(ts_start)} s={symbol} cs=1m')
@@ -94,7 +96,7 @@ def fetch1m(symbol, ts_start, ts_end):
 
     else:
         su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(ts_start)} cs=1m")
-        results = []
+        ids = []
 
     log(f"Lets fetch {symbol} cs=1m")
     data = {}
@@ -116,12 +118,13 @@ def fetch1m(symbol, ts_start, ts_end):
                 _id = f"{symbol}_{ot}_1m"
                 
                 # do not process if it already exists
-                if _id in results: continue 
+                if _id in ids: continue 
 
                 #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
                 #if not su.es_exists("symbols-1m", _id):
                 o["cs"] = "1m"
                 data[_id] = o
+
         su.log(f'End downloading day {su.get_yyyymmdd(ts_start)} for 1m', 'fetch_candle')
             
         ts_start += 3600*24
@@ -132,12 +135,15 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
     day = ts_start
 
     query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    ids = []
     if su.es.indices.exists( f"symbols-{cs}"):
         results = su.es_search(f"symbols-{cs}", query)
         if 'hits' in results: 
             results = results['hits']['hits']
+            for h in results:
+                ids.appen( h["_id"] )
 
-        if len(results) >= periods[cs]: 
+        if len(ids) >= periods[cs]: 
             su.log(f'Already downloaded {su.get_yyyymmdd(day)} s={symbol} cs={cs}')
             return {}
         else:
@@ -145,7 +151,7 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
 
     else:
         su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}")
-        results = []
+        ids = []
 
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
@@ -158,7 +164,7 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
             for o in r:
                 ot = su.get_yyyymmdd_hhmm(o['open_time'])
                 _id = f"{symbol}_{ot}_{cs}"
-                if _id not in results:
+                if _id not in ids:
                     o["cs"] = cs
                     data[_id] = o
                 else:
