@@ -139,7 +139,7 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         if 'hits' in results: 
             results = results['hits']['hits']
 
-        if results >= periods[cs]: 
+        if len(results) >= periods[cs]: 
             return {}          
     else:
         results = []
