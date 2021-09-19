@@ -240,7 +240,7 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    su.es_bulk_update("symbols-1m", data, partial=100 )
+    su.es_bulk_update("symbols-1m", data, partial=500 )
 
 def main(argv):
 
