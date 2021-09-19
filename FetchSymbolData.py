@@ -128,7 +128,7 @@ def fetch1m(symbol, ts_start, ts_end):
     return data
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
-    periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
+    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
 
     log(f"Lets fetch {symbol} cs={cs}")
     day = ts_start
