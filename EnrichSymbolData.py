@@ -35,7 +35,7 @@ def get_closes_1m( symbol, ts_start, window_size):
     ts_window_size = ts_start-window_size*60
 
     query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_window_size}","lte": f"{ts_start}" ,"format": "strict_date_optional_time"}}}]}}}
-    data = su.es_search("symbols", query)['hits']['hits']
+    data = su.es_search("symbols-1m", query)['hits']['hits']
 
     q_closes = deque()
     q_volumes = deque()
@@ -114,14 +114,14 @@ def enrich1m(symbol, data, ts_start, ts_end):
                 aug[_id] = doc
                 if len(aug) == 1000:
                     logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 1000 docs. Last ID: {_id}")
-                    su.es_bulk_update(iname="symbols", data=aug, partial=1000)
+                    su.es_bulk_update(iname="symbols-1m", data=aug, partial=1000)
                     aug = {}
         except Exception as ex:
             logging.error(ex)
 
         minute += 60
 
-    su.es_bulk_update(iname="symbols", data=aug, partial=1000)
+    su.es_bulk_update(iname="symbols-1m", data=aug, partial=1000)
 
 def enrich(symbol, cs, data, ts_start, ts_end):
 
@@ -151,7 +151,7 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                 doc_1m[f"is_{cs}"] = 1
 
         if _id in data: 
-            doc_1m = data[_id]  #su.es_get("symbols", _id)
+            doc_1m = data[_id]  #su.es_get("symbols-1m", _id)
             if f"is_{cs}" not in doc_1m: doc_1m[f"is_{cs}"] = 0
             close_1m = doc_1m['close']
             close_cs = doc_cs['close']
@@ -214,7 +214,7 @@ def enrichDay(symbol, day):
     ts_aug_end = ts_start + 60*3600
 
     query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
-    results = su.es_search("symbols", query)['hits']['hits']
+    results = su.es_search("symbols-1m", query)['hits']['hits']
     data = {}
     for d in results:
         doc = d['_source']
@@ -222,7 +222,7 @@ def enrichDay(symbol, day):
 
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
-    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols": {} }
+    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
 
     logging.info(f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1d", data, ts_start, ts_end)
@@ -236,7 +236,7 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    su.es_bulk_update("symbols", data, partial=500 )
+    su.es_bulk_update("symbols-1m", data, partial=500 )
 
 def main(argv):
 
@@ -287,7 +287,7 @@ if __name__ == "__main__":
 # query['query']['bool']['filter'][1]['range']['open_time']['gte'] = "1627784500"
 # query['query']['bool']['filter'][1]['range']['open_time']['lte'] = "1627786700"
 
-# results = su.es_search("symbols", query)
+# results = su.es_search("symbols-1m", query)
 # print(results['hits']['hits'])
 
 '''

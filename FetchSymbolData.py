@@ -85,7 +85,10 @@ def fetch1m(symbol, ts_start, ts_end):
     log(f"Lets fetch {symbol} cs=1m")
 
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
-    results = su.es_search("symbols", query)['hits']['hits']
+    if su.es.indices.exists( f"symbols-1m"):
+        results = su.es_search("symbols-1m", query)['hits']['hits']
+    else:
+        results = []
 
     data = {}
     while ts_start < ts_end:
@@ -95,8 +98,8 @@ def fetch1m(symbol, ts_start, ts_end):
         # check if open_time 00:00 and minute 23:59 exists
         id_start = f"{symbol}_{su.get_yyyymmdd_hhmm(ts_start)}_1m"
         id_end = f"{symbol}_{su.get_yyyymmdd_hhmm(end_time)}_1m"
-        start_exists = su.es_exists("symbols", id_start)
-        end_exists = su.es_exists("symbols", id_end)
+        start_exists = su.es_exists("symbols-1m", id_start)
+        end_exists = su.es_exists("symbols-1m", id_end)
         if not start_exists or not end_exists: 
             rall = []
             for periods, end_time in pairs:
@@ -115,7 +118,7 @@ def fetch1m(symbol, ts_start, ts_end):
                     if _id in results: continue 
 
                     #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
-                    #if not su.es_exists("symbols", _id):
+                    #if not su.es_exists("symbols-1m", _id):
                     o["cs"] = "1m"
                     data[_id] = o
             su.log(f'End downloading day {su.get_yyyymmdd(ts_start)} for 1m', 'fetch_candle')
@@ -196,7 +199,7 @@ def main(argv):
     symbols_download = get_symbols_download()
 
     symbols_1d = {}
-    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols": {} }
+    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
     while day < end:
         count = 1
         for symbol in symbols:
@@ -216,7 +219,7 @@ def main(argv):
             data["symbols-1h"] = fetch( symbol, "1h", day, day+24*3600 )
             data["symbols-15m"] = fetch( symbol, "15m", day, day+24*3600 )
             data["symbols-5m"] = fetch( symbol, "5m", day, day+24*3600 )
-            data["symbols"] = fetch1m(symbol, day, day+24*3600 )
+            data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} for {symbol}.' )
             su.es_bulk_create_multi_index(data,partial=500)
