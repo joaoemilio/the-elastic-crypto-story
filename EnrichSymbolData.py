@@ -168,6 +168,8 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                     doc_cs[f"std{mm}"] = std_dev( close_1m, list(q_closes)[-mm:], mm )
                     doc_cs[f"mid_bb{mm}"] = mean( close_1m, list(q_closes)[-mm:], mm )
                     doc_cs[f"bb{mm}"] = bb(close_1m, doc_cs[f"close_mm{mm}"], doc_cs[f"std{mm}"] )
+                    doc_cs[f'd_vol_{mm}'] = delta( doc_cs['q_volume'], doc_cs['q_volume_mm{mm}'] )
+                    doc_cs[f'd_trades_{mm}'] = delta( doc_cs['trades'], doc_cs['trades_mm{mm}'] )
                 else:
                     doc_cs[f"close_mm{mm}"] = 0
                     doc_cs[f"std{mm}"] = 0
