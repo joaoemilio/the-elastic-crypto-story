@@ -219,7 +219,7 @@ def enrichDay(symbol, day):
         doc = d['_source']
         data[d['_id']] = doc
 
-    print([data[k] for k in data])
+    print([k for k in data])
 
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
