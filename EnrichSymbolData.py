@@ -212,7 +212,7 @@ def enrichDay(symbol, day):
     ts_end = ts_start + 24*3600
     ts_aug_end = ts_start + 60*3600
 
-    query = {"size": 60*60 ,"query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"size": 72*60 ,"query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
     results = su.es_search("symbols-1m", query)['hits']['hits']
     data = {}
     for d in results:
