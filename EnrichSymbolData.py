@@ -187,8 +187,11 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                 id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
                 doc_p = data[id_p]
                 if "prices" not in doc_1m: doc_1m["prices"] = {}
-                for field in ("low", "close", "high"):
-                    doc_1m["prices"][p] = { field: doc_p[field], "d": delta( doc_1m['close'], doc_p[field] ) }
+                doc_1m["prices"][p] = { 
+                    "low":   { "p": doc_p["low"], "d": delta( doc_1m['close'], doc_p["low"] ) }, 
+                    "close": { "p": doc_p["close"], "d": delta( doc_1m['close'], doc_p["close"] ) },
+                    "high":  { "p": doc_p["high"], "d": delta( doc_1m['close'], doc_p["high"] ) }
+                }
 
             if not first and (minute % periods[cs] == 0):
                 q_closes.append(close_cs)
@@ -219,7 +222,7 @@ def enrichDay(symbol, day):
         doc = d['_source']
         data[d['_id']] = doc
 
-    print([k for k in data])
+    # print([k for k in data])
 
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
