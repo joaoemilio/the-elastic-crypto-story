@@ -148,6 +148,41 @@ def es_bulk_create(iname, data, partial=100):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
+
+def es_bulk_update_multi_index(index_data, partial=500):
+    actions = []
+    count = 0
+    for iname in index_data:
+        data = index_data[iname]
+        for k in data:
+            action = { "_op_type": "update", "_index": iname, "_id": k, "doc": data[k] }
+            actions.append( action )
+            count += 1
+            if count >= partial:
+                for i in (1,2,3):
+                    try:
+                        logging.info( f"Uploading {count} docs to Elastic Cloud")
+                        helpers.bulk(client=es,actions=actions)
+                        actions = []
+                        count = 0
+                        break
+                    except elasticsearch.exceptions.ConnectionTimeout as cte:
+                        logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+                        logging.info( "waiting 10s before retry sending docs to elasticsearch")
+                        time.sleep(10)
+
+    for i in (1,2,3):
+        try:
+            logging.info( f"Uploading {len(actions)} docs to Elastic Cloud")
+            helpers.bulk(client=es,actions=actions)
+            actions = []
+            count = 0
+            break
+        except elasticsearch.exceptions.ConnectionTimeout as cte:
+            logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+            logging.info( "waiting 10s before retry sending docs to elasticsearch")
+            time.sleep(10)
+
 def es_bulk_update(iname, data, partial=100):
     count = 1
     if not partial: partial = len(data)

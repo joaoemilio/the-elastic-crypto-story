@@ -131,8 +131,8 @@ def enrich(symbol, cs, data, ts_start, ts_end):
     periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
     minute = ts_start
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
-    aug = {}
     doc_cs = {}
+    doc_1m = {}
     first = True
     while minute < ts_end:
         _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
@@ -145,10 +145,14 @@ def enrich(symbol, cs, data, ts_start, ts_end):
 
             doc_cs = su.es_get(f"symbols-{cs}", _id_cs)
             if "_source" in doc_cs:
-                doc_cs = doc_cs['_source'] 
+                doc_cs = doc_cs['_source']
+            if _id in data:
+                doc_1m = data[_id]
+                doc_1m[f"is_{cs}"] = 1
 
         if _id in data: 
             doc_1m = data[_id]  #su.es_get("symbols", _id)
+            if f"is_{cs}" not in doc_1m: doc_1m[f"is_{cs}"] = 0
             close_1m = doc_1m['close']
             close_cs = doc_cs['close']
             q_vol_cs = doc_cs['q_volume']
@@ -156,58 +160,60 @@ def enrich(symbol, cs, data, ts_start, ts_end):
             
             if cs not in doc_1m: doc_1m[cs] = {}
             if "aug" not in doc_1m: doc_1m["aug"] = {}
-            if cs in doc_1m["aug"] and doc_1m["aug"][cs] == "1.0.0": 
-                logging.debug(f"{_id} already augmented {cs}: {doc_1m['aug'][cs]}")
-            else:
-                for mm in mms:
-                    if mm <= len(q_closes):
-                        doc_1m[cs][f"close_mm{mm}"] = moving_avg( close_1m, list(q_closes)[-mm:], mm)
-                        doc_1m[cs][f"trades_mm{mm}"] = moving_avg( trades_cs, list(q_trades)[-mm:], mm)
-                        doc_1m[cs][f"q_volume_mm{mm}"] = moving_avg( q_vol_cs, list(q_volumes)[-mm:], mm)
-                        doc_1m[cs][f"std{mm}"] = std_dev( close_1m, list(q_closes)[-mm:], mm )
-                        doc_1m[cs][f"mid_bb{mm}"] = mean( close_1m, list(q_closes)[-mm:], mm )
-                        doc_1m[cs][f"bb{mm}"] = bb(close_1m, doc_1m[cs][f"close_mm{mm}"], doc_1m[cs][f"std{mm}"] )
-                    else:
-                        doc_1m[cs][f"close_mm{mm}"] = 0
-                        doc_1m[cs][f"std{mm}"] = 0
-                        doc_1m[cs][f"mid_bb{mm}"] = 0
-                        doc_1m[cs][f"bb{mm}"] = 0
+            for mm in mms:
+                if mm <= len(q_closes):
+                    doc_cs[f"close_mm{mm}"] = moving_avg( close_1m, list(q_closes)[-mm:], mm)
+                    doc_cs[f"trades_mm{mm}"] = moving_avg( trades_cs, list(q_trades)[-mm:], mm)
+                    doc_cs[f"q_volume_mm{mm}"] = moving_avg( q_vol_cs, list(q_volumes)[-mm:], mm)
+                    doc_cs[f"std{mm}"] = std_dev( close_1m, list(q_closes)[-mm:], mm )
+                    doc_cs[f"mid_bb{mm}"] = mean( close_1m, list(q_closes)[-mm:], mm )
+                    doc_cs[f"bb{mm}"] = bb(close_1m, doc_1m[cs][f"close_mm{mm}"], doc_1m[cs][f"std{mm}"] )
+                else:
+                    doc_cs[f"close_mm{mm}"] = 0
+                    doc_cs[f"std{mm}"] = 0
+                    doc_cs[f"mid_bb{mm}"] = 0
+                    doc_cs[f"bb{mm}"] = 0
 
-                doc_1m[cs]["dp"] = dp( close_1m, close_cs)
-                doc_1m[cs]['d0'] = delta( doc_cs['open'], close_cs )
-                doc_1m[cs]['q_volume_d0'] = delta( q_volumes[-1], q_vol_cs )
-                doc_1m[cs]['trades_d0'] = delta( q_trades[-1], trades_cs )
-                doc_1m["aug"] = { cs: "1.0.0" }
+            doc_cs["dp"] = dp( close_1m, close_cs)
+            doc_cs['d0'] = delta( doc_cs['open'], close_cs )
+            doc_cs['q_volume_d0'] = delta( q_volumes[-1], q_vol_cs )
+            doc_cs['trades_d0'] = delta( q_trades[-1], trades_cs )
+            doc_1m[cs] = doc_cs
+            doc_1m["aug"] = { cs: "1.0.0" }
 
-                if not first and (minute % periods[cs] == 0):
-                    q_closes.append(close_cs)
-                    q_closes.popleft()
-                    q_volumes.append(q_vol_cs)
-                    q_volumes.popleft()
-                    q_trades.append(trades_cs)
-                    q_trades.popleft()
+            # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h 
+            prices = { "5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2*60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60 }
+            for p in prices:
+                id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
+                doc_p = data[id_p]
+                if "prices" not in doc_1m: doc_1m["prices"] = {}
+                for field in ("low", "close", "high"):
+                    doc_1m["prices"][p] = { field: doc_p[field], "d": delta( doc_1m['close'], doc_p[field] ) }
 
-                print(f"{doc_1m}")
+            if not first and (minute % periods[cs] == 0):
+                q_closes.append(close_cs)
+                q_closes.popleft()
+                q_volumes.append(q_vol_cs)
+                q_volumes.popleft()
+                q_trades.append(trades_cs)
+                q_trades.popleft()
 
-                aug[_id] = doc_1m
-                if len(aug) == 100:
-                    logging.info(f"{su.get_yyyymmdd_hhmm(time.time())} uploading 100 docs. Last ID: {_id}")
-                    #su.es_bulk_update(iname=f"symbols", data=aug, partial=100)
-                    aug = {}
+            data[_id] = doc_1m
         else:
             logging.error(f"{_id} not found")
 
         if first: first = False
         minute += 60
 
-    #su.es_bulk_update(iname=f"symbols", data=aug, partial=1000)
+    return data
 
 def enrichDay(symbol, day):
     window_size = 24*60
     ts_start = day
     ts_end = ts_start + 24*3600
+    ts_aug_end = ts_start + 60*3600
 
-    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
     results = su.es_search("symbols", query)['hits']['hits']
     data = {}
     for d in results:
@@ -216,13 +222,21 @@ def enrichDay(symbol, day):
 
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
+    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols": {} }
 
-    logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
-    enrich(symbol, "1d", data, ts_start, ts_end)
-    enrich(symbol, "4h", data, ts_start, ts_end)
-    enrich(symbol, "1h", data, ts_start, ts_end)
-    enrich(symbol, "15m", data, ts_start, ts_end)
-    enrich(symbol, "5m", data, ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    data = enrich(symbol, "1d", data, ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} 4h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    data = enrich(symbol, "4h", data, ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} 1h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    data = enrich(symbol, "1h", data, ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} 15m from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    data = enrich(symbol, "15m", data, ts_start, ts_end)
+    logging.info(f"enriching {len(data)} of {symbol} 5m from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
+    data = enrich(symbol, "5m", data, ts_start, ts_end)
+    
+    logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
+    su.es_bulk_update("symbols", data, partial=500 )
 
 def main(argv):
 
