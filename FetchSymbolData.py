@@ -141,7 +141,7 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         if 'hits' in results: 
             results = results['hits']['hits']
             for h in results:
-                ids.appen( h["_id"] )
+                ids.append( h["_id"] )
 
         if len(ids) >= periods[cs]: 
             su.log(f'Already downloaded {su.get_yyyymmdd(day)} s={symbol} cs={cs}')
