@@ -181,7 +181,7 @@ def enrich(symbol, cs, data, ts_start, ts_end):
             doc_cs['d0'] = delta( doc_cs['open'], doc_cs['close'] )
             doc_cs['q_volume_d0'] = delta( q_volumes[-1], q_vol_cs )
             doc_cs['trades_d0'] = delta( q_trades[-1], trades_cs )
-            doc_1m[cs] = doc_cs
+            doc_1m[cs] = doc_cs.copy()
             doc_1m["aug"] = { cs: "1.0.0" }
 
             # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h 
