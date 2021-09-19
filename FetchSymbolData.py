@@ -85,6 +85,7 @@ def fetch1m(symbol, ts_start, ts_end):
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     if su.es.indices.exists( f"symbols-1m"):
         results = su.es_search("symbols-1m", query)['hits']['hits']
+        if results >= 24*60: return {}
     else:
         results = []
 
@@ -127,13 +128,15 @@ def fetch1m(symbol, ts_start, ts_end):
     return data
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
+    periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
 
     log(f"Lets fetch {symbol} cs={cs}")
     day = ts_start
 
-    query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     if su.es.indices.exists( f"symbols-{cs}"):
         results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
+        if results >= periods[cs]: return {}
     else:
         results = []
 
