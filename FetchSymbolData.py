@@ -80,16 +80,23 @@ def fetch1d( symbol, ts_start, ts_end ):
 
 def fetch1m(symbol, ts_start, ts_end):
 
-    log(f"Lets fetch {symbol} cs=1m")
 
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     if su.es.indices.exists( f"symbols-1m"):
         results = su.es_search("symbols-1m", query)
         if 'hits' in results: results = results['hits']['hits']
-        if len(results) >= 24*60: return {}
+
+        if len(results) >= 24*60:
+            su.log(f'Already downloaded {su.get_yyyymmdd(ts_start)} s={symbol} cs=1m')
+            return {}
+        else:
+            su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(ts_start)} cs=1m. Missing {len(results)-24*60} docs")
+
     else:
+        su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(ts_start)} cs=1m")
         results = []
 
+    log(f"Lets fetch {symbol} cs=1m")
     data = {}
     while ts_start < ts_end:
         end_time = ts_start + 24*3600 # in seconds
@@ -122,8 +129,6 @@ def fetch1m(symbol, ts_start, ts_end):
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
-
-    log(f"Lets fetch {symbol} cs={cs}")
     day = ts_start
 
     query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
@@ -133,13 +138,19 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
             results = results['hits']['hits']
 
         if len(results) >= periods[cs]: 
-            return {}          
+            su.log(f'Already downloaded {su.get_yyyymmdd(day)} s={symbol} cs={cs}')
+            return {}
+        else:
+            su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}. Missing {len(results)-periods[cs]} docs")
+
     else:
+        su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}")
         results = []
 
+    log(f"Lets fetch {symbol} cs={cs}")
     data = {}
     while day < ts_end:
-        su.log(f'Will download {su.get_yyyymmdd(day)} cs={cs}', 'download_candles')
+        su.log(f'Will download {su.get_yyyymmdd(day)} s={symbol} cs={cs}', 'download_candles')
 
         periods = int((24*3600)/candle_sizes[cs])
         r = fetch_candles(symbol, day, cs, periods)
