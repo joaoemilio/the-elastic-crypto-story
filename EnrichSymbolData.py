@@ -208,12 +208,11 @@ def enrich(symbol, cs, data, ts_start, ts_end):
     return data
 
 def enrichDay(symbol, day):
-    window_size = 24*60
     ts_start = day
     ts_end = ts_start + 24*3600
     ts_aug_end = ts_start + 60*3600
 
-    query = {"size": window_size, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_aug_end}" ,"format": "strict_date_optional_time"}}}]}}}
     results = su.es_search("symbols-1m", query)['hits']['hits']
     data = {}
     for d in results:
@@ -222,7 +221,7 @@ def enrichDay(symbol, day):
 
     #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     #enrich1m(symbol, data, ts_start, ts_end)
-    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
+    # data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
 
     logging.info(f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1d", data, ts_start, ts_end)
