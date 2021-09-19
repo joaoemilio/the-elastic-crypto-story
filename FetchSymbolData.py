@@ -10,8 +10,6 @@ from collections import deque
 import sys
 import numpy as np
 
-symbols_download = {}
-
 ##################################################
 # Download
 ##################################################
@@ -158,19 +156,6 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         day += 3600*24
     return data
 
-def get_symbols_download():
-    if not su.es.indices.exists(index="symbols-download"):
-        symbols = su.read_json("symbols.json")
-        for symbol in symbols:
-            su.es_create("symbols-download", symbol, { "1d":{ "last_update": "20191130" } } )
-
-    res = su.es_search( iname="symbols-download", query = {'size' : 100, 'query': { 'match_all' : {}}})
-
-    for doc in res['hits']['hits']:
-        symbols_download[ doc['_id'] ] = doc['_source']
-
-    return symbols_download
-
 def main(argv):
 
     logging.basicConfig(
@@ -195,8 +180,6 @@ def main(argv):
     end = su.get_ts(argv[1])
 
     symbols = su.read_json("symbols.json")
-    global symbols_download
-    symbols_download = get_symbols_download()
 
     symbols_1d = {}
     data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
@@ -205,14 +188,6 @@ def main(argv):
         for symbol in symbols:
             logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)}")
             count += 1
-
-            if symbol in symbols_download:
-                sd = symbols_download[symbol]
-                sd1d = sd["1d"] if "1d" in sd else {}
-                last_update = su.get_ts(sd1d["last_update"]) if "last_update" in sd1d else su.get_yyyymmdd("20191130")
-                if last_update >= day:
-                    logging.info(f'Already downloaded {su.get_yyyymmdd(day)} for {symbol}.' )
-                    continue
 
             data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
             data["symbols-4h"] = fetch( symbol, "4h", day, day+24*3600 )
@@ -223,11 +198,6 @@ def main(argv):
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} for {symbol}.' )
             su.es_bulk_create_multi_index(data,partial=500)
-            for cs in candle_sizes:
-                symbols_download[symbol] = { cs : { "last_update": su.get_yyyymmdd(day) } }
-
-            logging.info(f'Update symbols-download' )
-            su.es_bulk_update("symbols-download", symbols_download, partial=300)
 
         day += 24*3600
 
