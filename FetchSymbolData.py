@@ -95,35 +95,27 @@ def fetch1m(symbol, ts_start, ts_end):
         end_time = ts_start + 24*3600 # in seconds
         pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
 
-        # check if open_time 00:00 and minute 23:59 exists
-        id_start = f"{symbol}_{su.get_yyyymmdd_hhmm(ts_start)}_1m"
-        id_end = f"{symbol}_{su.get_yyyymmdd_hhmm(end_time)}_1m"
-        start_exists = su.es_exists("symbols-1m", id_start)
-        end_exists = su.es_exists("symbols-1m", id_end)
-        if not start_exists or not end_exists: 
-            rall = []
-            for periods, end_time in pairs:
-                logging.info(f"fetching {periods} to {end_time}")
-                r = fetch_candles(symbol, ts_start, "1m", periods, end_time=end_time)
-                rall += r
+        rall = []
+        for periods, end_time in pairs:
+            logging.info(f"fetching {periods} to {end_time}")
+            r = fetch_candles(symbol, ts_start, "1m", periods, end_time=end_time)
+            rall += r
 
-            logging.info(f"{len(rall)} lines fetched")
+        logging.info(f"{len(rall)} lines fetched")
 
-            if rall:
-                for o in rall:
-                    ot = su.get_yyyymmdd_hhmm(o['open_time'])
-                    _id = f"{symbol}_{ot}_1m"
-                    
-                    # do not process if it already exists
-                    if _id in results: continue 
+        if rall:
+            for o in rall:
+                ot = su.get_yyyymmdd_hhmm(o['open_time'])
+                _id = f"{symbol}_{ot}_1m"
+                
+                # do not process if it already exists
+                if _id in results: continue 
 
-                    #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
-                    #if not su.es_exists("symbols-1m", _id):
-                    o["cs"] = "1m"
-                    data[_id] = o
-            su.log(f'End downloading day {su.get_yyyymmdd(ts_start)} for 1m', 'fetch_candle')
-        else:
-            su.log(f'Day is downloaded {su.get_yyyymmdd(ts_start)} for 1m. Skipping', 'fetch_candle')
+                #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
+                #if not su.es_exists("symbols-1m", _id):
+                o["cs"] = "1m"
+                data[_id] = o
+        su.log(f'End downloading day {su.get_yyyymmdd(ts_start)} for 1m', 'fetch_candle')
             
         ts_start += 3600*24
     return data
@@ -204,7 +196,7 @@ def main(argv):
             data["symbols-5m"] = fetch( symbol, "5m", day, day+24*3600 )
             data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
 
-            logging.info(f'Upload {su.get_yyyymmdd(day)} for {symbol}.' )
+            logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
             su.es_bulk_create_multi_index(data,partial=500)
 
         day += 24*3600
