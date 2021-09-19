@@ -84,8 +84,9 @@ def fetch1m(symbol, ts_start, ts_end):
 
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     if su.es.indices.exists( f"symbols-1m"):
-        results = su.es_search("symbols-1m", query)['hits']['hits']
-        if results >= 24*60: return {}
+        results = su.es_search("symbols-1m", query)
+        if 'hits' in results: results = results['hits']['hits']
+        if len(results) >= 24*60: return {}
     else:
         results = []
 
