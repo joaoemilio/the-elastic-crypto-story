@@ -187,7 +187,7 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                 id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
                 doc_p = data[id_p]
                 if "prices" not in doc_1m: doc_1m["prices"] = {}
-                doc_1m["prices"][p] = { 
+                doc_1m["future"][p] = { 
                     "low":   { "p": doc_p["low"], "d": delta( doc_1m['close'], doc_p["low"] ) }, 
                     "close": { "p": doc_p["close"], "d": delta( doc_1m['close'], doc_p["close"] ) },
                     "high":  { "p": doc_p["high"], "d": delta( doc_1m['close'], doc_p["high"] ) }
