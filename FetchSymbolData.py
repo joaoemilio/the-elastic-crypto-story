@@ -135,8 +135,12 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
 
     query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     if su.es.indices.exists( f"symbols-{cs}"):
-        results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
-        if results >= periods[cs]: return {}
+        results = su.es_search(f"symbols-{cs}", query)
+        if 'hits' in results: 
+            results = results['hits']['hits']
+
+        if results >= periods[cs]: 
+            return {}          
     else:
         results = []
 
