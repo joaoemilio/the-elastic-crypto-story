@@ -281,8 +281,12 @@ def main(argv):
     if argv[0] == "ALL":
         symbols = su.read_json("symbols.json")
         while day < end:
+            count = 0
             for symbol in symbols:
+                count += 1
+                logging.info(f"\n\n *********** SYMBOL {symbol} #{count} out of {len(symbols)}\n")
                 logging.info(f"start fetching data from day {su.get_iso_datetime(day)} for {symbol}")
+                logging.info(f"******************\n\n")
                 enrichDay( symbol, day )
 
             day += 24*3600
