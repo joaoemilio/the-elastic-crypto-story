@@ -254,7 +254,7 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    su.es_bulk_update("symbols-1m", data, partial=1000 )
+    su.es_bulk_update("symbols-1m", data, partial=250 )
 
 def main(argv):
 
@@ -275,28 +275,9 @@ def main(argv):
     logging.info(f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     logging.info('--------------------------------------------------------------------------------')
 
-    start = su.get_ts(argv[1])
-    day = start
-    end = su.get_ts(argv[2])
-    if argv[0] == "ALL":
-        symbols = su.read_json("symbols.json")
-        while day < end:
-            count = 0
-            for symbol in symbols:
-                count += 1
-                logging.info(f"\n\n *********** SYMBOL {symbol} #{count} out of {len(symbols)}\n")
-                logging.info(f"start fetching data from day {su.get_iso_datetime(day)} for {symbol}")
-                logging.info(f"******************\n\n")
-                enrichDay( symbol, day )
-
-            day += 24*3600
-    else:
-        symbol = argv[0]
-        while day < end:
-            logging.info(f"start fetching data from day {su.get_iso_datetime(day)} for {symbol}")
-            enrichDay( symbol, day )
-
-            day += 24*3600
+    symbol = argv[0]
+    day = su.get_ts(argv[1])
+    enrichDay( symbol, day )
 
 if __name__ == "__main__":
    main(sys.argv[1:])
