@@ -6,13 +6,14 @@ from collections import deque
 import time, sys
 
 def moving_avg(number, numbers, window_size):
+    if window_size == 0: return 0
     numbers.append( number )
     n = numbers[-window_size:]
     mma = sum(n) / window_size
     return mma
 
 def delta(starting_price, closing_price):
-    return (closing_price - starting_price)/starting_price
+    return 0 if starting_price == 0 else (closing_price - starting_price)/starting_price
 
 def std_dev(number, numbers, window_size):
     numbers.append( number )
@@ -25,10 +26,10 @@ def mean(number, numbers, window_size):
     return np.mean(n)
 
 def dp( current_price, previous_price, ):
-    return 100*(current_price - previous_price)/previous_price
+    return 0 if previous_price == 0 else 100*(current_price - previous_price)/previous_price
 
 def bb( current_price, mov_avg_price, std_price ):
-    return ( current_price - mov_avg_price) / std_price
+    return 0 if std_price == 0 else ( current_price - mov_avg_price) / std_price
 
 
 def get_closes_1m( symbol, ts_start, window_size):
@@ -127,6 +128,10 @@ def enrich(symbol, cs, data, ts_start, ts_end):
 
     logging.info(f"Fetching {cs} closes for {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     q_closes, q_volumes, q_trades = get_closes( symbol, cs, ts_start, 200 )
+
+    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
+    query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    data_cs = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
     periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
     minute = ts_start
