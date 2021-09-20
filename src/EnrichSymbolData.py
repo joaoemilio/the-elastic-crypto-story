@@ -134,15 +134,16 @@ def enrich(symbol, cs, data, ts_start, ts_end):
     results_cs = su.es_search(f"symbols-{cs}", query)
     if 'hits' in results_cs: results_cs = results_cs['hits']['hits']
     data_cs = {}
+    doc_cs = None
     for h in results_cs:
         doc = h['_source']
+        if not doc_cs: doc_cs = doc
         _id = h['_id']
         data_cs[_id] = doc
 
     periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
     minute = ts_start
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
-    doc_cs = {}
     doc_1m = {}
     first = True
     while minute < ts_end:
