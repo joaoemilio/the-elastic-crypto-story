@@ -154,8 +154,8 @@ def enrich(symbol, cs, data, ts_start, ts_end):
             else:
                 _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
 
-            if _id in data_cs:
-                doc_cs = data_cs[_id]
+            if _id_cs in data_cs:
+                doc_cs = data_cs[_id_cs]
 
             if _id in data:
                 doc_1m = data[_id]
