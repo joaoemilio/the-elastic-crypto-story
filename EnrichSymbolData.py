@@ -131,7 +131,13 @@ def enrich(symbol, cs, data, ts_start, ts_end):
 
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
     query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
-    data_cs = su.es_search(f"symbols-{cs}", query)['hits']['hits']
+    results_cs = su.es_search(f"symbols-{cs}", query)
+    if 'hits' in results_cs: results_cs = results_cs['hits']['hits']
+    data_cs = {}
+    for h in results_cs:
+        doc = h['_source']
+        _id = h['_id']
+        data_cs[_id] = doc
 
     periods = { "5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60 }
     minute = ts_start
@@ -148,9 +154,9 @@ def enrich(symbol, cs, data, ts_start, ts_end):
             else:
                 _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
 
-            doc_cs = su.es_get(f"symbols-{cs}", _id_cs)
-            if "_source" in doc_cs:
-                doc_cs = doc_cs['_source']
+            if _id in data_cs:
+                doc_cs = data_cs[_id]
+
             if _id in data:
                 doc_1m = data[_id]
                 doc_1m[f"is_{cs}"] = 1
