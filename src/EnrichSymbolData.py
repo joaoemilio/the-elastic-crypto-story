@@ -268,11 +268,12 @@ def enrichDay(symbol, day):
 
 def main(argv):
 
+    config = su.read_json("config.json")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"logs/EnrichSymbolData.log",
+            TimedRotatingFileHandler(f"{config['logs']}/EnrichSymbolData.log",
                                         when="d",
                                         interval=1,
                                         backupCount=7),
@@ -285,7 +286,6 @@ def main(argv):
     logging.info(f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     logging.info('--------------------------------------------------------------------------------')
 
-    config = su.read_json("config.json")
     day = su.get_ts(argv[0])
     symbols = su.get_symbols()
     end_ts = day+31*24*3600
