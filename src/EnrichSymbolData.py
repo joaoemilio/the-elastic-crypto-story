@@ -276,9 +276,10 @@ def main(argv):
     logging.info(f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     logging.info('--------------------------------------------------------------------------------')
 
-    symbol = argv[0]
-    day = su.get_ts(argv[1])
-    enrichDay( symbol, day )
+    day = su.get_ts(argv[0])
+    symbols = su.get_symbols()
+    for symbol in symbols:
+        enrichDay( symbol, day )
 
 if __name__ == "__main__":
    main(sys.argv[1:])
