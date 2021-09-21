@@ -274,9 +274,9 @@ def main(argv):
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
             TimedRotatingFileHandler(f"{config['logs']}/EnrichSymbolData.log",
-                                        when="d",
-                                        interval=1,
-                                        backupCount=7),
+                                        when="h",
+                                        interval=4,
+                                        backupCount=42),
             logging.StreamHandler(sys.stdout)
         ]
     )
