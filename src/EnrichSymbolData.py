@@ -243,6 +243,11 @@ def enrichDay(symbol, day):
     #enrich1m(symbol, data, ts_start, ts_end)
     # data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
 
+    _id1d = f"{symbol}_{su.get_yyyymmdd(ts_start)}_1d"
+    if not su.es_exists("symbols-1d", _id1d): 
+        logging.info(f"Symbol {symbol} not downloaded for day {su.get_iso_datetime(ts_start)} or didn't exists back then.")
+        return 
+
     logging.info(f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1d", data, ts_start, ts_end)
     logging.info(f"enriching {len(data)} of {symbol} 4h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
@@ -255,7 +260,7 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    su.es_bulk_update("symbols-1m", data, partial=500 )
+    su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
 
 def main(argv):
 
@@ -278,8 +283,12 @@ def main(argv):
 
     day = su.get_ts(argv[0])
     symbols = su.get_symbols()
-    for symbol in symbols:
-        enrichDay( symbol, day )
+    end_ts = day+31*24*3600
+    while day < end_ts:           
+        for symbol in symbols:
+            enrichDay( symbol, day )
+        
+        day += 24*3600
 
 if __name__ == "__main__":
    main(sys.argv[1:])

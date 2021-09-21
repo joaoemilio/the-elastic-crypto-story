@@ -1,4 +1,6 @@
 {
     "cloud_id" : "ml-demo:dXMtd2VzdDEuZ2NwLmNsb3VkLmVzLmlvJGRmNTI0ZGM0ZTJmYTRhNDdiODkyY2JiM2NiMGM0NzU1JGVhMDAyZDUwMDY4ZDRkMTY4NDcyM2VhYWFhZmZhNWEz",
-    "cloud_password" : "cTBjTATNJ2zu9B1pp3tvAkrc"
+    "cloud_password" : "cTBjTATNJ2zu9B1pp3tvAkrc",
+    "cloud_id_upload": "ccr-demo:dXMtd2VzdC0xLmF3cy5mb3VuZC5pbyQ2NDdlZmFmNWI3N2M0MDI0YjFiNzBmZDc2ZTY5Y2ViZiQ4ZDgxYmE3YWM3Y2Y0ZGQ2YWNhY2RmYWZhYTQyZWI5Zg==",
+    "cloud_password_upload": "j7eqBb7zgvjiTVeq32n9ALrn"
 }

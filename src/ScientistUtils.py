@@ -37,11 +37,11 @@ def notify(msg, code=None, channel="alerts"):
         logging.error(f"Error posting to {url} e={e}") # use proper logging
 
 ############ ELASTICSEARCH ##############
-def es_search( iname, query ):
+def es_search( iname, query, es="ml-demo" ):
     results = None
     for i in (1,2,3):
         try:
-            results = es.search( index=iname, body=query)
+            results = elastic[es].search( index=iname, body=query)
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -49,11 +49,11 @@ def es_search( iname, query ):
             time.sleep(10)
     return results
 
-def es_exists(iname, id):
+def es_exists(iname, id, es="ml-demo"):
     results = None
     for i in (1,2,3):
         try:
-            results = es.exists( index=iname, id=id)
+            results = elastic[es].exists( index=iname, id=id)
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -62,11 +62,11 @@ def es_exists(iname, id):
 
     return results
 
-def es_get(iname, id):
+def es_get(iname, id, es="ml-demo"):
     results = None
     for i in (1,2,3):
         try:
-            results = es.get( id=id, index=iname)
+            results = elastic[es].get( id=id, index=iname)
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -74,17 +74,17 @@ def es_get(iname, id):
             time.sleep(10)
     return results
 
-def es_create( iname, _id, obj ):
+def es_create( iname, _id, obj, es="ml-demo" ):
     for i in (1,2,3):
         try:
-            es.create( id=_id, body=obj, index=iname)
+            elastic[es].create( id=_id, body=obj, index=iname)
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_create_multi_index(index_data, partial=1000):
+def es_bulk_create_multi_index(index_data, partial=1000, es="ml-demo"):
     actions = []
     count = 0
     for iname in index_data:
@@ -96,7 +96,7 @@ def es_bulk_create_multi_index(index_data, partial=1000):
             if count >= partial:
                 for i in (1,2,3):
                     try:
-                        helpers.bulk(client=es,actions=actions)
+                        helpers.bulk(elastic[es],actions=actions)
                         actions = []
                         count = 0
                         break
@@ -107,7 +107,7 @@ def es_bulk_create_multi_index(index_data, partial=1000):
 
     for i in (1,2,3):
         try:
-            helpers.bulk(client=es,actions=actions)
+            helpers.bulk(client=elastic[es],actions=actions)
             actions = []
             count = 0
             break
@@ -116,8 +116,7 @@ def es_bulk_create_multi_index(index_data, partial=1000):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-
-def es_bulk_create(iname, data, partial=100):
+def es_bulk_create(iname, data, partial=100, es="ml-demo"):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -128,7 +127,7 @@ def es_bulk_create(iname, data, partial=100):
 
             for i in (1,2,3):
                 try:
-                    helpers.bulk(client=es,actions=actions)
+                    helpers.bulk(client=elastic[es],actions=actions)
                     break
                 except elasticsearch.exceptions.ConnectionTimeout as cte:
                     logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -141,7 +140,7 @@ def es_bulk_create(iname, data, partial=100):
 
     for i in (1,2,3):
         try:
-            helpers.bulk(client=es,actions=actions)        
+            helpers.bulk(client=elastic[es],actions=actions)        
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -149,7 +148,7 @@ def es_bulk_create(iname, data, partial=100):
             time.sleep(10)
 
 
-def es_bulk_update_multi_index(index_data, partial=500):
+def es_bulk_update_multi_index(index_data, partial=500, es="ml-demo"):
     actions = []
     count = 0
     for iname in index_data:
@@ -162,7 +161,7 @@ def es_bulk_update_multi_index(index_data, partial=500):
                 for i in (1,2,3):
                     try:
                         logging.info( f"Uploading {count} docs to Elastic Cloud")
-                        helpers.bulk(client=es,actions=actions)
+                        helpers.bulk(client=elastic[es],actions=actions)
                         actions = []
                         count = 0
                         break
@@ -174,7 +173,7 @@ def es_bulk_update_multi_index(index_data, partial=500):
     for i in (1,2,3):
         try:
             logging.info( f"Uploading {len(actions)} docs to Elastic Cloud")
-            helpers.bulk(client=es,actions=actions)
+            helpers.bulk(client=elastic[es],actions=actions)
             actions = []
             count = 0
             break
@@ -183,7 +182,7 @@ def es_bulk_update_multi_index(index_data, partial=500):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_update(iname, data, partial=100):
+def es_bulk_update(iname, data, partial=100, es="ml-demo"):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -194,7 +193,7 @@ def es_bulk_update(iname, data, partial=100):
 
             for i in (1,2,3):
                 try:
-                    helpers.bulk(client=es,actions=actions)
+                    helpers.bulk(client=elastic[es],actions=actions)
                     break
                 except elasticsearch.exceptions.ConnectionTimeout as cte:
                     logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -210,7 +209,7 @@ def es_bulk_update(iname, data, partial=100):
 
     for i in (1,2,3):
         try:
-            helpers.bulk(client=es,actions=actions)        
+            helpers.bulk(client=elastic[es],actions=actions)        
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -544,7 +543,14 @@ def get_disciples(enabled_only=False):
     return disciples
 
 config = read_json( f"config.json" )
+
 es = Elasticsearch(    
     cloud_id= config["cloud_id"] ,
     http_auth=("elastic", config["cloud_password"])
 )
+
+es_u = Elasticsearch(
+    cloud_id= config["cloud_id_upload"] ,
+    http_auth=("elastic", config["cloud_password_upload"])
+)
+elastic = { "ml-demo": es, "ccr-demo": es_u}
