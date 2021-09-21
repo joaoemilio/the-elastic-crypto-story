@@ -3,7 +3,7 @@ from logging.handlers import TimedRotatingFileHandler
 import ScientistUtils as su
 import numpy as np
 from collections import deque
-import time, sys
+import time, sys, os
 
 def moving_avg(number, numbers, window_size):
     if window_size == 0: return 0
@@ -260,7 +260,11 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
+    config = su.read_json("config.json")
+    for k in data:
+        su.write_json(data[k], f"{config['aug']}/{symbol}/{k}.json")
+    
+    #su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
 
 def main(argv):
 
@@ -281,11 +285,14 @@ def main(argv):
     logging.info(f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
     logging.info('--------------------------------------------------------------------------------')
 
+    config = su.read_json("config.json")
     day = su.get_ts(argv[0])
     symbols = su.get_symbols()
     end_ts = day+31*24*3600
     while day < end_ts:           
         for symbol in symbols:
+            if not os.path.exists(config["aug"]): os.makedirs(config["aug"])
+            if not os.path.exists( f"{config['aug']}/{symbol}" ): os.makedirs(f"{config['aug']}/{symbol}")
             enrichDay( symbol, day )
         
         day += 24*3600
