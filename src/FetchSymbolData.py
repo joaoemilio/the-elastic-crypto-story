@@ -188,13 +188,12 @@ def main(argv):
     )
 
     logging.info('--------------------------------------------------------------------------------')
-    logging.info(f" python3 FetchSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    logging.info(f" python3 FetchSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
+    logging.info(f" python3 FetchSymbolData.py 20210801 <-- start from here until the current day")
     logging.info('--------------------------------------------------------------------------------')
 
     start = su.get_ts(argv[0])
     day = start
-    end = su.get_ts(argv[1])
+    end = time.time()
 
     symbols = su.read_json("symbols.json")
 
@@ -214,7 +213,7 @@ def main(argv):
             data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
-            su.es_bulk_create_multi_index(data,partial=500)
+            #su.es_bulk_create_multi_index(data,partial=500)
 
         day += 24*3600
 

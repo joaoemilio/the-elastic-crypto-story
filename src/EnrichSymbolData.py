@@ -125,6 +125,7 @@ def enrich1m(symbol, data, ts_start, ts_end):
     su.es_bulk_update(iname="symbols-1m", data=aug, partial=1000)
 
 def enrich(symbol, cs, data, ts_start, ts_end):
+    config = su.read_json("config.json")
 
     logging.info(f"Fetching {cs} closes for {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     q_closes, q_volumes, q_trades = get_closes( symbol, cs, ts_start, 200 )
@@ -148,6 +149,10 @@ def enrich(symbol, cs, data, ts_start, ts_end):
     first = True
     while minute < ts_end:
         _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
+        fname = f"{config['aug']}/{symbol}/{_id}.json"
+        if os.path.exists(fname): 
+            logging.info(f"{fname} already augmented")
+            continue
 
         if minute % periods[cs] == 0:
             if cs == "1d":
@@ -247,6 +252,7 @@ def enrichDay(symbol, day):
     if not su.es_exists("symbols-1d", _id1d): 
         logging.info(f"Symbol {symbol} not downloaded for day {su.get_iso_datetime(ts_start)} or didn't exists back then.")
         return 
+    config = su.read_json("config.json")
 
     logging.info(f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1d", data, ts_start, ts_end)
@@ -260,7 +266,6 @@ def enrichDay(symbol, day):
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
-    config = su.read_json("config.json")
     for k in data:
         su.write_json(data[k], f"{config['aug']}/{symbol}/{k}.json")
     
