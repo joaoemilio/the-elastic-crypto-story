@@ -273,7 +273,7 @@ def enrichDay(symbol, day):
 
         su.write_json(data[k], f"{config['aug']}/{symbol}/{k}.json")
         if not su.es_exists("symbols-aug", k, "ccr-demo"):
-            su.es_create("symbols-aug", k, "ccr-demo")
+            su.es_create("symbols-aug", k, data[k], "ccr-demo")
     
     #su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
 
