@@ -266,6 +266,8 @@ def enrichDay(symbol, day):
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud and writing to {config['aug']}/symbol/")
     for k in data:
+        doc = data[k]
+        if doc['open_time'] > ts_end: break 
         fname = f"{config['aug']}/{symbol}/{k}.json"
         if os.path.exists(fname):
             logging.info(f"{fname} already augmented")
