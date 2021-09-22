@@ -202,13 +202,14 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                 prices = { "5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2*60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60 }
                 for p in prices:
                     id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
-                    doc_p = data[id_p]
-                    if "future" not in doc_1m: doc_1m["future"] = {}
-                    doc_1m["future"][p] = { 
-                        "low":   { "p": doc_p["low"], "d": delta( doc_1m['close'], doc_p["low"] ) }, 
-                        "close": { "p": doc_p["close"], "d": delta( doc_1m['close'], doc_p["close"] ) },
-                        "high":  { "p": doc_p["high"], "d": delta( doc_1m['close'], doc_p["high"] ) }
-                    }
+                    if id_p in data:
+                        doc_p = data[id_p]
+                        if "future" not in doc_1m: doc_1m["future"] = {}
+                        doc_1m["future"][p] = { 
+                            "low":   { "p": doc_p["low"], "d": delta( doc_1m['close'], doc_p["low"] ) }, 
+                            "close": { "p": doc_p["close"], "d": delta( doc_1m['close'], doc_p["close"] ) },
+                            "high":  { "p": doc_p["high"], "d": delta( doc_1m['close'], doc_p["high"] ) }
+                        }
 
                 if not first and (minute % periods[cs] == 0):
                     q_closes.append(close_cs)
