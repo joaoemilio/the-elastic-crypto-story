@@ -266,6 +266,11 @@ def enrichDay(symbol, day):
     
     logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
     for k in data:
+        fname = f"{config['aug']}/{symbol}/{k}.json"
+        if os.path.exists(fname):
+            logging.info(f"{fname} already augmented")
+            continue
+
         su.write_json(data[k], f"{config['aug']}/{symbol}/{k}.json")
     
     #su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
