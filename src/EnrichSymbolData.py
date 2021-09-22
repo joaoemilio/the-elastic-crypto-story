@@ -264,7 +264,7 @@ def enrichDay(symbol, day):
     logging.info(f"enriching {len(data)} of {symbol} 5m from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "5m", data, ts_start, ts_end)
     
-    logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud")
+    logging.info(f"Sending {len(data)} of {symbol} to Elastic Cloud and writing to {config['aug']}/symbol/")
     for k in data:
         fname = f"{config['aug']}/{symbol}/{k}.json"
         if os.path.exists(fname):
@@ -272,6 +272,8 @@ def enrichDay(symbol, day):
             continue
 
         su.write_json(data[k], f"{config['aug']}/{symbol}/{k}.json")
+        if not su.es_exists("symbols-aug", k, "ccr-demo"):
+            su.es_create("symbols-aug", k, "ccr-demo")
     
     #su.es_bulk_create("symbols-1m", data, partial=500, es="ccr-demo" )
 
@@ -297,14 +299,14 @@ def main(argv):
 
     day = su.get_ts(argv[0])
     symbols = su.get_symbols()
-    end_ts = day+31*24*3600
-    while day < end_ts:           
-        for symbol in symbols:
+    end_ts = time.time()
+    for symbol in symbols:
+        while day < end_ts:           
             if not os.path.exists(config["aug"]): os.makedirs(config["aug"])
             if not os.path.exists( f"{config['aug']}/{symbol}" ): os.makedirs(f"{config['aug']}/{symbol}")
             enrichDay( symbol, day )
         
-        day += 24*3600
+            day += 24*3600
 
 if __name__ == "__main__":
    main(sys.argv[1:])
