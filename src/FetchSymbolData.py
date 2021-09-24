@@ -213,7 +213,7 @@ def main(argv):
             data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
-            #su.es_bulk_create_multi_index(data,partial=500)
+            su.es_bulk_create_multi_index(data,partial=500)
 
         day += 24*3600
 
