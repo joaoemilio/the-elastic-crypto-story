@@ -235,8 +235,9 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                 doc_cs["dp"] = dp(doc_1m['close'], doc_cs['close'])
                 #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
                 doc_cs['d0'] = delta(doc_cs['open'], doc_cs['close'])
-                doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
-                doc_cs['trades_d0'] = delta(q_trades[-1], trades_cs)
+                if len(q_volumes) > 0:
+                    doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
+                    doc_cs['trades_d0'] = delta(q_trades[-1], trades_cs)
                 doc_1m[cs] = doc_cs.copy()
                 doc_1m["aug"] = {cs: "1.0.0"}
 
