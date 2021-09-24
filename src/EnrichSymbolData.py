@@ -328,14 +328,14 @@ def enrichDay(symbol, day):
     su.es_bulk_update("symbols-1m", data, partial=500, es="ccr-demo" )
 
 
-def query_first_and_last_doc(symbol: str):
+def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
     _first = {"size": 1, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
     _last = {"size": 1, "sort": [{"open_time": {"order": "desc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
 
-    fd = su.es_search("symbols-1d", _first)
-    ld = su.es_search("symbols-1d", _last)
+    fd = su.es_search(iname, _first, es)
+    ld = su.es_search(iname, _last, es)
 
 
     fot = None
@@ -372,18 +372,26 @@ def main(argv):
         '--------------------------------------------------------------------------------')
 
     symbol = argv[0]
-    day, end_ts = query_first_and_last_doc( symbol )
 
-    print(f"start={day} end={end_ts}")
+    start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
+    start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-aug", "ccr-demo")
+    yyyymmdd = su.get_yyyymmdd(end_aug)
+    day = su.get_ts(yyyymmdd)
+    #
+    # This is to reaugment it all
+    #
+    #day, end_ts = query_first_and_last_doc( symbol )
+
+    print(f"start={day} end={end_1d}")
     if symbol == "ALL":
         symbols = su.get_symbols()
         for symbol in symbols:
-            while day < end_ts:
+            while day <= end_1d:
                 enrichDay(symbol, day)
 
                 day += 24*3600
     else:
-        while day <= end_ts:
+        while day <= end_1d:
             enrichDay(symbol, day)
             day += 24*3600
 
