@@ -347,6 +347,24 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
 
     return fot, lot
 
+def get_augmentation_period(symbol: str):
+    start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
+    if not start_1d or end_1d:
+        start_1d = su.get_ts("20191201")
+    end_1d = time.time()
+
+    logging.info(
+        f"{symbol} downloaded start={su.get_iso_datetime(start_1d)} end={su.get_iso_datetime(end_1d)}")
+
+    if su.es.indices.exists( f"symbols-1m-aug"):
+        start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-1m-aug", "ml-demo")
+        day = end_aug
+    else:
+        day = start_1d
+
+    print(f"AUGMENT {symbol} FROM start={day} TO end={end_1d}")
+    return day, end_1d
+
 def main(argv):
 
     config = su.read_json("config.json")
@@ -373,29 +391,16 @@ def main(argv):
 
     symbol = argv[0]
 
-    start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
-    if not start_1d or end_1d:
-        start_1d = su.get_ts("20191201")
-    end_1d = time.time()
-
-    logging.info(
-        f"{symbol} downloaded start={su.get_iso_datetime(start_1d)} end={su.get_iso_datetime(end_1d)}")
-
-    if su.es.indices.exists( f"symbols-1m-aug"):
-        start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-1m-aug", "ml-demo")
-        day = end_aug
-    else:
-        day = start_1d
-
-    print(f"start={day} end={end_1d}")
     if symbol == "ALL":
         symbols = su.get_symbols()
         for symbol in symbols:
+            day, end_1d = get_augmentation_period(symbol)
             while day <= end_1d:
                 enrichDay(symbol, day)
 
                 day += 24*3600
     else:
+        day, end_1d = get_augmentation_period(symbol)
         while day <= end_1d:
             enrichDay(symbol, day)
             day += 24*3600
