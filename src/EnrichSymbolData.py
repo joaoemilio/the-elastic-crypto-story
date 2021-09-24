@@ -375,7 +375,10 @@ def main(argv):
 
     start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
     start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-aug", "ccr-demo")
-    yyyymmdd = su.get_yyyymmdd(end_aug)
+    if end_aug:
+        yyyymmdd = su.get_yyyymmdd(end_aug)
+    else:
+        yyyymmdd = su.get_yyyymmdd(start_1d)
     day = su.get_ts(yyyymmdd)
     #
     # This is to reaugment it all
