@@ -349,16 +349,20 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
 
 def get_augmentation_period(symbol: str):
     start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
-    if not start_1d or end_1d:
+    if not start_1d:
         start_1d = su.get_ts("20191201")
-    end_1d = time.time()
+    if not end_1d:
+        end_1d = time.time()
 
     logging.info(
         f"{symbol} downloaded start={su.get_iso_datetime(start_1d)} end={su.get_iso_datetime(end_1d)}")
 
     if su.es.indices.exists( f"symbols-1m-aug"):
         start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-1m-aug", "ml-demo")
-        day = end_aug
+        if not end_aug:
+            day = start_1d
+        else:
+            day = end_aug
     else:
         day = start_1d
 
