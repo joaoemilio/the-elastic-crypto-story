@@ -1,4 +1,4 @@
-
+import datetime
 from logging import error, warn, info
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -173,13 +173,33 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         day += 3600*24
     return data
 
+def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
+    _first = {"size": 1, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
+
+    _last = {"size": 1, "sort": [{"open_time": {"order": "desc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
+
+    fd = su.es_search(iname, _first, es)
+    ld = su.es_search(iname, _last, es)
+
+    fot = None
+    lot = None
+    if 'hits' in fd and 'hits' in fd['hits'] and len(fd['hits']['hits']) > 0:
+        fot = int(fd['hits']['hits'][0]['fields']['open_time'][0])
+    if 'hits' in ld and 'hits' in ld['hits'] and len(ld['hits']['hits']) > 0:
+        lot = int(ld['hits']['hits'][0]['fields']['open_time'][0])
+
+    print(f"{lot}\n\n")
+    print(f"{fot}\n\n")
+
+    return fot, lot
+
 def main(argv):
 
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"logs/FetchSymbolData.log",
+            TimedRotatingFileHandler(f"logs/FetchSymbolData-{su.get_iso_datetime(time.time())}.log",
                                         when="d",
                                         interval=1,
                                         backupCount=7),
@@ -191,19 +211,18 @@ def main(argv):
     logging.info(f" python3 FetchSymbolData.py 20210801 <-- start from here until the current day")
     logging.info('--------------------------------------------------------------------------------')
 
-    start = su.get_ts(argv[0])
-    day = start
-    end = time.time()
-
     symbols = su.read_json("symbols.json")
-
-    symbols_1d = {}
     data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
-    while day < end:
+    for symbol in symbols:
+        end, day = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
+        if not day:
+            day = su.get_ts("20191201")
+
+        end = time.time()
+
         count = 1
-        for symbol in symbols:
-            logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)}")
-            count += 1
+        logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)} FROM {su.get_yyyymmdd_hhmm(day)} TO {su.get_yyyymmdd_hhmm(end)}")
+        while day < end:
 
             data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
             data["symbols-4h"] = fetch( symbol, "4h", day, day+24*3600 )
@@ -215,7 +234,8 @@ def main(argv):
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
             su.es_bulk_create_multi_index(data,partial=500)
 
-        day += 24*3600
+            day += 24*3600
+        count += 1
 
 if __name__ == "__main__":
    main(sys.argv[1:])
