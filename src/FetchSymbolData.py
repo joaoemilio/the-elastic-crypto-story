@@ -215,7 +215,10 @@ def main(argv):
     logging.info(f" python3 FetchSymbolData.py 20210801 <-- start from here until the current day")
     logging.info('--------------------------------------------------------------------------------')
 
-    symbols = su.read_json("symbols.json")
+    if len(argv) > 0: 
+        symbols = su.read_json(f"../config/symbols-group{argv[0]}.json")
+    else:
+        symbols = su.read_json("symbols.json")
     data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
     count = 1
     for symbol in symbols:
