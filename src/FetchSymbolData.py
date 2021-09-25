@@ -213,6 +213,7 @@ def main(argv):
 
     symbols = su.read_json("symbols.json")
     data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
+    count = 1
     for symbol in symbols:
         end, day = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
         if not day:
@@ -220,7 +221,6 @@ def main(argv):
 
         end = time.time()
 
-        count = 1
         logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)} FROM {su.get_yyyymmdd_hhmm(day)} TO {su.get_yyyymmdd_hhmm(end)}")
         while day < end:
 
