@@ -80,7 +80,7 @@ def fetch1d( symbol, ts_start, ts_end ):
 
 def fetch1m(symbol, ts_start, ts_end):
 
-    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
+    _f, day = query_first_and_last_doc(symbol, f"symbols-1m")
 
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}},"fields": ["id"], "_source": False}
     ids = []
