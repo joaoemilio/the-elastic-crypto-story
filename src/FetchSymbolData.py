@@ -153,6 +153,8 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}")
         ids = []
 
+    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
+
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
     while day < ts_end:
