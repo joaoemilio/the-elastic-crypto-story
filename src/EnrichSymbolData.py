@@ -409,10 +409,10 @@ def main(argv):
     else:
         symbols = symbol.split(",")
 
-    for symbol in symbols:
-        day, end_1d = get_augmentation_period(symbol)
+    for s in symbols:
+        day, end_1d = get_augmentation_period(s)
         while day <= end_1d:
-            enrichDay(symbol, day)
+            enrichDay(s, day)
 
             day += 24*3600
 
