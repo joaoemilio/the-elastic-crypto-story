@@ -298,41 +298,17 @@ def enrichDay(symbol, day):
         doc = d['_source']
         data[d['_id']] = doc
 
-    # print([k for k in data])
-
-    #logging.info(f"enriching {len(data)} of {symbol} from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
-    #enrich1m(symbol, data, ts_start, ts_end)
-    # data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
-
     _id1d = f"{symbol}_{su.get_yyyymmdd(ts_start)}_1d"
     if not su.es_exists("symbols-1d", _id1d):
         logging.info(
             f"Symbol {symbol} not downloaded for day {su.get_iso_datetime(ts_start)} or didn't exists back then.")
         return
 
-    logging.info(
-        f"enriching {len(data)} of {symbol} 1d from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1d", data, ts_start, ts_end)
-    logging.info(
-        f"enriching {len(data)} of {symbol} 4h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "4h", data, ts_start, ts_end)
-    logging.info(
-        f"enriching {len(data)} of {symbol} 1h from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "1h", data, ts_start, ts_end)
-    logging.info(
-        f"enriching {len(data)} of {symbol} 15m from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "15m", data, ts_start, ts_end)
-    logging.info(
-        f"enriching {len(data)} of {symbol} 5m from {su.get_iso_datetime(ts_start)} to {su.get_iso_datetime(ts_end)}")
     data = enrich(symbol, "5m", data, ts_start, ts_end)
-
-    # upload = {}
-    # for k in data:
-    #     doc = data[k]
-    #     if doc['open_time'] > ts_end:
-    #         break
-        # if not su.es_exists("symbols-aug", k, "ccr-demo"):
-        #     upload[k] = data[k]
 
     su.es_bulk_create("symbols-1m-aug", data, partial=500, es="ml-demo" )
 
@@ -380,12 +356,23 @@ def get_augmentation_period(symbol: str):
 
 def main(argv):
 
+    symbol = argv[0]
+
+    group = None
+    if symbol == "ALL":
+        symbols = su.get_symbols()
+    elif "GROUP" in symbol:
+        group = symbol.split("=")[1]
+        symbols = su.read_json(f"../config/symbols-group{group}.json")
+    else:
+        symbols = symbol.split(",")
+
     config = su.read_json("config.json")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"{config['logs']}/EnrichSymbolData.log",
+            TimedRotatingFileHandler(f"logs/EnrichSymbolData{'' if not group else group}.log",
                                      when="h",
                                      interval=4,
                                      backupCount=42),
@@ -402,15 +389,6 @@ def main(argv):
     logging.info(
         '--------------------------------------------------------------------------------')
 
-    symbol = argv[0]
-
-    if symbol == "ALL":
-        symbols = su.get_symbols()
-    elif "GROUP" in symbol:
-        group = symbol.split("=")[1]
-        symbols = su.read_json(f"../config/symbols-group{group}.json")
-    else:
-        symbols = symbol.split(",")
 
     for s in symbols:
         day, end_1d = get_augmentation_period(s)
