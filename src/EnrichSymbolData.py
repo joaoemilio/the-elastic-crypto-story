@@ -406,6 +406,9 @@ def main(argv):
 
     if symbol == "ALL":
         symbols = su.get_symbols()
+    elif "GROUP" in symbol:
+        group = symbol.split("=")[1]
+        symbols = su.read_json(f"../config/symbols-group{group}.json")
     else:
         symbols = symbol.split(",")
 
