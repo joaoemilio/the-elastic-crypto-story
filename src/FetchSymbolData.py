@@ -80,7 +80,9 @@ def fetch1d( symbol, ts_start, ts_end ):
 
 def fetch1m(symbol, ts_start, ts_end):
 
-    query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}},"fields": ["id"], "_source": False}
+    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
+
+    query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}},"fields": ["id"], "_source": False}
     ids = []
     if su.es.indices.exists( f"symbols-1m"):
         results = su.es_search("symbols-1m", query)
@@ -100,14 +102,14 @@ def fetch1m(symbol, ts_start, ts_end):
 
     log(f"Lets fetch {symbol} cs=1m")
     data = {}
-    while ts_start < ts_end:
+    while day < ts_end:
         end_time = ts_start + 24*3600 # in seconds
         pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
 
         rall = []
         for periods, end_time in pairs:
             logging.info(f"fetching {periods} to {end_time}")
-            r = fetch_candles(symbol, ts_start, "1m", periods, end_time=end_time)
+            r = fetch_candles(symbol, day, "1m", periods, end_time=end_time)
             rall += r
 
         logging.info(f"{len(rall)} lines fetched")
@@ -133,8 +135,9 @@ def fetch1m(symbol, ts_start, ts_end):
 def fetch(symbol:str, cs:str, ts_start, ts_end):
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
     day = ts_start
+    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
 
-    query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{ts_start}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
+    query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     ids = []
     if su.es.indices.exists( f"symbols-{cs}"):
         results = su.es_search(f"symbols-{cs}", query)
@@ -153,7 +156,6 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
         su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}")
         ids = []
 
-    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
 
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
