@@ -91,19 +91,19 @@ def fetch1m(symbol, ts_start, ts_end):
             ids.append(h["_id"])
 
         if len(results) >= 24*60:
-            su.log(f'Already downloaded {su.get_yyyymmdd(ts_start)} s={symbol} cs=1m')
+            su.log(f'Already downloaded {su.get_yyyymmdd(day)} s={symbol} cs=1m')
             return {}
         else:
-            su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(ts_start)} cs=1m. Missing {len(results)-24*60} docs")
+            su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs=1m. Missing {len(results)-24*60} docs")
 
     else:
-        su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(ts_start)} cs=1m")
+        su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs=1m")
         ids = []
 
     log(f"Lets fetch {symbol} cs=1m")
     data = {}
     while day < ts_end:
-        end_time = ts_start + 24*3600 # in seconds
+        end_time = day + 24*3600 # in seconds
         pairs = [ (440+25, end_time - 1000*60), (1000, end_time) ] # periods, end_time
 
         rall = []
@@ -127,9 +127,9 @@ def fetch1m(symbol, ts_start, ts_end):
                 o["cs"] = "1m"
                 data[_id] = o
 
-        su.log(f'End downloading day {su.get_yyyymmdd(ts_start)} for 1m', 'fetch_candle')
+        su.log(f'End downloading day {su.get_yyyymmdd(day)} for 1m', 'fetch_candle')
             
-        ts_start += 3600*24
+        day += 3600*24
     return data
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
