@@ -406,18 +406,15 @@ def main(argv):
 
     if symbol == "ALL":
         symbols = su.get_symbols()
-        for symbol in symbols:
-            day, end_1d = get_augmentation_period(symbol)
-            while day <= end_1d:
-                enrichDay(symbol, day)
-
-                day += 24*3600
     else:
+        symbols = symbol.split(",")
+
+    for symbol in symbols:
         day, end_1d = get_augmentation_period(symbol)
         while day <= end_1d:
             enrichDay(symbol, day)
-            day += 24*3600
 
+            day += 24*3600
 
 if __name__ == "__main__":
     main(sys.argv[1:])
