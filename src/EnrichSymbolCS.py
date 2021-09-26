@@ -209,7 +209,7 @@ def main(argv):
             for d in results:
                 doc = d['_source']
                 data[d['_id']] = doc
-                day = doc['open_time']
+                day = doc['open_time']+1
 
             logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
