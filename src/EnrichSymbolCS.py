@@ -200,6 +200,8 @@ def main(argv):
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 6, "1d": 1 }
     for s in symbols:
         day, end_cs = get_augmentation_period(s, cs)
+
+        data = {}
         while day < end_cs:
             query = {"size": 1000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
                 "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
