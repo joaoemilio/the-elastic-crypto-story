@@ -116,7 +116,7 @@ def es_bulk_create_multi_index(index_data, partial=1000, es="ml-demo"):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_create(iname, data, partial=100, es="ml-demo"):
+def es_bulk_create(iname, data, partial=100, es="ml-demo", pipeline=None):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -127,7 +127,8 @@ def es_bulk_create(iname, data, partial=100, es="ml-demo"):
 
             for i in (1,2,3):
                 try:
-                    helpers.bulk(client=elastic[es],actions=actions)
+                    print(f"uploading {partial} documents")
+                    helpers.bulk(client=elastic[es],actions=actions, pipeline=pipeline)
                     break
                 except elasticsearch.exceptions.ConnectionTimeout as cte:
                     logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -140,6 +141,7 @@ def es_bulk_create(iname, data, partial=100, es="ml-demo"):
 
     for i in (1,2,3):
         try:
+            print(f"uploading {count} documents")
             helpers.bulk(client=elastic[es],actions=actions)        
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:

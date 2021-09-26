@@ -235,7 +235,6 @@ def enrich(symbol, cs, data, ts_start, ts_end):
                     doc_cs[f'd_trades_{mm}'] = 0
 
             doc_cs["dp"] = dp(doc_1m['close'], doc_cs['close'])
-            #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
             doc_cs['d0'] = delta(doc_cs['open'], doc_cs['close'])
             if len(q_volumes) > 0 and len(q_trades) > 0:
                 doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
@@ -363,7 +362,6 @@ def main(argv):
     else:
         symbols = symbol.split(",")
 
-    config = su.read_json("config.json")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -376,16 +374,6 @@ def main(argv):
         ]
     )
 
-    logging.info(
-        '--------------------------------------------------------------------------------')
-    logging.info(
-        f" python3 EnrichSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    logging.info(
-        f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
-    logging.info(
-        '--------------------------------------------------------------------------------')
-
-
     for s in symbols:
         day, end_1d = get_augmentation_period(s)
         while day <= end_1d:
@@ -395,47 +383,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-
-
-# query = su.read_json(f"queries/symbol_1m_range_open_time.json")
-# print( query['query'])
-# query['query']['bool']['filter'][0]['bool']['should'][0]['match_phrase']['symbol.keyword'] = "ETHUSDT"
-# query['query']['bool']['filter'][1]['range']['open_time']['gte'] = "1627784500"
-# query['query']['bool']['filter'][1]['range']['open_time']['lte'] = "1627786700"
-
-# results = su.es_search("symbols-1m", query)
-# print(results['hits']['hits'])
-
-'''
-kline1m = {
-    "symbol": "TKOUSDT",
-    "open": 2.173,
-    "high": 2.173,
-    "low": 2.171,
-    "close": 2.171,
-    "q_volume": 283.7748,
-    "trades": 3,
-    "open_time": 1631750340,
-    "open_time_ms": 1631750340000,
-    "open_time_iso": "2021-09-15T23:59:00",
-    "cs": "1m",
-    "1m" : { "mm5": 2.173, "mm7": 2.169 }, 
-    "aug" : { 
-        "1m" : { "mm5": 0, "mm7": 0 } ,
-        "5m": { "mm5": 0, "mm7": 0 }
-    }
-  }
-
-
-t = time.time()
-n = [1, 4, 5, 10, 8, 7, 2, 3, 1, 5, 1, 4, 5, 10, 8, 7, 2, 3, 1, 5, 3, 2, 12, 3, 6, 78, 9, 7, 5, 3]
-ws = 10
-print(f"Calculate mma")
-i = 0
-while i < 10000:
-    mma = moving_avg(50, n, ws)
-    #print(f"Moving avg: {mma}")
-    i += 1
-
-print( f"Time spent: {time.time()-t}s")
-'''

@@ -108,9 +108,10 @@ def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
         doc_cs['trades_d0'] = 0
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
-    prices = {"1d": 3600*24,  "1s": 7*3600*24,  "15d": 15*3600*24, "1M": 30*3600*24 }
+    prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
+                60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60}
     for p in prices:
-        id_p = f"{symbol}_{su.get_yyyymmdd(doc_cs['open_time']+prices[p])}_1d"
+        id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_{cs}"
         if id_p in data:
             doc_p = data[id_p]
             if "future" not in doc_cs:
@@ -145,27 +146,27 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
 
     return fot, lot
 
-def get_augmentation_period(symbol: str):
-    start_1d, end_1d = query_first_and_last_doc( symbol, "symbols-aug-1d", "ml-demo")
-    if not start_1d:
-        start_1d = su.get_ts("20191201")
-    if not end_1d:
-        end_1d = time.time()
+def get_augmentation_period(symbol: str, cs: str):
+    start_cs, end_cs = query_first_and_last_doc( symbol, f"symbols-{cs}", "ml-demo")
+    if not start_cs:
+        start_cs = su.get_ts("20191201")
+    if not end_cs:
+        end_cs = time.time()
 
     logging.info(
-        f"{symbol} downloaded start={su.get_iso_datetime(start_1d)} end={su.get_iso_datetime(end_1d)}")
+        f"{symbol} downloaded start={su.get_iso_datetime(start_cs)} end={su.get_iso_datetime(end_cs)}")
 
-    if su.es.indices.exists( f"symbols-aug-1d"):
-        start_aug, end_aug = query_first_and_last_doc( symbol, "symbols-aug-1d", "ml-demo")
+    if su.es.indices.exists( f"symbols-aug-{cs}"):
+        start_aug, end_aug = query_first_and_last_doc( symbol, f"symbols-aug-{cs}", "ml-demo")
         if not end_aug:
-            day = start_1d
+            day = start_cs
         else:
             day = end_aug
     else:
-        day = start_1d
+        day = start_cs
 
-    print(f"AUGMENT {symbol} FROM start={su.get_iso_datetime(day)} TO end={su.get_iso_datetime(end_1d)}")
-    return day, end_1d
+    print(f"AUGMENT {symbol} FROM start={su.get_iso_datetime(day)} TO end={su.get_iso_datetime(end_cs)}")
+    return day, end_cs
 
 def main(argv):
 
@@ -202,13 +203,11 @@ def main(argv):
     logging.info(
         '--------------------------------------------------------------------------------')
 
-    symbols = ['BTCUSDT']
-
     for s in symbols:
-        day, end_1d = get_augmentation_period(s)
-        cs = "1d"
-        query = {"size": (end_1d-day) / (3600*24) , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
-            "range": {"open_time": {"gte": f"{day}", "lte": f"{end_1d}", "format": "strict_date_optional_time"}}}]}}}
+        cs = "4h"
+        day, end_cs = get_augmentation_period(s, cs)
+        query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
+            "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
         results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
         data = {}
@@ -216,12 +215,11 @@ def main(argv):
             doc = d['_source']
             data[d['_id']] = doc
         print("\n", len(data), "\n")
-        cs = "1d"
         q_closes, q_volumes, q_trades = get_closes(symbol, cs, day, 200)
         aug = {}
         for k in data:
             doc_cs = data[k]
-            logging.info(f"Enriching {s} day={su.get_yyyymmdd(doc_cs['open_time'])}")
+            logging.info(f"Enriching {s} day={su.get_yyyymmdd_hhmm(doc_cs['open_time'])}")
             aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
             q_closes.append( doc_cs['close'] )
             q_closes.popleft()
