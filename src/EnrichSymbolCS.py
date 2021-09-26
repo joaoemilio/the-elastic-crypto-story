@@ -211,7 +211,7 @@ def main(argv):
                 data[d['_id']] = doc
                 last_ot = doc['open_time']
 
-            day = doc['open_time']+4*60
+            day = doc['open_time']+1
             logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
             if len(data) == 0: break 
