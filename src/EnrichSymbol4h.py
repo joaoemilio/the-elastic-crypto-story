@@ -197,8 +197,6 @@ def main(argv):
     count = 1
     total = len(symbols)
     for s in symbols:
-        logging.info(f"\n\n {s} #{count} of {total}\n\n")
-        count += 1
         cs = "4h"
         day, end_cs = get_augmentation_period(s, cs)
         query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
@@ -209,6 +207,10 @@ def main(argv):
         for d in results:
             doc = d['_source']
             data[d['_id']] = doc
+
+        logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
+        count += 1
+
         q_closes, q_volumes, q_trades = get_closes(symbol, cs, day, 200)
         aug = {}
         for k in data:
