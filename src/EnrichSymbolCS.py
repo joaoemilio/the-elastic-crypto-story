@@ -211,10 +211,10 @@ def main(argv):
                 data[d['_id']] = doc
                 last_ot = doc['open_time']
 
-            day = doc['open_time']+1
+            if len(data) == 0: break 
+            day = last_ot
             logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
-            if len(data) == 0: break 
 
         logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
         count += 1
