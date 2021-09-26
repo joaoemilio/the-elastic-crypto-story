@@ -169,16 +169,16 @@ def get_augmentation_period(symbol: str):
 
 def main(argv):
 
-    symbol = argv[0]
+    _symbol = argv[0]
 
     group = None
-    if symbol == "ALL":
+    if _symbol == "ALL":
         symbols = su.get_symbols()
-    elif "GROUP" in symbol:
-        group = symbol.split("=")[1]
+    elif "GROUP" in _symbol:
+        group = _symbol.split("=")[1]
         symbols = su.read_json(f"../config/symbols-group{group}.json")
     else:
-        symbols = symbol.split(",")
+        symbols = _symbol.split(",")
 
     config = su.read_json("config.json")
     logging.basicConfig(
@@ -202,12 +202,10 @@ def main(argv):
     logging.info(
         '--------------------------------------------------------------------------------')
 
-    symbols = ['BTCUSDT']
-
     for s in symbols:
         day, end_1d = get_augmentation_period(s)
         cs = "1d"
-        query = {"size": (end_1d-day) / (3600*24) , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
+        query = {"size": (end_1d-day) / (3600*24) , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
             "range": {"open_time": {"gte": f"{day}", "lte": f"{end_1d}", "format": "strict_date_optional_time"}}}]}}}
         results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
@@ -217,7 +215,7 @@ def main(argv):
             data[d['_id']] = doc
         print("\n", len(data), "\n")
         cs = "1d"
-        q_closes, q_volumes, q_trades = get_closes(symbol, cs, day, 200)
+        q_closes, q_volumes, q_trades = get_closes(s, cs, day, 200)
         aug = {}
         for k in data:
             doc_cs = data[k]
