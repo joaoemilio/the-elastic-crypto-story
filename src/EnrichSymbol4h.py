@@ -186,7 +186,7 @@ def main(argv):
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"logs/EnrichSymbolData{'' if not group else group}.log",
+            TimedRotatingFileHandler(f"logs/EnrichSymbolData_G{'' if not group else group}_4H.log",
                                      when="h",
                                      interval=4,
                                      backupCount=42),
@@ -194,16 +194,11 @@ def main(argv):
         ]
     )
 
-    logging.info(
-        '--------------------------------------------------------------------------------')
-    logging.info(
-        f" python3 EnrichSymbolData.py BTCUSDT 20210801 [20210901] <-- only BTCUSDT from start to [end]")
-    logging.info(
-        f" python3 EnrichSymbolData.py ALL 20210801 [20210901]<-- ALL symbols in symbols.json from start to [end]")
-    logging.info(
-        '--------------------------------------------------------------------------------')
-
+    count = 1
+    total = len(symbols)
     for s in symbols:
+        logging.info(f"\n\n {s} #{count} of {total}\n\n")
+        count += 1
         cs = "4h"
         day, end_cs = get_augmentation_period(s, cs)
         query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
@@ -214,7 +209,6 @@ def main(argv):
         for d in results:
             doc = d['_source']
             data[d['_id']] = doc
-        print("\n", len(data), "\n")
         q_closes, q_volumes, q_trades = get_closes(symbol, cs, day, 200)
         aug = {}
         for k in data:
