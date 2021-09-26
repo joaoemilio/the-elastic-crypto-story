@@ -211,7 +211,7 @@ def main(argv):
         logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
         count += 1
 
-        q_closes, q_volumes, q_trades = get_closes(symbol, cs, day, 200)
+        q_closes, q_volumes, q_trades = get_closes(s, cs, day, 200)
         aug = {}
         for k in data:
             doc_cs = data[k]
