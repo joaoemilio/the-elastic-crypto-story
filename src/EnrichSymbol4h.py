@@ -215,8 +215,8 @@ def main(argv):
         aug = {}
         for k in data:
             doc_cs = data[k]
-            logging.info(f"Enriching {s} day={su.get_yyyymmdd_hhmm(doc_cs['open_time'])}")
             aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
+            print(f"{aug[k]}")
             q_closes.append( doc_cs['close'] )
             q_closes.popleft()
             q_volumes.append(doc_cs['q_volume'] )
