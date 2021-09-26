@@ -207,7 +207,6 @@ def main(argv):
                 "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
             results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
-            data = {}
             for d in results:
                 doc = d['_source']
                 data[d['_id']] = doc
