@@ -97,13 +97,15 @@ def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
             doc_cs[f'd_vol_{mm}'] = 0
             doc_cs[f'd_trades_{mm}'] = 0
 
-    doc_cs["dp"] = dp(doc_cs['close'], q_closes[-1])
+    
     #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
     doc_cs['d0'] = delta(doc_cs['open'], doc_cs['close'])
     if len(q_volumes) > 0 and len(q_trades) > 0:
+        doc_cs["dp"] = dp(doc_cs['close'], q_closes[-1])
         doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
         doc_cs['trades_d0'] = delta(q_trades[-1], trades_cs)
     else:
+        doc_cs["dp"] = 0
         doc_cs['q_volume_d0'] = 0
         doc_cs['trades_d0'] = 0
 

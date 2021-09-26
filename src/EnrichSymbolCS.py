@@ -199,14 +199,16 @@ def main(argv):
     total = len(symbols)
     for s in symbols:
         day, end_cs = get_augmentation_period(s, cs)
-        query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
-            "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
-        results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
+        while day < end_cs:
+            query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
+                "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
+            results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
-        data = {}
-        for d in results:
-            doc = d['_source']
-            data[d['_id']] = doc
+            data = {}
+            for d in results:
+                doc = d['_source']
+                data[d['_id']] = doc
+                day = doc['open_time']
 
         logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
         count += 1
