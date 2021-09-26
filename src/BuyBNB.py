@@ -72,7 +72,7 @@ end = su.get_ts("20210925")
 backtest = time.time()
 while day < end:
     data = get_1m_docs("BNBUSDT", day, end, backtest )
-    su.es_bulk_create("backtest-bnbusdt", data, partial=10, pipeline=pipeline)
+    su.es_bulk_create("backtest-bnbusdt", data, partial=500, pipeline=pipeline)
 
 '''
 buys = {}
