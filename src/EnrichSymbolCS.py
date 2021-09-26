@@ -199,9 +199,11 @@ def main(argv):
     total = len(symbols)
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 6, "1d": 1 }
     for s in symbols:
+        logging.info(f"\n*********************\n {s} {count} out of {total} \n*********************\n")
         day, end_cs = get_augmentation_period(s, cs)
 
         data = {}
+        start = day
         while day < end_cs:
             query = {"size": 1000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
                 "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
@@ -213,25 +215,35 @@ def main(argv):
                 last_ot = doc['open_time']
 
             if len(data) == 0: break 
+            if len(data) > 20000:
+                send_data(s,cs,data)
+                data = {}
             day = last_ot
             logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
-        logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
         count += 1
 
-        q_closes, q_volumes, q_trades = get_closes(s, cs, day, 200)
-        aug = {}
-        for k in data:
-            doc_cs = data[k]
-            aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
-            q_closes.append( doc_cs['close'] )
-            q_closes.popleft()
-            q_volumes.append(doc_cs['q_volume'] )
-            q_volumes.popleft()
-            q_trades.append(doc_cs['trades'])
-            q_trades.popleft()
+        send_data(s, cs, data)
 
-        su.es_bulk_create(f"symbols-aug-{cs}", aug, partial=500 )
+def send_data(s, cs, data):
+    logging.info(f"\n*********************\n {s}: Upload {len(data)} Documents \n*********************\n")
+    aug = {}
+    first = True
+    for k in data:
+        doc_cs = data[k]
+        if first:
+            q_closes, q_volumes, q_trades = get_closes(s, cs, doc_cs['open_time'] , 200)
+            first = False
+        aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
+        q_closes.append( doc_cs['close'] )
+        q_closes.popleft()
+        q_volumes.append(doc_cs['q_volume'] )
+        q_volumes.popleft()
+        q_trades.append(doc_cs['trades'])
+        q_trades.popleft()
+
+    su.es_bulk_create(f"symbols-aug-{cs}", aug, partial=500 )
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
