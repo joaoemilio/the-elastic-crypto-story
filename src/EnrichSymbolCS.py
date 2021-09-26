@@ -201,7 +201,7 @@ def main(argv):
     for s in symbols:
         day, end_cs = get_augmentation_period(s, cs)
         while day < end_cs:
-            query = {"size": ((end_cs-day) / (3600*24) )*periods[cs] , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
+            query = {"size": max(((end_cs-day) / (3600*24) )*periods[cs],5000) , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
                 "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
             results = su.es_search(f"symbols-{cs}", query)['hits']['hits']
 
@@ -210,9 +210,8 @@ def main(argv):
                 doc = d['_source']
                 data[d['_id']] = doc
                 last_ot = doc['open_time']
-                
-            day = doc['open_time']+4*60
 
+            day = doc['open_time']+4*60
             logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
             if len(data) == 0: break 
