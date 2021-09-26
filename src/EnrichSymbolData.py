@@ -180,103 +180,99 @@ def enrich(symbol, cs, data, ts_start, ts_end):
     first = True
     while minute < ts_end:
         _id = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_1m"
-        fname = f"{config['aug']}/{symbol}/{_id}.json"
-        if not os.path.exists(fname):
-            if minute % periods[cs] == 0:
-                if cs == "1d":
-                    _id_cs = f"{symbol}_{su.get_yyyymmdd(minute)}_{cs}"
-                else:
-                    _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
+        if minute % periods[cs] == 0:
+            if cs == "1d":
+                _id_cs = f"{symbol}_{su.get_yyyymmdd(minute)}_{cs}"
+            else:
+                _id_cs = f"{symbol}_{su.get_yyyymmdd_hhmm(minute)}_{cs}"
 
-                if _id_cs in data_cs:
-                    doc_cs = data_cs[_id_cs]
-
-                if _id in data:
-                    doc_1m = data[_id]
-                    doc_1m[f"is_{cs}"] = 1
+            if _id_cs in data_cs:
+                doc_cs = data_cs[_id_cs]
 
             if _id in data:
-                doc_1m = data[_id]  # su.es_get("symbols-1m", _id)
-                if f"is_{cs}" not in doc_1m:
-                    doc_1m[f"is_{cs}"] = 0
-                close_1m = doc_1m['close']
-                close_cs = doc_cs['close']
-                q_vol_cs = doc_cs['q_volume']
-                trades_cs = doc_cs['trades']
+                doc_1m = data[_id]
+                doc_1m[f"is_{cs}"] = 1
 
-                if cs not in doc_1m:
-                    doc_1m[cs] = {}
-                if "aug" not in doc_1m:
-                    doc_1m["aug"] = {}
-                for mm in mms:
-                    if mm <= len(q_closes):
-                        doc_cs[f"close_mm{mm}"] = moving_avg(
-                            close_1m, list(q_closes)[-mm:], mm)
-                        doc_cs[f"trades_mm{mm}"] = moving_avg(
-                            trades_cs, list(q_trades)[-mm:], mm)
-                        doc_cs[f"q_volume_mm{mm}"] = moving_avg(
-                            q_vol_cs, list(q_volumes)[-mm:], mm)
-                        doc_cs[f"std{mm}"] = std_dev(
-                            close_1m, list(q_closes)[-mm:], mm)
-                        doc_cs[f"mid_bb{mm}"] = mean(
-                            close_1m, list(q_closes)[-mm:], mm)
-                        doc_cs[f"bb{mm}"] = bb(
-                            close_1m, doc_cs[f"close_mm{mm}"], doc_cs[f"std{mm}"])
-                        doc_cs[f'd_vol_{mm}'] = delta(
-                            doc_cs['q_volume'], doc_cs[f'q_volume_mm{mm}'])
-                        doc_cs[f'd_trades_{mm}'] = delta(
-                            doc_cs['trades'], doc_cs[f'trades_mm{mm}'])
-                    else:
-                        doc_cs[f"close_mm{mm}"] = 0
-                        doc_cs[f"trades_mm{mm}"] = 0
-                        doc_cs[f"q_volume_mm{mm}"] = 0
-                        doc_cs[f"std{mm}"] = 0
-                        doc_cs[f"mid_bb{mm}"] = 0
-                        doc_cs[f"bb{mm}"] = 0
-                        doc_cs[f'd_vol_{mm}'] = 0
-                        doc_cs[f'd_trades_{mm}'] = 0
+        if _id in data:
+            doc_1m = data[_id]  # su.es_get("symbols-1m", _id)
+            if f"is_{cs}" not in doc_1m:
+                doc_1m[f"is_{cs}"] = 0
+            close_1m = doc_1m['close']
+            close_cs = doc_cs['close']
+            q_vol_cs = doc_cs['q_volume']
+            trades_cs = doc_cs['trades']
 
-                doc_cs["dp"] = dp(doc_1m['close'], doc_cs['close'])
-                #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
-                doc_cs['d0'] = delta(doc_cs['open'], doc_cs['close'])
-                if len(q_volumes) > 0 and len(q_trades) > 0:
-                    doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
-                    doc_cs['trades_d0'] = delta(q_trades[-1], trades_cs)
+            if cs not in doc_1m:
+                doc_1m[cs] = {}
+            if "aug" not in doc_1m:
+                doc_1m["aug"] = {}
+            for mm in mms:
+                if mm <= len(q_closes):
+                    doc_cs[f"close_mm{mm}"] = moving_avg(
+                        close_1m, list(q_closes)[-mm:], mm)
+                    doc_cs[f"trades_mm{mm}"] = moving_avg(
+                        trades_cs, list(q_trades)[-mm:], mm)
+                    doc_cs[f"q_volume_mm{mm}"] = moving_avg(
+                        q_vol_cs, list(q_volumes)[-mm:], mm)
+                    doc_cs[f"std{mm}"] = std_dev(
+                        close_1m, list(q_closes)[-mm:], mm)
+                    doc_cs[f"mid_bb{mm}"] = mean(
+                        close_1m, list(q_closes)[-mm:], mm)
+                    doc_cs[f"bb{mm}"] = bb(
+                        close_1m, doc_cs[f"close_mm{mm}"], doc_cs[f"std{mm}"])
+                    doc_cs[f'd_vol_{mm}'] = delta(
+                        doc_cs['q_volume'], doc_cs[f'q_volume_mm{mm}'])
+                    doc_cs[f'd_trades_{mm}'] = delta(
+                        doc_cs['trades'], doc_cs[f'trades_mm{mm}'])
                 else:
-                    doc_cs['q_volume_d0'] = 0
-                    doc_cs['trades_d0'] = 0
+                    doc_cs[f"close_mm{mm}"] = 0
+                    doc_cs[f"trades_mm{mm}"] = 0
+                    doc_cs[f"q_volume_mm{mm}"] = 0
+                    doc_cs[f"std{mm}"] = 0
+                    doc_cs[f"mid_bb{mm}"] = 0
+                    doc_cs[f"bb{mm}"] = 0
+                    doc_cs[f'd_vol_{mm}'] = 0
+                    doc_cs[f'd_trades_{mm}'] = 0
 
-                doc_1m[cs] = doc_cs.copy()
-                doc_1m["aug"] = {cs: "1.0.0"}
-
-                # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
-                prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
-                          60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60}
-                for p in prices:
-                    id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
-                    if id_p in data:
-                        doc_p = data[id_p]
-                        if "future" not in doc_1m:
-                            doc_1m["future"] = {}
-                        doc_1m["future"][p] = {
-                            "low":   {"p": doc_p["low"], "d": delta(doc_1m['close'], doc_p["low"])},
-                            "close": {"p": doc_p["close"], "d": delta(doc_1m['close'], doc_p["close"])},
-                            "high":  {"p": doc_p["high"], "d": delta(doc_1m['close'], doc_p["high"])}
-                        }
-
-                if not first and (minute % periods[cs] == 0):
-                    q_closes.append(close_cs)
-                    q_closes.popleft()
-                    q_volumes.append(q_vol_cs)
-                    q_volumes.popleft()
-                    q_trades.append(trades_cs)
-                    q_trades.popleft()
-
-                data[_id] = doc_1m
+            doc_cs["dp"] = dp(doc_1m['close'], doc_cs['close'])
+            #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
+            doc_cs['d0'] = delta(doc_cs['open'], doc_cs['close'])
+            if len(q_volumes) > 0 and len(q_trades) > 0:
+                doc_cs['q_volume_d0'] = delta(q_volumes[-1], q_vol_cs)
+                doc_cs['trades_d0'] = delta(q_trades[-1], trades_cs)
             else:
-                logging.error(f"{_id} not found")
+                doc_cs['q_volume_d0'] = 0
+                doc_cs['trades_d0'] = 0
+
+            doc_1m[cs] = doc_cs.copy()
+            doc_1m["aug"] = {cs: "1.0.0"}
+
+            # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
+            prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
+                        60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60}
+            for p in prices:
+                id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(minute+prices[p])}_1m"
+                if id_p in data:
+                    doc_p = data[id_p]
+                    if "future" not in doc_1m:
+                        doc_1m["future"] = {}
+                    doc_1m["future"][p] = {
+                        "low":   {"p": doc_p["low"], "d": delta(doc_1m['close'], doc_p["low"])},
+                        "close": {"p": doc_p["close"], "d": delta(doc_1m['close'], doc_p["close"])},
+                        "high":  {"p": doc_p["high"], "d": delta(doc_1m['close'], doc_p["high"])}
+                    }
+
+            if not first and (minute % periods[cs] == 0):
+                q_closes.append(close_cs)
+                q_closes.popleft()
+                q_volumes.append(q_vol_cs)
+                q_volumes.popleft()
+                q_trades.append(trades_cs)
+                q_trades.popleft()
+
+            data[_id] = doc_1m
         else:
-            logging.info(f"{fname} already augmented")
+            logging.error(f"{_id} not found")
 
         if first:
             first = False
