@@ -215,7 +215,7 @@ def main(argv):
                 last_ot = doc['open_time']
 
             if len(data) == 0: break 
-            if len(data) > 20000:
+            if len(data) > 10000:
                 send_data(s,cs,data)
                 data = {}
             day = last_ot
@@ -242,7 +242,7 @@ def send_data(s, cs, data):
         q_trades.append(doc_cs['trades'])
         q_trades.popleft()
 
-    su.es_bulk_create(f"symbols-aug-{cs}", aug, partial=500 )
+    su.es_bulk_create(f"symbols-aug-{cs}", aug, partial=1000 )
 
 
 if __name__ == "__main__":
