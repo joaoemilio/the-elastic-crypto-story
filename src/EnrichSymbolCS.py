@@ -180,13 +180,14 @@ def main(argv):
         symbols = su.read_json(f"../config/symbols-group{group}.json")
     else:
         symbols = symbol.split(",")
+    cs = argv[1]
 
     config = su.read_json("config.json")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"logs/EnrichSymbolData_G{'' if not group else group}_4H.log",
+            TimedRotatingFileHandler(f"logs/EnrichSymbolData_G{'' if not group else group}_{cs}.log",
                                      when="h",
                                      interval=4,
                                      backupCount=42),
@@ -197,7 +198,6 @@ def main(argv):
     count = 1
     total = len(symbols)
     for s in symbols:
-        cs = "4h"
         day, end_cs = get_augmentation_period(s, cs)
         query = {"size": ((end_cs-day) / (3600*24) )*6 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
             "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
