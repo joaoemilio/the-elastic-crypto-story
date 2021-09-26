@@ -210,6 +210,8 @@ def main(argv):
                 data[d['_id']] = doc
                 day = doc['open_time']
 
+            if len(data) == 0: break 
+            
         logging.info(f"\n\n {s} #{count} of {total} -- {len(data)} Documents \n\n")
         count += 1
 
