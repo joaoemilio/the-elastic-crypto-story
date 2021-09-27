@@ -62,6 +62,8 @@ def get_closes(symbol, cs, ts_start, window_size):
         q_volumes.append(s['q_volume'])
         q_trades.append(s['trades'])
 
+    print(f"{q_closes}")
+
     return q_closes, q_volumes, q_trades
 
 def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
@@ -229,18 +231,20 @@ def send_data(s, cs, data):
     logging.info(f"\n*********************\n {s}: Upload {len(data)} Documents \n*********************\n")
     aug = {}
     first = True
+    window_size = 200
     for k in data:
         doc_cs = data[k]
         if first:
-            q_closes, q_volumes, q_trades = get_closes(s, cs, doc_cs['open_time'] , 200)
+            q_closes, q_volumes, q_trades = get_closes(s, cs, doc_cs['open_time'] , window_size)
             first = False
         aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
         q_closes.append( doc_cs['close'] )
-        q_closes.popleft()
         q_volumes.append(doc_cs['q_volume'] )
-        q_volumes.popleft()
         q_trades.append(doc_cs['trades'])
-        q_trades.popleft()
+        if len(q_closes) > window_size:
+            q_closes.popleft()
+            q_volumes.popleft()
+            q_trades.popleft()
 
     su.es_bulk_create(f"symbols-aug-{cs}", aug, partial=1000 )
 
