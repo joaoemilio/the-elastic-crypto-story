@@ -62,8 +62,6 @@ def get_closes(symbol, cs, ts_start, window_size):
         q_volumes.append(s['q_volume'])
         q_trades.append(s['trades'])
 
-    print(f"{q_closes}")
-
     return q_closes, q_volumes, q_trades
 
 def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
