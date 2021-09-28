@@ -175,7 +175,7 @@ def enrich(symbol, cs, data, doc_cs, dataws):
             }
             for i in [5,10,15,20,25,30,50,100,150,200]:
                 if doc_aug["future"][p]['high']['d'] >= i/1000:
-                    doc_aug["future"][p]['buy{i}'] = 1
+                    doc_aug["future"][p][f'buy{i}'] = 1
                 else:
                     doc_aug["future"][p][f'buy{i}'] = 0
 
