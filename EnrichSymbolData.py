@@ -209,10 +209,10 @@ def enrich_cs(s, cs):
 
 def enrich_symbol(s):
     enrich_cs(s, "1d")
-    # enrich_cs(s, "4h")
-    # enrich_cs(s, "1h")
-    # enrich_cs(s, "15m")
-    # enrich_cs(s, "5m")
+    enrich_cs(s, "4h")
+    enrich_cs(s, "1h")
+    enrich_cs(s, "15m")
+    enrich_cs(s, "5m")
 
 def enrich_symbols(symbols):
     count = 1
