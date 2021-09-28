@@ -1,14 +1,11 @@
-import datetime
 from logging import error, warn, info
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from os import strerror
-import os.path
 import time
 import ScientistUtils as su
-from collections import deque
+import ElasticSearchUtils as eu
 import sys
-import numpy as np
 
 ##################################################
 # Download
@@ -68,7 +65,7 @@ def fetch1d( symbol, ts_start, ts_end ):
         logging.info(f'\tprocessing {su.get_yyyymmdd(day)}' )
         ot = su.get_yyyymmdd(day)
         _id = f"{symbol}_{ot}_1d"
-        if not su.es_exists("symbols-1d", _id):
+        if not eu.es_exists("symbols-1d", _id):
             kline = fetch_candles(symbol, day, "1d", 1)
             if kline: 
                 obj = kline[0]
@@ -84,8 +81,8 @@ def fetch1m(symbol, ts_start, ts_end):
 
     query = {"size": 24*60, "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}},"fields": ["id"], "_source": False}
     ids = []
-    if su.es.indices.exists( f"symbols-1m"):
-        results = su.es_search("symbols-1m", query)
+    if eu.es.indices.exists( f"symbols-1m"):
+        results = eu.es_search("symbols-1m", query)
         if 'hits' in results: results = results['hits']['hits']
         for h in results:
             ids.append(h["_id"])
@@ -123,7 +120,7 @@ def fetch1m(symbol, ts_start, ts_end):
                 if _id in ids: continue 
 
                 #logging.info(f"Does {_id} exist? {o['open_time_iso']}")
-                #if not su.es_exists("symbols-1m", _id):
+                #if not eu.es_exists("symbols-1m", _id):
                 o["cs"] = "1m"
                 data[_id] = o
 
@@ -139,8 +136,8 @@ def fetch(symbol:str, cs:str, ts_start, ts_end):
 
     query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
     ids = []
-    if su.es.indices.exists( f"symbols-{cs}"):
-        results = su.es_search(f"symbols-{cs}", query)
+    if eu.es.indices.exists( f"symbols-{cs}"):
+        results = eu.es_search(f"symbols-{cs}", query)
         if 'hits' in results: 
             results = results['hits']['hits']
             for h in results:
@@ -182,8 +179,8 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
 
     _last = {"size": 1, "sort": [{"open_time": {"order": "desc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
-    fd = su.es_search(iname, _first, es)
-    ld = su.es_search(iname, _last, es)
+    fd = eu.es_search(iname, _first, es)
+    ld = eu.es_search(iname, _last, es)
 
     fot = None
     lot = None
@@ -192,18 +189,22 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
     if 'hits' in ld and 'hits' in ld['hits'] and len(ld['hits']['hits']) > 0:
         lot = int(ld['hits']['hits'][0]['fields']['open_time'][0])
 
-    print(f"{lot}\n\n")
-    print(f"{fot}\n\n")
-
     return fot, lot
 
 def main(argv):
+
+    group = None
+    if len(argv) > 0: 
+        group = argv[0]
+        symbols = su.read_json(f"config/symbols-group{group}.json")
+    else:
+        symbols = su.read_json("config/symbols.json")
 
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            TimedRotatingFileHandler(f"logs/FetchSymbolData-{su.get_iso_datetime(time.time())}.log",
+            TimedRotatingFileHandler(f"logs/FetchSymbolData_G{'' if not group else group}.log",
                                         when="d",
                                         interval=1,
                                         backupCount=7),
@@ -211,14 +212,6 @@ def main(argv):
         ]
     )
 
-    logging.info('--------------------------------------------------------------------------------')
-    logging.info(f" python3 FetchSymbolData.py 20210801 <-- start from here until the current day")
-    logging.info('--------------------------------------------------------------------------------')
-
-    if len(argv) > 0: 
-        symbols = su.read_json(f"../config/symbols-group{argv[0]}.json")
-    else:
-        symbols = su.read_json("symbols.json")
     data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
     count = 1
     for symbol in symbols:
@@ -239,7 +232,7 @@ def main(argv):
             data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
-            su.es_bulk_create_multi_index(data,partial=500)
+            eu.es_bulk_create_multi_index(data,partial=500)
 
             day += 24*3600
         count += 1

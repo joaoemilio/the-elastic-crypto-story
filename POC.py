@@ -1,10 +1,9 @@
 import ScientistUtils as su
-print("deploying my first docker container for a python job")
 
-symbols = su.read_json("symbols.json")
+symbols = su.read_json("config/symbols.json")
 
 total = len(symbols)
-split = int(total/5)
+split = int(total/10)
 
 count = 0
 groups = {}
@@ -18,4 +17,4 @@ for s in symbols:
         count = 0
 
 for g in groups:
-    su.write_json(groups[g], f"../config/symbols-group{g}.json")
+    su.write_json(groups[g], f"config/symbols-group{g}.json")
