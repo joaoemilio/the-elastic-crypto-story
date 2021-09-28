@@ -72,7 +72,7 @@ def get_augmentation_period(symbol: str, cs: str):
     print(f"AUGMENT {symbol} FROM start={su.get_iso_datetime(day)} TO end={su.get_iso_datetime(end_cs)}")
     return day, end_cs
 
-def get_closes(symbol, cs, ts_start, window_size):
+def get_closes1(symbol, cs, ts_start, window_size):
     periods = {"5m": 60*5,  "15m": 60*15,
                "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
     ts_window_size = ts_start-window_size*periods[cs]
@@ -95,48 +95,65 @@ def get_closes(symbol, cs, ts_start, window_size):
 
     return q_closes, q_volumes, q_trades
 
-def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
+def get_last(symbol, cs, ts_start, window_size):
+    periods = {"5m": 60*5,  "15m": 60*15,
+               "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
+    ts_window_size = ts_start-window_size*periods[cs]
+
+    query = {"size": window_size, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
+        "range": {"open_time": {"gte": f"{ts_window_size}", "lte": f"{ts_start}", "format": "strict_date_optional_time"}}}]}}}
+    results = eu.es_search(f"symbols-{cs}", query)
+    data = {}
+    if 'hits' in results and 'hits' in results['hits']:
+        r = results['hits']['hits']        
+        for d in r:
+            data[d['_id']] = d['_source']
+
+    return data
+
+def enrich(symbol, cs, data, doc_cs, dataws):
     close_cs = doc_cs['close']
     q_vol_cs = doc_cs['q_volume']
     trades_cs = doc_cs['trades']
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
+    closes = [dataws[d]['close'] for d in dataws]
+    trades = [dataws[d]['trades'] for d in dataws]
+    volumes = [dataws[d]['q_volume'] for d in dataws]
+    doc_aug = doc_cs.copy()
     for mm in mms:
-        if mm <= len(q_closes):
-            doc_cs[f"close_mm{mm}"] = su.moving_avg(
-                close_cs, list(q_closes)[-mm:], mm)
-            doc_cs[f"trades_mm{mm}"] = su.moving_avg(
-                trades_cs, list(q_trades)[-mm:], mm)
-            doc_cs[f"q_volume_mm{mm}"] = su.moving_avg(
-                q_vol_cs, list(q_volumes)[-mm:], mm)
-            doc_cs[f"std{mm}"] = su.std_dev(
-                close_cs, list(q_closes)[-mm:], mm)
-            doc_cs[f"mid_bb{mm}"] = su.mean(
-                close_cs, list(q_closes)[-mm:], mm)
-            doc_cs[f"bb{mm}"] = su.bb(
-                close_cs, doc_cs[f"close_mm{mm}"], doc_cs[f"std{mm}"])
-            doc_cs[f'd_vol_{mm}'] = su.delta(
-                doc_cs['q_volume'], doc_cs[f'q_volume_mm{mm}'])
-            doc_cs[f'd_trades_{mm}'] = su.delta(
-                doc_cs['trades'], doc_cs[f'trades_mm{mm}'])
-        else:
-            doc_cs[f"close_mm{mm}"] = 0
-            doc_cs[f"trades_mm{mm}"] = 0
-            doc_cs[f"q_volume_mm{mm}"] = 0
-            doc_cs[f"std{mm}"] = 0
-            doc_cs[f"mid_bb{mm}"] = 0
-            doc_cs[f"bb{mm}"] = 0
-            doc_cs[f'd_vol_{mm}'] = 0
-            doc_cs[f'd_trades_{mm}'] = 0
+        if mm <= len(closes):
+            doc_aug[f"close_mm{mm}"] = su.moving_avg(close_cs, closes[-mm:], mm)
+            doc_aug[f"trades_mm{mm}"] = su.moving_avg(trades_cs, trades[-mm:], mm)
+            doc_aug[f"q_volume_mm{mm}"] = su.moving_avg(q_vol_cs, volumes[-mm:], mm)
+            doc_aug[f"std{mm}"] = su.std_dev(close_cs, closes[-mm:], mm)
+            std = doc_aug[f"std{mm}"]
+            closemm = doc_aug[f"close_mm{mm}"]
+            tradesmm = doc_aug[f'trades_mm{mm}']
+            doc_aug[f"bb{mm}"] = su.bb(close_cs, closemm , std )
+            doc_aug[f'd_vol_{mm}'] = su.delta(doc_cs['q_volume'], doc_aug[f'q_volume_mm{mm}'])
+            d_trades = su.delta(trades_cs, tradesmm)
+            doc_aug[f'd_trades_{mm}'] = d_trades
+            doc_aug[f"mid_bb{mm}"] = su.mean(close_cs, closes[-mm:], mm)
 
-    doc_cs["dp"] = su.dp(doc_cs['close'], q_closes[-1])
+        else:
+            doc_aug[f"close_mm{mm}"] = 0
+            doc_aug[f"trades_mm{mm}"] = 0
+            doc_aug[f"q_volume_mm{mm}"] = 0
+            doc_aug[f"std{mm}"] = 0
+            doc_aug[f"mid_bb{mm}"] = 0
+            doc_aug[f"bb{mm}"] = 0
+            doc_aug[f'd_vol_{mm}'] = 0
+            doc_aug[f'd_trades_{mm}'] = 0
+
+    doc_aug["dp"] = su.dp(doc_cs['close'], closes[-1])
     #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
-    doc_cs['d0'] = su.delta(doc_cs['open'], doc_cs['close'])
-    if len(q_volumes) > 0 and len(q_trades) > 0:
-        doc_cs['q_volume_d0'] = su.delta(q_volumes[-1], q_vol_cs)
-        doc_cs['trades_d0'] = su.delta(q_trades[-1], trades_cs)
+    doc_aug['d0'] = su.delta(doc_cs['open'], doc_cs['close'])
+    if len(volumes) > 0 and len(trades) > 0:
+        doc_aug['q_volume_d0'] = su.delta(volumes[-1], q_vol_cs)
+        doc_aug['trades_d0'] = su.delta(trades[-1], trades_cs)
     else:
-        doc_cs['q_volume_d0'] = 0
-        doc_cs['trades_d0'] = 0
+        doc_aug['q_volume_d0'] = 0
+        doc_aug['trades_d0'] = 0
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
     prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
@@ -146,65 +163,56 @@ def enrich(symbol, cs, data, doc_cs, q_closes, q_volumes, q_trades):
         if id_p in data:
             doc_p = data[id_p]
             if "future" not in doc_cs:
-                doc_cs["future"] = {}
-            doc_cs["future"][p] = {
+                doc_aug["future"] = {}
+            doc_aug["future"][p] = {
                 "low":   {"p": doc_p["low"], "d": su.delta(doc_cs['close'], doc_p["low"])},
                 "close": {"p": doc_p["close"], "d": su.delta(doc_cs['close'], doc_p["close"])},
                 "high":  {"p": doc_p["high"], "d": su.delta(doc_cs['close'], doc_p["high"])}
             }
         
-    aug = doc_cs.copy()
-    aug["version"] = "1.0.0"
+    doc_aug["version"] = "1.0.0"
 
-    return aug
-
-def send_data(s, cs, data):
-    aug = {}
-    first = True
-    window_size = 200
-    for k in data:
-        doc_cs = data[k]
-        if first:
-            q_closes, q_volumes, q_trades = get_closes(s, cs, doc_cs['open_time'] , window_size)
-            first = False
-        aug[k] = enrich(s, cs, data, doc_cs, q_closes, q_volumes, q_trades )
-        q_closes.append( doc_cs['close'] )
-        q_volumes.append(doc_cs['q_volume'] )
-        q_trades.append(doc_cs['trades'])
-        if len(q_closes) > window_size:
-            q_closes.popleft()
-            q_volumes.popleft()
-            q_trades.popleft()
-
-    eu.es_bulk_create(f"symbols-aug-{cs}", aug, partial=1000 )
+    return doc_aug
 
 def enrich_cs(s, cs):
     day, end_cs = get_augmentation_period(s, cs)
     data = {}
+    window_size = 200
+    dataws = get_last(s, cs, day, window_size=window_size)
     while day < end_cs:
         query = {"size": 1000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
             "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
         results = eu.es_search(f"symbols-{cs}", query)['hits']['hits']
 
+        data = {}
         for d in results:
             doc = d['_source']
             data[d['_id']] = doc
             last_ot = doc['open_time']
 
-        if len(data) == 0: break 
-        if len(data) > 10000:
-            send_data(s,cs,data)
-            data = {}
+        aug = {}
+        for k in data:
+            doc_cs = data[k]
+            aug[k] = enrich(s, cs, data, doc_cs, dataws )
+            if len(dataws) > window_size:
+                k0 = None
+                for kws in dataws:
+                    k0 = kws
+                    break
+                if k0: del dataws[k0]
+            dataws[k] = doc_cs
+
+        eu.es_bulk_create(f"symbols-aug-{cs}", aug, partial=500 )
+
         day = last_ot
         logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
-    send_data(s, cs, data)
 
 def enrich_symbol(s):
     enrich_cs(s, "1d")
-    enrich_cs(s, "4h")
-    enrich_cs(s, "1h")
-    enrich_cs(s, "15m")
-    enrich_cs(s, "5m")
+    # enrich_cs(s, "4h")
+    # enrich_cs(s, "1h")
+    # enrich_cs(s, "15m")
+    # enrich_cs(s, "5m")
 
 def enrich_symbols(symbols):
     count = 1
