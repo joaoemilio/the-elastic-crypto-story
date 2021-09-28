@@ -28,7 +28,7 @@ def read_json(fname):
 
 def get_symbols():
     # Seleted symbols with q_volume_mm7 > 10e6 on 20210615, excluding BLVT and stable coins
-    return read_json("symbols.json")
+    return read_json("config/symbols.json")
 
 def write_object(obj, fname):
     with open(fname, 'wb') as output:  # Overwrites any existing file.
