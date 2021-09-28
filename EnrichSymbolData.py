@@ -169,11 +169,16 @@ def enrich(symbol, cs, data, doc_cs, dataws):
             if "future" not in doc_cs:
                 doc_aug["future"] = {}
             doc_aug["future"][p] = {
-                "low":   {"p": doc_p["low"], "d": su.delta(doc_cs['close'], doc_p["low"])},
+                "low":   {"p": doc_p["low"], "d": su.delta(doc_cs['close'], doc_p["low"]) },
                 "close": {"p": doc_p["close"], "d": su.delta(doc_cs['close'], doc_p["close"])},
                 "high":  {"p": doc_p["high"], "d": su.delta(doc_cs['close'], doc_p["high"])}
             }
-        
+            for i in [5,10,15,20,25,30,50,100,150,200]:
+                if doc_aug["future"][p]['high']['d'] >= i/1000:
+                    doc_aug["future"][p]['buy'] = 1
+                else:
+                    doc_aug["future"][p]['buy'] = 0
+
     doc_aug["version"] = "1.0.0"
 
     return doc_aug
@@ -211,26 +216,32 @@ def enrich_cs(s, cs):
         day = last_ot
         logging.info(f"Continue {s} {cs} from {su.get_iso_datetime(day)}")
 
-def enrich_symbol(s):
-    enrich_cs(s, "1d")
-    #enrich_cs(s, "4h")
-    #enrich_cs(s, "1h")
-    #enrich_cs(s, "15m")
-    #enrich_cs(s, "5m")
+def enrich_symbol(s, cs):
+    if not cs:
+        enrich_cs(s, "1d")
+        enrich_cs(s, "4h")
+        enrich_cs(s, "1h")
+        enrich_cs(s, "15m")
+        enrich_cs(s, "5m")
+    else:
+        enrich_cs(s, cs)
 
-def enrich_symbols(symbols):
+def enrich_symbols(symbols, cs):
     count = 1
     total = len(symbols)
     for s in symbols:
         logging.info(f"Enriching symbol {s} #{count} of {total}")
-        enrich_symbol(s)
+        enrich_symbol(s, cs)
         count += 1
 
 def main(argv):
     symbol = argv[0]
+    cs = None
+    if len(argv) > 1:
+        cs = argv[1]
     group, symbols = get_symbols(symbol)
     initialize(group)
-    enrich_symbols( symbols )
+    enrich_symbols( symbols, cs )
 
 if __name__ == "__main__":
     main(sys.argv[1:])
