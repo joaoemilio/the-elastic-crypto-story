@@ -157,9 +157,13 @@ def enrich(symbol, cs, data, doc_cs, dataws):
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
     prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
-                60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60}
+                60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60, 
+                "48h": 48*60*60, "72h": 72*60*60, "96h": 96*60*60}
     for p in prices:
-        id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_{cs}"
+        if cs == "1d":
+            id_p = f"{symbol}_{su.get_yyyymmdd(doc_cs['open_time']+prices[p])}_{cs}"
+        else:
+            id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_{cs}"
         if id_p in data:
             doc_p = data[id_p]
             if "future" not in doc_cs:
@@ -209,10 +213,10 @@ def enrich_cs(s, cs):
 
 def enrich_symbol(s):
     enrich_cs(s, "1d")
-    enrich_cs(s, "4h")
-    enrich_cs(s, "1h")
-    enrich_cs(s, "15m")
-    enrich_cs(s, "5m")
+    #enrich_cs(s, "4h")
+    #enrich_cs(s, "1h")
+    #enrich_cs(s, "15m")
+    #enrich_cs(s, "5m")
 
 def enrich_symbols(symbols):
     count = 1
