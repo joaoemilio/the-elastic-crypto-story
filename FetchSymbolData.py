@@ -61,9 +61,13 @@ def fetch1d( symbol, ts_start, ts_end ):
     day = ts_start
     data = {}
 
+    today_ts = su.get_ts(su.get_yyyymmdd(time.time()) ) 
+    if ts_start >= today_ts or ts_end >= today_ts: return data
+
     while day < ts_end:
         logging.info(f'\tprocessing {su.get_yyyymmdd(day)}' )
         ot = su.get_yyyymmdd(day)
+        if ot == su.get_yyyymmdd(time.time()): break
         _id = f"{symbol}_{ot}_1d"
         if not eu.es_exists("symbols-1d", _id):
             kline = fetch_candles(symbol, day, "1d", 1)
@@ -76,6 +80,9 @@ def fetch1d( symbol, ts_start, ts_end ):
     return data
 
 def fetch1m(symbol, ts_start, ts_end):
+
+    now_ts = su.get_ts(su.get_yyyymmdd_hhmm(time.time()))
+    if ts_start >= now_ts or ts_end >= now_ts: return 
 
     _f, day = query_first_and_last_doc(symbol, f"symbols-1m")
 
@@ -131,6 +138,10 @@ def fetch1m(symbol, ts_start, ts_end):
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
     periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
+
+    now_ts = su.get_ts(su.get_yyyymmdd_hhmm(time.time()))
+    if ts_start >= now_ts or ts_end >= now_ts: return 
+
     day = ts_start
     _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
 
@@ -200,6 +211,11 @@ def main(argv):
     else:
         symbols = su.read_json("config/symbols.json")
 
+    if len(argv) > 1:
+        cs = argv[1]
+    else:
+        cs = None
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -223,13 +239,19 @@ def main(argv):
 
         logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)} FROM {su.get_yyyymmdd_hhmm(day)} TO {su.get_yyyymmdd_hhmm(end)}")
         while day < end:
-
-            data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
-            data["symbols-4h"] = fetch( symbol, "4h", day, day+24*3600 )
-            data["symbols-1h"] = fetch( symbol, "1h", day, day+24*3600 )
-            data["symbols-15m"] = fetch( symbol, "15m", day, day+24*3600 )
-            data["symbols-5m"] = fetch( symbol, "5m", day, day+24*3600 )
-            data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
+            if not cs:
+                data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
+                data["symbols-4h"] = fetch( symbol, "4h", day, day+24*3600 )
+                data["symbols-1h"] = fetch( symbol, "1h", day, day+24*3600 )
+                data["symbols-15m"] = fetch( symbol, "15m", day, day+24*3600 )
+                data["symbols-5m"] = fetch( symbol, "5m", day, day+24*3600 )
+                data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
+            elif cs == "1d":
+                data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
+            elif cs == "1m":
+                data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
+            else:
+                data["symbols-5m"] = fetch( symbol, cs, day, day+24*3600-60/5*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
             eu.es_bulk_create_multi_index(data,partial=500)
