@@ -140,6 +140,10 @@ def get_ts2(tiso:str):
     tiso = tiso + ":00+00:00"
     return int(datetime.timestamp(dtparser.isoparse(tiso)))
 
+def get_iso_datetime_sec(ts):
+    dt = datetime.fromtimestamp(ts,tz=timezone.utc)
+    return dt.strftime("%Y-%m-%dT%H:%M:%S")
+
 candle_sizes = {'5m': 5*60, '15m': 15*60, '1h': 3600, '4h': 4*3600, '1d': 24*3600}
 candle_sizes1m = {'1m': 60, '5m': 5*60, '15m': 15*60, '1h': 3600, '4h': 4*3600, '1d': 24*3600}
 candle_sizes1h = {'1h': 3600, '4h': 4*3600, '1d': 24*3600}
