@@ -41,6 +41,17 @@ def read_object(fname):
 def get_config():
     return read_json( f"config/config.json" )
 
+def get_symbols(symbol):
+    group = None
+    if symbol == "ALL":
+        symbols = get_symbols()
+    elif "GROUP" in symbol:
+        group = symbol.split("=")[1]
+        symbols = read_json(f"config/symbols-group{group}.json")
+    else:
+        symbols = symbol.split(",")
+    return group, symbols
+
 start = time.time()
 last = start
 

@@ -207,9 +207,7 @@ def main(argv):
     group = None
     if len(argv) > 0: 
         group = argv[0]
-        symbols = su.read_json(f"config/symbols-group{group}.json")
-    else:
-        symbols = su.read_json("config/symbols.json")
+        symbols = su.get_symbols(group)
 
     if len(argv) > 1:
         cs = argv[1]
