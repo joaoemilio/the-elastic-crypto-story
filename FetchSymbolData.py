@@ -204,10 +204,7 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
 
 def main(argv):
 
-    group = None
-    if len(argv) > 0: 
-        group = argv[0]
-        symbols = su.get_symbols(group)
+    group, symbols = su.get_symbols(argv[0])
 
     if len(argv) > 1:
         cs = argv[1]
