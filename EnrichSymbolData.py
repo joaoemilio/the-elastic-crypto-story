@@ -112,7 +112,7 @@ def get_last(symbol, cs, ts_start, window_size):
     return data
 
 def get_next_hours_15m(symbol, ts_start, hours):
-    ts_next_hours = ts_start+15+hours*60*60
+    ts_next_hours = ts_start+24*3600+15+hours*60*60
 
     query = { "size": 10000, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": f"{ts_start}", "lte": f"{ts_next_hours}", "format": "strict_date_optional_time"}}}]}}, "fields": ["close", "high", "low", "open_time"], "_source": False}
     results = eu.es_search(f"symbols-15m", query)
