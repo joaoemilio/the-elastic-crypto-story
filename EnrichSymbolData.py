@@ -179,7 +179,7 @@ def enrich(symbol, cs, data, doc_cs, dataws):
         id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_15m"
         if id_p in data:
             doc_p = data[id_p]
-            if "future" not in doc_cs:
+            if "future" not in doc_aug:
                 doc_aug["future"] = {}
             doc_aug["future"][p] = {
                 "low":   {"p": doc_p["low"], "d": su.delta(doc_cs['close'], doc_p["low"]) },
@@ -205,6 +205,15 @@ def enrich(symbol, cs, data, doc_cs, dataws):
                     t = t+60*15
         else:
             print(f"{id_p} not found")      
+            if "future" not in doc_aug:
+                doc_aug["future"] = {}
+            doc_aug["future"][p] = {
+                "low":   {"p": 0, "d": 0},
+                "close": {"p": 0, "d": 0},
+                "high":  {"p": 0, "d": 0}
+            }
+            for i in [5,10,15,20,25,30,50,100,150,200]:
+                doc_aug["future"][p][f'buy{i}'] = 0
 
     doc_aug["version"] = "1.0.0"
 
