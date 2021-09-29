@@ -111,10 +111,26 @@ def get_last(symbol, cs, ts_start, window_size):
 
     return data
 
+def get_next_hours_15m(symbol, ts_start, hours):
+    ts_next_hours = ts_start+15+hours*60*60
+
+    query = { "size": 10000, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": f"{ts_start}", "lte": f"{ts_next_hours}", "format": "strict_date_optional_time"}}}]}}, "fields": ["close", "high", "low", "open_time"], "_source": False}
+    results = eu.es_search(f"symbols-15m", query)
+    data = {}
+    if 'hits' in results and 'hits' in results['hits']:
+        r = results['hits']['hits']        
+        for d in r:
+            data[d['_id']] = { "open_time" : d['fields']['open_time'][0], "close": d['fields']['close'][0], "high": d['fields']['high'][0], "low": d['fields']['low'][0] }
+
+    return data
+
+
+
 def enrich(symbol, cs, data, doc_cs, dataws):
     close_cs = doc_cs['close']
     q_vol_cs = doc_cs['q_volume']
     trades_cs = doc_cs['trades']
+    ot = doc_cs["open_time"]
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
     closes = [dataws[d]['close'] for d in dataws]
     trades = [dataws[d]['trades'] for d in dataws]
@@ -156,14 +172,11 @@ def enrich(symbol, cs, data, doc_cs, dataws):
         doc_aug['trades_d0'] = 0
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
-    prices = {"5m": 60*5,  "15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
+    prices = {"15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
                 60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60, 
                 "48h": 48*60*60, "72h": 72*60*60, "96h": 96*60*60}
     for p in prices:
-        if cs == "1d":
-            id_p = f"{symbol}_{su.get_yyyymmdd(doc_cs['open_time']+prices[p])}_{cs}"
-        else:
-            id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_{cs}"
+        id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_15m"
         if id_p in data:
             doc_p = data[id_p]
             if "future" not in doc_cs:
@@ -174,10 +187,24 @@ def enrich(symbol, cs, data, doc_cs, dataws):
                 "high":  {"p": doc_p["high"], "d": su.delta(doc_cs['close'], doc_p["high"])}
             }
             for i in [5,10,15,20,25,30,50,100,150,200]:
-                if doc_aug["future"][p]['high']['d'] >= i/1000:
-                    doc_aug["future"][p][f'buy{i}'] = 1
-                else:
-                    doc_aug["future"][p][f'buy{i}'] = 0
+                ts_final = ot + prices[p]
+                t = ot
+                while t <= ts_final:
+                    id_15m = f"{symbol}_{su.get_yyyymmdd_hhmm(t)}_15m"
+                    if id_15m in data:
+                        doc_15m = data[id_15m]
+                        c15m = doc_15m['close']
+                        if su.delta( close_cs, c15m ) >= i/1000:
+                            doc_aug["future"][p][f'buy{i}'] = 1
+                            break
+                        else:
+                            doc_aug["future"][p][f'buy{i}'] = 0
+                    else:
+                        doc_aug["future"][p][f'buy{i}'] = 0
+
+                    t = t+60*15
+        else:
+            print(f"{id_p} not found")      
 
     doc_aug["version"] = "1.0.0"
 
@@ -202,7 +229,9 @@ def enrich_cs(s, cs):
         aug = {}
         for k in data:
             doc_cs = data[k]
-            aug[k] = enrich(s, cs, data, doc_cs, dataws )
+            logging.info(f"Processing {s} day={su.get_iso_datetime(doc_cs['open_time'])}")
+            _next = get_next_hours_15m(s, doc_cs['open_time'], 96)
+            aug[k] = enrich(s, cs, _next, doc_cs, dataws )
             if len(dataws) > window_size:
                 k0 = None
                 for kws in dataws:
