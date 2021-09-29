@@ -176,7 +176,7 @@ def enrich(symbol, cs, data, doc_cs, dataws):
                 60*60, "4h": 4*60*60, "8h": 8*60*60, "12h": 12*60*60, "24h": 24*60*60, 
                 "48h": 48*60*60, "72h": 72*60*60, "96h": 96*60*60}
     for p in prices:
-        id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+prices[p])}_15m"
+        id_p = f"{symbol}_{su.get_yyyymmdd_hhmm(doc_cs['open_time']+24*3600+prices[p])}_15m"
         if id_p in data:
             doc_p = data[id_p]
             if "future" not in doc_aug:

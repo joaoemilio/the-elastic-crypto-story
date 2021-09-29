@@ -38,6 +38,9 @@ def read_object(fname):
     with open(fname, 'rb') as input:
         return pickle.load(input)
 
+def get_config():
+    return read_json( f"config/config.json" )
+
 start = time.time()
 last = start
 
@@ -64,13 +67,13 @@ def start_progress(_total_count, _interval_log=1):
     
 def log_progress(current_count):
     if not interval_log or not total_count:
-        logging.info('ERROR in log_progress, call start_progress first')
+        print('ERROR in log_progress, call start_progress first')
         return 
     global log_count
     progress = current_count/total_count
     if  progress > log_count*interval_log/100:
         log_count += 1
-        logging.info(f'\tProgress: {int(progress*100)}%', end='\r')
+        print(f'\tProgress: {int(progress*100)}%', end='\r')
 
 
 def call_binance(url):
