@@ -246,7 +246,7 @@ def main(argv):
             elif cs == "1m":
                 data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
             else:
-                data["symbols-5m"] = fetch( symbol, cs, day, day+24*3600-60/5*3600 )
+                data[f"symbols-{cs}"] = fetch( symbol, cs, day, day+24*3600-60/5*3600 )
 
             logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
             eu.es_bulk_create_multi_index(data,partial=500)
