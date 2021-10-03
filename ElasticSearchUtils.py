@@ -5,7 +5,7 @@ import logging
 import time
 
 ############ ELASTICSEARCH ##############
-def es_search( iname, query, es="ml-demo" ):
+def es_search( iname, query, es="prophet" ):
     results = None
     for i in (1,2,3):
         try:
@@ -17,7 +17,7 @@ def es_search( iname, query, es="ml-demo" ):
             time.sleep(10)
     return results
 
-def es_exists(iname, id, es="ml-demo"):
+def es_exists(iname, id, es="prophet"):
     results = None
     for i in (1,2,3):
         try:
@@ -30,7 +30,7 @@ def es_exists(iname, id, es="ml-demo"):
 
     return results
 
-def es_get(iname, id, es="ml-demo"):
+def es_get(iname, id, es="prophet"):
     results = None
     for i in (1,2,3):
         try:
@@ -42,7 +42,7 @@ def es_get(iname, id, es="ml-demo"):
             time.sleep(10)
     return results
 
-def es_create( iname, _id, obj, es="ml-demo" ):
+def es_create( iname, _id, obj, es="prophet" ):
     for i in (1,2,3):
         try:
             elastic[es].create( id=_id, body=obj, index=iname)
@@ -52,7 +52,7 @@ def es_create( iname, _id, obj, es="ml-demo" ):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_create_multi_index(index_data, partial=1000, es="ml-demo"):
+def es_bulk_create_multi_index(index_data, partial=1000, es="prophet"):
     actions = []
     count = 0
     for iname in index_data:
@@ -84,7 +84,7 @@ def es_bulk_create_multi_index(index_data, partial=1000, es="ml-demo"):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_create(iname, data, partial=100, es="ml-demo", pipeline=None):
+def es_bulk_create(iname, data, partial=100, es="prophet", pipeline=None):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -118,7 +118,7 @@ def es_bulk_create(iname, data, partial=100, es="ml-demo", pipeline=None):
             time.sleep(10)
 
 
-def es_bulk_update_multi_index(index_data, partial=500, es="ml-demo"):
+def es_bulk_update_multi_index(index_data, partial=500, es="prophet"):
     actions = []
     count = 0
     for iname in index_data:
@@ -152,7 +152,7 @@ def es_bulk_update_multi_index(index_data, partial=500, es="ml-demo"):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_update(iname, data, partial=100, es="ml-demo"):
+def es_bulk_update(iname, data, partial=100, es="prophet"):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -190,6 +190,22 @@ def es_bulk_update(iname, data, partial=100, es="ml-demo"):
             logging.error(ree)
 
 
+def get_last_n_docs(symbol, cs, ts_start, window_size):
+    periods = {"5m": 60*5,  "15m": 60*15,
+               "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
+    ts_window_size = ts_start-window_size*periods[cs]
+
+    query = {"size": window_size, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
+        "range": {"open_time": {"gte": f"{ts_window_size}", "lte": f"{ts_start}", "format": "strict_date_optional_time"}}}]}}}
+    results = es_search(f"symbols-{cs}", query)
+    data = {}
+    if 'hits' in results and 'hits' in results['hits']:
+        r = results['hits']['hits']        
+        for d in r:
+            data[d['_id']] = d['_source']
+
+    return data
+
 config = su.read_json( f"config/config.json" )
 
 es = Elasticsearch(    
@@ -197,9 +213,5 @@ es = Elasticsearch(
     http_auth=("elastic", config["cloud_password"])
 )
 
-es_u = Elasticsearch(
-    cloud_id= config["cloud_id_upload"] ,
-    http_auth=("elastic", config["cloud_password_upload"])
-)
-elastic = { "ml-demo": es, "ccr-demo": es_u}
+elastic = { "prophet": es }
 

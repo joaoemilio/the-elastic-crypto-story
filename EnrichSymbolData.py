@@ -20,7 +20,7 @@ def initialize(group):
         ]
     )
 
-def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
+def query_first_and_last_doc(symbol: str, iname: str, es="prophet"):
     _first = {"size": 1, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
     _last = {"size": 1, "sort": [{"open_time": {"order": "desc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
@@ -40,7 +40,7 @@ def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
     return fot, lot
 
 def get_augmentation_period(symbol: str, cs: str):
-    start_cs, end_cs = query_first_and_last_doc( symbol, f"symbols-{cs}", "ml-demo")
+    start_cs, end_cs = query_first_and_last_doc( symbol, f"symbols-{cs}", "prophet")
     if not start_cs:
         start_cs = su.get_ts("20191201")
     if not end_cs:
@@ -50,7 +50,7 @@ def get_augmentation_period(symbol: str, cs: str):
         f"{symbol} downloaded start={su.get_iso_datetime(start_cs)} end={su.get_iso_datetime(end_cs)}")
 
     if eu.es.indices.exists( f"symbols-aug-{cs}"):
-        start_aug, end_aug = query_first_and_last_doc( symbol, f"symbols-aug-{cs}", "ml-demo")
+        start_aug, end_aug = query_first_and_last_doc( symbol, f"symbols-aug-{cs}", "prophet")
         if not end_aug:
             day = start_cs
         else:
@@ -58,6 +58,7 @@ def get_augmentation_period(symbol: str, cs: str):
     else:
         day = start_cs
 
+    day = day - 96*3600 # recent days do not have fields covering the future, as it didn't exist yet. Now, there are 24 "new" hours to fill the gap of an augmented day 96 hours ago
     print(f"AUGMENT {symbol} FROM start={su.get_iso_datetime(day)} TO end={su.get_iso_datetime(end_cs)}")
     return day, end_cs
 

@@ -1,3 +1,4 @@
+from EnrichSymbolData import enrich_cs, get_last
 from logging import error, warn, info
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -6,6 +7,7 @@ import time
 import ScientistUtils as su
 import ElasticSearchUtils as eu
 import sys
+from collections import deque
 
 ##################################################
 # Download
@@ -57,32 +59,36 @@ def log(info):
 # 1d Logic
 ##################################################
 
-def fetch1d( symbol, ts_start, ts_end ):
-    day = ts_start
+def fetch1d( symbol ):
     data = {}
 
-    today_ts = su.get_ts(su.get_yyyymmdd(time.time()) ) 
-    if ts_start >= today_ts or ts_end >= today_ts: return data
-
-    while day < ts_end:
-        logging.info(f'\tprocessing {su.get_yyyymmdd(day)}' )
-        ot = su.get_yyyymmdd(day)
-        if ot == su.get_yyyymmdd(time.time()): break
+    fd, ld = query_first_and_last_doc(symbol, "symbols-1d")
+    if not ld: 
+        ld = su.get_ts("20191130")
+    else:
+        ld = ld + 24*3600
+    if not fd: fd = su.get_ts("20191130")
+    end_time = int(time.time())
+    delta = (end_time - ld)/3600
+    print(f"first day={su.get_yyyymmdd(fd)} last day={su.get_yyyymmdd(ld)} end_time={su.get_yyyymmdd(end_time)} delta={delta} {ld} {end_time}")
+    if delta < 24: return # Não tentar fazer download do dia de hoje que está com candle aberto
+    end_time = end_time-(24*3600)
+    print(f"last download={su.get_yyyymmdd(ld)} {delta} periods end_time={su.get_yyyymmdd(end_time)}")
+    klines = fetch_candles(symbol, ld, "1d", int(delta), end_time=end_time)
+    for kline in klines:
+        ot = su.get_yyyymmdd_hhmm(kline['open_time'])
         _id = f"{symbol}_{ot}_1d"
-        if not eu.es_exists("symbols-1d", _id):
-            kline = fetch_candles(symbol, day, "1d", 1)
-            if kline: 
-                obj = kline[0]
-                obj["cs"] = "1d"
-                data[_id] = obj
+        kline["cs"] = "1d"
+        data[_id] = kline
       
-        day += 3600*24
     return data
 
 def fetch1m(symbol, ts_start, ts_end):
 
-    now_ts = su.get_ts(su.get_yyyymmdd_hhmm(time.time()))
-    if ts_start >= now_ts or ts_end >= now_ts: return 
+    # Only download until 'yesterday'
+    now_ts = su.get_ts(su.get_yyyymmdd(time.time()))
+    today_ts = su.get_ts(su.get_yyyymmdd(ts_start))    
+    if now_ts == today_ts: return
 
     _f, day = query_first_and_last_doc(symbol, f"symbols-1m")
 
@@ -137,61 +143,28 @@ def fetch1m(symbol, ts_start, ts_end):
     return data
 
 def fetch(symbol:str, cs:str, ts_start, ts_end):
-    periods = { "5m": 24*60/5,  "15m": 24*60/15, "1h": 24, "4h": 24/6, "1d": 1 }
-
-    now_ts = su.get_ts(su.get_yyyymmdd_hhmm(time.time()))
-    if ts_start >= now_ts or ts_end >= now_ts: return 
-
-    day = ts_start
-    _f, day = query_first_and_last_doc(symbol, f"symbols-{cs}")
-
-    query = {"size": periods[cs], "query": {"bool":{"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}],"minimum_should_match": 1}},{"range": {"open_time": {"gte": f"{day}","lte": f"{ts_end}" ,"format": "strict_date_optional_time"}}}]}}}
-    ids = []
-    if eu.es.indices.exists( f"symbols-{cs}"):
-        results = eu.es_search(f"symbols-{cs}", query)
-        if 'hits' in results: 
-            results = results['hits']['hits']
-            for h in results:
-                ids.append( h["_id"] )
-
-        if len(ids) >= periods[cs]: 
-            su.log(f'Already downloaded {su.get_yyyymmdd(day)} s={symbol} cs={cs}')
-            return {}
-        else:
-            su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}. Missing {len(results)-periods[cs]} docs")
-
-    else:
-        su.log(f"Download required. s={symbol} day={su.get_yyyymmdd(day)} cs={cs}")
-        ids = []
-
-
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
-    while day < ts_end:
-        su.log(f'Will download {su.get_yyyymmdd(day)} s={symbol} cs={cs}', 'download_candles')
 
-        periods = int((24*3600)/candle_sizes[cs])
-        r = fetch_candles(symbol, day, cs, periods)
-        if r:
-            for o in r:
-                ot = su.get_yyyymmdd_hhmm(o['open_time'])
-                _id = f"{symbol}_{ot}_{cs}"
-                if _id not in ids:
-                    o["cs"] = cs
-                    data[_id] = o
-                else:
-                    logging.info(f"Doc {_id} already exists. Skiping")
+    periods = int((24*3600)/candle_sizes[cs])
+    r = fetch_candles(symbol, ts_start, cs, periods)
+    for o in r:
+        ot = su.get_yyyymmdd_hhmm(o['open_time'])
+        _id = f"{symbol}_{ot}_{cs}"
+        o["cs"] = cs
+        data[_id] = o
 
-        day += 3600*24
     return data
 
-def query_first_and_last_doc(symbol: str, iname: str, es="ml-demo"):
+def query_first_and_last_doc(symbol: str, iname: str):
     _first = {"size": 1, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
     _last = {"size": 1, "sort": [{"open_time": {"order": "desc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
 
-    fd = eu.es_search(iname, _first, es)
-    ld = eu.es_search(iname, _last, es)
+    if not eu.es.indices.exists("symbols-1d"): return None, None
+
+    fd = eu.es_search(iname, _first)
+    ld = eu.es_search(iname, _last)
 
     fot = None
     lot = None
@@ -223,36 +196,39 @@ def main(argv):
         ]
     )
 
-    data = { "symbols-1d": {}, "symbols-4h": {}, "symbols-1h": {}, "symbols-15m": {}, "symbols-5m": {}, "symbols-1m": {} }
     count = 1
     for symbol in symbols:
-        end, day = query_first_and_last_doc( symbol, "symbols-1d", "ml-demo")
-        if not day:
-            day = su.get_ts("20191201")
+        data1d = fetch1d( symbol )
+        if data1d:
+            for key in data1d:
+                day = data1d[key]['open_time']
+                data5m = fetch( symbol, "5m", day, day+24*3600 )
+                data15m = fetch( symbol, "15m", day, day+24*3600 )
+                data1h = fetch( symbol, "1h", day, day+24*3600 )
+                data4h = fetch( symbol, "4h", day, day+24*3600 )
 
-        end = time.time()
+            eu.es_bulk_create("symbols-1d", data1d, partial=1000)
+            eu.es_bulk_create("symbols-15m", data15m, partial=1000)
+            eu.es_bulk_create("symbols-1h", data1h, partial=1000)
+            eu.es_bulk_create("symbols-4h", data4h, partial=1000)
+            eu.es_bulk_create("symbols-5m", data5m, partial=1000)
 
-        logging.info(f"start fetching data for {symbol} - {count} of {len(symbols)} FROM {su.get_yyyymmdd_hhmm(day)} TO {su.get_yyyymmdd_hhmm(end)}")
-        while day < end:
-            if not cs:
-                data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
-                data["symbols-4h"] = fetch( symbol, "4h", day, day+24*3600 )
-                data["symbols-1h"] = fetch( symbol, "1h", day, day+24*3600 )
-                data["symbols-15m"] = fetch( symbol, "15m", day, day+24*3600 )
-                data["symbols-5m"] = fetch( symbol, "5m", day, day+24*3600 )
-                data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
-            elif cs == "1d":
-                data["symbols-1d"] = fetch1d( symbol, day, day+24*3600 )
-            elif cs == "1m":
-                data["symbols-1m"] = fetch1m(symbol, day, day+24*3600 )
-            else:
-                data[f"symbols-{cs}"] = fetch( symbol, cs, day, day+24*3600-60/5*3600 )
+        enrich_cs(symbol, "1d")
+        enrich_cs(symbol, "4h")
+        enrich_cs(symbol, "1h")
+        enrich_cs(symbol, "15m")
+        enrich_cs(symbol, "5m")
 
-            logging.info(f'Upload {su.get_yyyymmdd(day)} {len(data)} klines for {symbol}.' )
-            eu.es_bulk_create_multi_index(data,partial=500)
-
-            day += 24*3600
         count += 1
 
 if __name__ == "__main__":
    main(sys.argv[1:])
+
+
+
+
+'''
+pegar  
+
+
+'''
