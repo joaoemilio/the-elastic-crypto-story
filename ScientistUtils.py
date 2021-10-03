@@ -44,7 +44,7 @@ def get_config():
 def get_symbols(symbol):
     group = None
     if symbol == "ALL":
-        symbols = get_symbols()
+        symbols = read_json("config/symbols.json")
     elif "GROUP" in symbol:
         group = symbol.split("=")[1]
         symbols = read_json(f"config/symbols-group{group}.json")
