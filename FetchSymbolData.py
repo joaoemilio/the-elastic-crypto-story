@@ -240,7 +240,10 @@ def enrich_present(symbol, cs, data, doc_cs, dataws):
     volumes = [dataws[d]['q_volume'] for d in dataws]
     doc_aug = doc_cs.copy()
 
-    doc_aug["dp"] = su.dp(doc_cs['close'], closes[-1])
+    if len(closes) > 0:
+        doc_aug["dp"] = su.dp(doc_cs['close'], closes[-1])
+    else:
+        doc_aug["dp"] = 0
     #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
     doc_aug['d0'] = su.delta(doc_cs['open'], doc_cs['close'])
     if len(volumes) > 0 and len(trades) > 0:
