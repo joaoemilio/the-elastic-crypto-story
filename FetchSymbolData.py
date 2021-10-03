@@ -189,7 +189,7 @@ def get_next_hours_15m(symbol, ts_start, hours):
     return data
 
 def enrich_past(symbol, cs, data, doc_cs, dataws):
-    if len(dataws) == 0: return {}
+    if len(dataws) == 0: return
 
     close_cs = doc_cs['close']
     q_vol_cs = doc_cs['q_volume']
@@ -347,7 +347,8 @@ def enrich_cs(s, cs):
         logging.info(f"Processing {s} open_time={su.get_iso_datetime(doc_cs['open_time'])}")
         aug_time = doc_cs['open_time'] + periods[cs]
         _next = get_next_hours_15m(s, aug_time, 96)
-        aug[k] = enrich_past(s, cs, _next, doc_cs, dataws )
+        past = enrich_past(s, cs, _next, doc_cs, dataws )
+        aug[k] = past if past else doc_cs
         aug[k] = enrich_present(s, cs, _next, aug[k], dataws )
         aug[k] = enrich_future(s, cs, _next, aug[k], dataws )
         if len(dataws) > window_size:
