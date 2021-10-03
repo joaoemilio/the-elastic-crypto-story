@@ -188,13 +188,12 @@ def get_next_hours_15m(symbol, ts_start, hours):
 
     return data
 
-def enrich(symbol, cs, data, doc_cs, dataws):
+def enrich_past(symbol, cs, data, doc_cs, dataws):
     if len(dataws) == 0: return {}
 
     close_cs = doc_cs['close']
     q_vol_cs = doc_cs['q_volume']
     trades_cs = doc_cs['trades']
-    ot = doc_cs["open_time"]
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
     closes = [dataws[d]['close'] for d in dataws]
     logging.info(f"s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} We have {len(closes)} historical documents to enrich with the past")
@@ -226,6 +225,21 @@ def enrich(symbol, cs, data, doc_cs, dataws):
             doc_aug[f'd_vol_{mm}'] = 0
             doc_aug[f'd_trades_{mm}'] = 0
 
+    doc_aug["version"] = "1.0.0"
+
+    return doc_aug
+
+
+def enrich_present(symbol, cs, data, doc_cs, dataws):
+
+    q_vol_cs = doc_cs['q_volume']
+    trades_cs = doc_cs['trades']
+    closes = [dataws[d]['close'] for d in dataws]
+    logging.info(f"PRESENT s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} PRESENT")
+    trades = [dataws[d]['trades'] for d in dataws]
+    volumes = [dataws[d]['q_volume'] for d in dataws]
+    doc_aug = doc_cs.copy()
+
     doc_aug["dp"] = su.dp(doc_cs['close'], closes[-1])
     #print(f"close_1m={doc_1m['close']} close_cs={doc_cs['close']} dp={doc_cs['dp']} ")
     doc_aug['d0'] = su.delta(doc_cs['open'], doc_cs['close'])
@@ -235,6 +249,15 @@ def enrich(symbol, cs, data, doc_cs, dataws):
     else:
         doc_aug['q_volume_d0'] = 0
         doc_aug['trades_d0'] = 0
+
+    return doc_aug
+
+def enrich_future(symbol, cs, data, doc_cs, dataws):
+
+    close_cs = doc_cs['close']
+    ot = doc_cs["open_time"]
+    logging.info(f"FUTURE s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} FUTURE ")
+    doc_aug = doc_cs.copy()
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
     prices = {"15m": 60*15,  "30m": 60*30, "1h": 60*60, "2h": 2 *
@@ -324,7 +347,9 @@ def enrich_cs(s, cs):
         logging.info(f"Processing {s} open_time={su.get_iso_datetime(doc_cs['open_time'])}")
         aug_time = doc_cs['open_time'] + periods[cs]
         _next = get_next_hours_15m(s, aug_time, 96)
-        aug[k] = enrich(s, cs, _next, doc_cs, dataws )
+        aug[k] = enrich_past(s, cs, _next, doc_cs, dataws )
+        aug[k] = enrich_present(s, cs, _next, aug[k], dataws )
+        aug[k] = enrich_future(s, cs, _next, aug[k], dataws )
         if len(dataws) > window_size:
             k0 = None
             for kws in dataws:
