@@ -114,8 +114,6 @@ def get_next_hours_15m(symbol, ts_start, hours):
 
     return data
 
-
-
 def enrich(symbol, cs, data, doc_cs, dataws):
     close_cs = doc_cs['close']
     q_vol_cs = doc_cs['q_volume']
