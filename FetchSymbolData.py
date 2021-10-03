@@ -176,7 +176,6 @@ def query_first_and_last_doc(symbol: str, iname: str):
 
 def get_next_hours_15m(symbol, ts_start, hours):
     ts_next_hours = ts_start+hours*3600
-    logging.info(f"Next {hours} start={su.get_iso_datetime(ts_start)} next={su.get_iso_datetime(ts_next_hours)}")
 
     query = { "size": 10000, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": f"{ts_start}", "lte": f"{ts_next_hours}", "format": "strict_date_optional_time"}}}]}}, "fields": ["close", "high", "low", "open_time"], "_source": False}
     results = eu.es_search(f"symbols-15m", query)
@@ -196,7 +195,6 @@ def enrich_past(symbol, cs, data, doc_cs, dataws):
     trades_cs = doc_cs['trades']
     mms = [5, 7, 9, 10, 15, 20, 21, 25, 51, 99, 200]
     closes = [dataws[d]['close'] for d in dataws]
-    logging.info(f"s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} We have {len(closes)} historical documents to enrich with the past")
     trades = [dataws[d]['trades'] for d in dataws]
     volumes = [dataws[d]['q_volume'] for d in dataws]
     doc_aug = doc_cs.copy()
@@ -235,7 +233,6 @@ def enrich_present(symbol, cs, data, doc_cs, dataws):
     q_vol_cs = doc_cs['q_volume']
     trades_cs = doc_cs['trades']
     closes = [dataws[d]['close'] for d in dataws]
-    logging.info(f"PRESENT s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} PRESENT")
     trades = [dataws[d]['trades'] for d in dataws]
     volumes = [dataws[d]['q_volume'] for d in dataws]
     doc_aug = doc_cs.copy()
@@ -259,7 +256,6 @@ def enrich_future(symbol, cs, data, doc_cs, dataws):
 
     close_cs = doc_cs['close']
     ot = doc_cs["open_time"]
-    logging.info(f"FUTURE s={symbol} cs={cs} ot={su.get_iso_datetime(doc_cs['open_time'])} FUTURE ")
     doc_aug = doc_cs.copy()
 
     # future prices => low, high, close <==> 5m | 15m | 30m | 1h | 2h | 4h | 8h | 12h | 24h
@@ -295,7 +291,6 @@ def enrich_future(symbol, cs, data, doc_cs, dataws):
 
                     t = t+60*15
         else:
-            logging.info(f"{id_p} not found")      
             if "future" not in doc_aug:
                 doc_aug["future"] = {}
             doc_aug["future"][p] = {
@@ -311,11 +306,9 @@ def enrich_future(symbol, cs, data, doc_cs, dataws):
     return doc_aug
 
 def get_last(symbol, cs, ts_start, window_size):
-    logging.info(f"s={symbol} cs={cs} ts_start={su.get_iso_datetime(ts_start)} ws={window_size}")
     periods = {"5m": 60*5,  "15m": 60*15,
                "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
     ts_window_size = ts_start-window_size*periods[cs]
-    logging.info(f"ts_ws={su.get_iso_datetime(ts_window_size)}")
 
     query = {"size": window_size, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {
         "range": {"open_time": {"gte": f"{ts_window_size}", "lte": f"{ts_start}", "format": "strict_date_optional_time"}}}]}}}
@@ -347,7 +340,6 @@ def enrich_cs(s, cs):
     aug = {}
     for k in data:
         doc_cs = data[k]
-        logging.info(f"Processing {s} open_time={su.get_iso_datetime(doc_cs['open_time'])}")
         aug_time = doc_cs['open_time'] + periods[cs]
         _next = get_next_hours_15m(s, aug_time, 96)
         past = enrich_past(s, cs, _next, doc_cs, dataws )
@@ -390,9 +382,6 @@ def get_augmentation_period(symbol: str, cs: str):
     if not end_cs:
         end_cs = time.time()
 
-    logging.info(
-        f"{symbol} downloaded start={su.get_iso_datetime(start_cs)} end={su.get_iso_datetime(end_cs)}")
-
     if eu.es.indices.exists( f"symbols-aug-{cs}"):
         start_aug, end_aug = query_first_and_last_doc( symbol, f"symbols-aug-{cs}", "prophet")
         if not end_aug:
@@ -403,7 +392,6 @@ def get_augmentation_period(symbol: str, cs: str):
         day = start_cs
 
     day = day - 96*3600 # recent days do not have fields covering the future, as it didn't exist yet. Now, there are 24 "new" hours to fill the gap of an augmented day 96 hours ago
-    logging.info(f"AUGMENT {symbol} FROM start={su.get_iso_datetime(day)} TO end={su.get_iso_datetime(end_cs)}")
     return day, end_cs
 
 def main(argv):
@@ -450,8 +438,8 @@ def main(argv):
         enrich_cs(symbol, "1d")
         enrich_cs(symbol, "4h")
         enrich_cs(symbol, "1h")
-        enrich_cs(symbol, "15m")
-        enrich_cs(symbol, "5m")
+        # enrich_cs(symbol, "15m")
+        # enrich_cs(symbol, "5m")
 
         count += 1
 
