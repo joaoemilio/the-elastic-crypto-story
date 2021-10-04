@@ -187,6 +187,25 @@ def get_next_hours_15m(symbol, ts_start, hours):
 
     return data
 
+def get_cs_documents(symbol, cs, ts_start, ts_next_hours):
+
+    data = {}
+    last_ot = None
+    while ts_start < ts_next_hours:
+        query = { "size": 1000, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": f"{ts_start}", "lte": f"{ts_next_hours}", "format": "strict_date_optional_time"}}}]}}, "fields": ["close", "high", "low", "open_time"], "_source": False}
+        results = eu.es_search(f"symbols-{cs}", query)
+        count = 0
+        if 'hits' in results and 'hits' in results['hits']:
+            r = results['hits']['hits']        
+            for d in r:
+                count += 1
+                data[d['_id']] = { "open_time" : d['fields']['open_time'][0], "close": d['fields']['close'][0], "high": d['fields']['high'][0], "low": d['fields']['low'][0] }
+                last_ot = d['fields']['open_time'][0]
+        ts_start = last_ot
+        if count < 1000: break
+
+    return data
+
 def enrich_past(symbol, cs, data, doc_cs, dataws):
     if len(dataws) == 0: return
 
@@ -236,6 +255,7 @@ def enrich_present(symbol, cs, data, doc_cs, dataws):
     trades = [dataws[d]['trades'] for d in dataws]
     volumes = [dataws[d]['q_volume'] for d in dataws]
     doc_aug = doc_cs.copy()
+    doc_aug["cs"] = cs
 
     if len(closes) > 0:
         doc_aug["dp"] = su.dp(doc_cs['close'], closes[-1])
@@ -323,38 +343,49 @@ def get_last(symbol, cs, ts_start, window_size):
 
 def enrich_cs(s, cs):
     day, end_cs = get_augmentation_period(s, cs)
-    logging.info(f"Augmenting from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
-    data = {}
-    window_size = 200
-    dataws = get_last(s, cs, day, window_size=window_size)
-    query = {"size": 1000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
-        "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
-    results = eu.es_search(f"symbols-{cs}", query)['hits']['hits']
+    while day < end_cs:
+        logging.info(f"Augmenting from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
+        data = {}
+        window_size = 200
+        dataws = get_last(s, cs, day, window_size=window_size)
+        query = {"size": 100 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": s}}], "minimum_should_match": 1}}, {
+            "range": {"open_time": {"gte": f"{day}", "lte": f"{end_cs}", "format": "strict_date_optional_time"}}}]}}}
+        results = eu.es_search(f"symbols-{cs}", query)['hits']['hits']
 
-    data = {}
-    for d in results:
-        doc = d['_source']
-        data[d['_id']] = doc
+        data = {}
+        first_ot = 0
+        last_ot = 0
+        next_ot = 0
+        for d in results:
+            doc = d['_source']
+            data[d['_id']] = doc
+            if not first_ot: first_ot = doc['open_time']
+            next_ot = doc['open_time'] #This is to make sure it keeps iterating every 1000 records (specially for older cryptos going back to 2017)
 
-    periods = {"5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
-    aug = {}
-    for k in data:
-        doc_cs = data[k]
-        aug_time = doc_cs['open_time'] + periods[cs]
-        _next = get_next_hours_15m(s, aug_time, 96)
-        past = enrich_past(s, cs, _next, doc_cs, dataws )
-        aug[k] = past if past else doc_cs
-        aug[k] = enrich_present(s, cs, _next, aug[k], dataws )
-        aug[k] = enrich_future(s, cs, _next, aug[k], dataws )
-        if len(dataws) > window_size:
-            k0 = None
-            for kws in dataws:
-                k0 = kws
-                break
-            if k0: del dataws[k0]
-        dataws[k] = doc_cs
+        periods = {"5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
+        aug = {}
+        #_next = get_next_hours_15m(s, aug_time, 96)
+        last_ot = last_ot+96*3600
+        print(f"{su.get_iso_datetime(first_ot)} last={su.get_iso_datetime(last_ot)}")
+        _next = get_cs_documents( s, "15m", first_ot, last_ot )
+        for k in data:
+            doc_cs = data[k]
+            print(f"Augment s={doc_cs['symbol']} t={su.get_iso_datetime(doc_cs['open_time'])} cs={cs}")
+            aug_time = doc_cs['open_time'] + periods[cs]
+            past = enrich_past(s, cs, _next, doc_cs, dataws )
+            aug[k] = past if past else doc_cs
+            aug[k] = enrich_present(s, cs, _next, aug[k], dataws )
+            aug[k] = enrich_future(s, cs, _next, aug[k], dataws )
+            if len(dataws) > window_size:
+                k0 = None
+                for kws in dataws:
+                    k0 = kws
+                    break
+                if k0: del dataws[k0]
+            dataws[k] = doc_cs
 
-    eu.es_bulk_create(f"symbols-aug-{cs}", aug, partial=500 )
+        eu.es_bulk_create(f"aug-symbols-{cs}", aug, partial=100 )
+        day = next_ot
 
 def query_first_and_last_doc(symbol: str, iname: str, es="prophet"):
     _first = {"size": 1, "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"should": [{"match_phrase": {"symbol.keyword": symbol}}], "minimum_should_match": 1}}, {"range": {"open_time": {"gte": "1569342906", "lte": f"{time.time()}", "format": "strict_date_optional_time"}}}]}}, "fields": ["open_time"], "_source": False}
@@ -382,8 +413,8 @@ def get_augmentation_period(symbol: str, cs: str):
     if not end_cs:
         end_cs = time.time()
 
-    if eu.es.indices.exists( f"symbols-aug-{cs}"):
-        start_aug, end_aug = query_first_and_last_doc( symbol, f"symbols-aug-{cs}", "prophet")
+    if eu.es.indices.exists( f"aug-symbols-{cs}"):
+        start_aug, end_aug = query_first_and_last_doc( symbol, f"aug-symbols-{cs}", "prophet")
         if not end_aug:
             day = start_cs
         else:
