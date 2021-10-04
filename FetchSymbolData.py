@@ -365,7 +365,7 @@ def enrich_cs(s, cs):
         periods = {"5m": 60*5,  "15m": 60*15, "1h": 60*60, "4h": 4*60*60, "1d": 24*60*60}
         aug = {}
         #_next = get_next_hours_15m(s, aug_time, 96)
-        last_ot = last_ot+96*3600
+        last_ot = next_ot+96*3600
         print(f"{su.get_iso_datetime(first_ot)} last={su.get_iso_datetime(last_ot)}")
         _next = get_cs_documents( s, "15m", first_ot, last_ot )
         for k in data:
