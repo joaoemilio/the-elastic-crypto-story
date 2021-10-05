@@ -42,15 +42,21 @@ def es_get(iname, id, es="prophet"):
             time.sleep(10)
     return results
 
-def es_create( iname, _id, obj, es="prophet" ):
+def es_create( iname, _id, obj, es="prophet", pipeline=None ):
+    res = None
     for i in (1,2,3):
         try:
-            elastic[es].create( id=_id, body=obj, index=iname)
+            if pipeline:
+                res = elastic[es].create( id=_id, body=obj, index=iname, pipeline=pipeline)
+            else:
+                res = elastic[es].create( id=_id, body=obj, index=iname)
+
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
+    return res
 
 def es_bulk_create_multi_index(index_data, partial=1000, es="prophet"):
     actions = []

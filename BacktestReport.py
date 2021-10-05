@@ -6,7 +6,8 @@ from colorama import Fore, Back, Style
 import ScientistUtils as su 
 import ElasticSearchUtils as eu 
 
-strategy_name = "five-percent-in-an-hour"
+#strategy_name = "five-percent-in-an-hour"
+strategy_name = "pipeline-bnb-1hbuy10"
 
 def get_fields():
     fields = ["trades_d0", "d_trades_200", "d_trades_99", "d_trades_25", "mid_bb99", "mid_bb200", "mid_bb5", "mid_bb10", "mid_bb51", "bb5", "bb7", "bb51", "bb99", "bb10", "d_vol_99", "d_vol_200", "d_vol_51", "d_vol_21", "d_vol_25", "d0", "dp", "q_volume_d0", "trades_d0", "close_mm5", "close_mm99", "close_mm15", "close_mm25", "close_mm200", "std21", "std25", "std51", "std20", "std99", "close", "cs"]
@@ -38,7 +39,7 @@ backtest_id = sys.argv[3]
 
 query = {"size": 10000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"bool": {"filter": [{"bool": {"minimum_should_match": 1}}, {
     "range": {"open_time": {"gte": f"{day}", "lte": f"{end}", "format": "strict_date_optional_time"}}}]}}}
-all = eu.es_search("symbols-aug-1d", query)['hits']['hits']
+all = eu.es_search("aug-symbols-1h", query)['hits']['hits']
 
 total = len(all)
 su.start_progress(total)
@@ -49,13 +50,12 @@ for row in all:
 
 trades = {}
 
-query = {"size": 10000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"term": {"backtest_id": {"value": backtest_id }}}}
+query = {"size": 10000 , "sort": [{"open_time": {"order": "asc"}}], "query": {"term": {"backtest": {"value": backtest_id }}}}
 results = eu.es_search(strategy_name, query)['hits']['hits']
 
 for r in results:
-
     doc = r['_source']
-    _id = f"{doc['symbol']}_{su.get_yyyymmdd(doc['open_time'])}_1d"
+    _id = f"{doc['symbol']}_{su.get_yyyymmdd_hhmm(doc['open_time'])}_1h"
     s = doc['symbol']
     ot = doc['open_time']
     if 'ml' in doc:
@@ -67,10 +67,10 @@ for r in results:
         else:
             _i = 1
         #print(f"Call {Fore.GREEN}Elastic Machine Learning{Style.RESET_ALL} - Pipeline Inference Processor")
-        should_buy = bool(inf['future.1h.buy50_prediction'])
+        should_buy = bool(inf['future.1h.buy10_prediction'])
         inf = inf['top_classes'][_i]
 
-        if should_buy and inf['class_probability'] > 0.5:
+        if should_buy and inf['class_probability'] > 0.8:
             aug1d = data[_id]
             trades[f"{s}_{su.get_yyyymmdd(ot)}"] = aug1d
     else:
