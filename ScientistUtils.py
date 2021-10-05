@@ -126,6 +126,10 @@ def get_yyyymmdd_hhmm(ts):
     dt = datetime.fromtimestamp(ts,tz=timezone.utc)
     return dt.strftime("%Y%m%d_%H%M")
 
+def get_yyyymmdd_hh00(ts):
+    dt = datetime.fromtimestamp(ts,tz=timezone.utc)
+    return dt.strftime("%Y%m%d_%H00")
+
 def get_iso_datetime(ts):
     dt = datetime.fromtimestamp(ts,tz=timezone.utc)
     return dt.strftime("%Y-%m-%dT%H:%M")
@@ -133,6 +137,10 @@ def get_iso_datetime(ts):
 def get_ts(yyyymmdd):
     yyyymmdd = f'{yyyymmdd}'
     t = f'{yyyymmdd[0:4]}-{yyyymmdd[4:6]}-{yyyymmdd[6:8]}T00:00:00+00:00'
+    return int(datetime.timestamp(dtparser.isoparse(t)))
+
+def get_ts_yyyymmdd_hh00(yyyymmdd_hhmm):
+    t = f'{yyyymmdd_hhmm[0:4]}-{yyyymmdd_hhmm[4:6]}-{yyyymmdd_hhmm[6:8]}T{yyyymmdd_hhmm[9:11]}:00:00+00:00'
     return int(datetime.timestamp(dtparser.isoparse(t)))
 
 def get_ts2(tiso:str):

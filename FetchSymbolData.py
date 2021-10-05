@@ -19,7 +19,7 @@ def download_klines(symbol, cs, periods, end_time):
 
     # prepare empty result
     url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={cs}&limit={periods}&endTime={end_time}"
-
+    print(url)
     lines = None
     for i in (1,2,3):
         try:
@@ -206,7 +206,7 @@ def get_cs_documents(symbol, cs, ts_start, ts_next_hours):
 
     return data
 
-def enrich_past(symbol, cs, data, doc_cs, dataws):
+def enrich_past(symbol, cs, doc_cs, dataws):
     if len(dataws) == 0: return
 
     close_cs = doc_cs['close']
@@ -247,7 +247,7 @@ def enrich_past(symbol, cs, data, doc_cs, dataws):
     return doc_aug
 
 
-def enrich_present(symbol, cs, data, doc_cs, dataws):
+def enrich_present(symbol, cs, doc_cs, dataws):
 
     q_vol_cs = doc_cs['q_volume']
     trades_cs = doc_cs['trades']
@@ -344,7 +344,7 @@ def get_last(symbol, cs, ts_start, window_size):
 def enrich_cs(s, cs):
     day, end_cs = get_augmentation_period(s, cs)
     while day < end_cs:
-        logging.info(f"Augmenting from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
+        logging.info(f"Augmenting {s} {cs} from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
         data = {}
         window_size = 200
         dataws = get_last(s, cs, day, window_size=window_size)
@@ -372,9 +372,9 @@ def enrich_cs(s, cs):
             doc_cs = data[k]
             print(f"Augment s={doc_cs['symbol']} t={su.get_iso_datetime(doc_cs['open_time'])} cs={cs}")
             aug_time = doc_cs['open_time'] + periods[cs]
-            past = enrich_past(s, cs, _next, doc_cs, dataws )
+            past = enrich_past(s, cs, doc_cs, dataws )
             aug[k] = past if past else doc_cs
-            aug[k] = enrich_present(s, cs, _next, aug[k], dataws )
+            aug[k] = enrich_present(s, cs, aug[k], dataws )
             aug[k] = enrich_future(s, cs, _next, aug[k], dataws )
             if len(dataws) > window_size:
                 k0 = None

@@ -95,14 +95,14 @@ def es_bulk_create(iname, data, partial=100, es="prophet", pipeline=None):
     if not partial: partial = len(data)
     actions = []
     for k in data:
-        action = { "_index": iname, "_source": data[k], "id": k, "_id": k }
+        action = { "_index": iname, "_source": data[k], "id": k, "_id": k, "pipeline": pipeline }
         actions.append( action )
         if partial and count == partial:
 
             for i in (1,2,3):
                 try:
                     print(f"uploading {partial} documents")
-                    helpers.bulk(client=elastic[es],actions=actions, pipeline=pipeline)
+                    helpers.bulk(client=elastic[es],actions=actions)
                     break
                 except elasticsearch.exceptions.ConnectionTimeout as cte:
                     logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
@@ -116,7 +116,7 @@ def es_bulk_create(iname, data, partial=100, es="prophet", pipeline=None):
     for i in (1,2,3):
         try:
             print(f"uploading {count} documents")
-            helpers.bulk(client=elastic[es],actions=actions)        
+            helpers.bulk(client=elastic[es],actions=actions)
             break
         except elasticsearch.exceptions.ConnectionTimeout as cte:
             logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
