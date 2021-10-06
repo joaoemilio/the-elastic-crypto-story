@@ -7,7 +7,7 @@ import ScientistUtils as su
 import ElasticSearchUtils as eu
 import sys
 from collections import deque
-
+import datetime
 ##################################################
 # Download
 ##################################################
@@ -343,7 +343,7 @@ def get_last(symbol, cs, ts_start, window_size):
 
 def enrich_cs(s, cs):
     day, end_cs = get_augmentation_period(s, cs)
-    while day < end_cs:
+    while day < end_cs or day == su.get_ts(su.get_yyyymmdd(datetime.datetime.utcnow())):
         logging.info(f"Augmenting {s} {cs} from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
         data = {}
         window_size = 200
