@@ -423,6 +423,7 @@ def get_augmentation_period(symbol: str, cs: str):
         day = start_cs
 
     day = day - 96*3600 # recent days do not have fields covering the future, as it didn't exist yet. Now, there are 24 "new" hours to fill the gap of an augmented day 96 hours ago
+    end_cs = end_cs - 96*3600
     return day, end_cs
 
 def main(argv):
