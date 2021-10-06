@@ -343,8 +343,9 @@ def get_last(symbol, cs, ts_start, window_size):
 
 def enrich_cs(s, cs):
     day, end_cs = get_augmentation_period(s, cs)
+    if cs == "1d" and day == end_cs: return
     while day < end_cs:
-        logging.info(f"Augmenting {s} {cs} from {su.get_yyyymmdd(day)} to {su.get_yyyymmdd(end_cs)}")
+        logging.info(f"Augmenting {s} {cs} from {su.get_yyyymmdd_hhmm(day)} to {su.get_yyyymmdd_hhmm(end_cs)}")
         data = {}
         window_size = 200
         dataws = get_last(s, cs, day, window_size=window_size)
