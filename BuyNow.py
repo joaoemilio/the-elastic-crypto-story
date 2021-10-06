@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import sys
 import time
 import ScientistUtils as su
@@ -141,6 +142,19 @@ def get_last(symbol, cs, ts_start, window_size):
 
     return dataws
 
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        TimedRotatingFileHandler(f"logs/BuyNow.log",
+                                    when="d",
+                                    interval=1,
+                                    backupCount=7),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
 # Arguments
 symbol = sys.argv[1]
 cs = "1h"
@@ -161,15 +175,19 @@ for s in symbols:
     aug = enrich_present(s, cs, aug, dataws )
 
     # Run Pipeline
-    _id = f"{s}_{su.get_yyyymmdd_hhmm(start_ts)}"
+    _id = f"{s}_{su.get_yyyymmdd_hhmm(start_ts)}_esquisito"
     if not eu.es_exists(iname, _id):
+        print("asdf")
+        su.log("antes")
         res = eu.es_create(iname, _id, aug, pipeline="pipeline-bnb-1hbuy10" )
+        su.log("depois")
+    else:
+        print("3")
     doc = eu.es_get(iname, _id)['_source']
     # print(f"Buy {s} 1%={doc['ml']['inference']['future.1h.buy10_prediction']} ")
     # print(f"Buy {s} 5%={doc['ml5']['future.1h.buy50_prediction']}")
     inf1 = doc['ml']['inference']
     inf5 = doc['ml5']
-    #print(f"{_id}")
     buy1 = inf1['future.1h.buy10_prediction']
     buy1prob = inf1['top_classes'][0]['class_probability']
     buy5 = inf5['future.1h.buy50_prediction']
