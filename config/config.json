@@ -3,5 +3,7 @@
     "cloud_password" : "EEgGPhr6N5lotlpHg9ckby8P",
     "aug": "/home/ec2-user/scientist/data/aug",
     "logs_dev": "c:/prophet/scientist/logs/",
-    "logs": "/home/ec2-user/scientist/logs/"
+    "logs": "/home/ec2-user/scientist/logs/",
+    "apikey" : "AKIARPE4Y2EB54L3YF3W",
+    "apisecret": "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"
 }

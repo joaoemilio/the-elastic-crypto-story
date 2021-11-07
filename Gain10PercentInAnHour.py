@@ -174,6 +174,8 @@ for s in symbols:
     aug = past if past else doc_cs
     aug = enrich_present(s, cs, aug, dataws )
 
+    print(aug)
+
     # Run Pipeline
     _id = f"{s}_{su.get_yyyymmdd_hhmm(start_ts)}"
     if not eu.es_exists(iname, _id):
@@ -182,14 +184,12 @@ for s in symbols:
     # print(f"Buy {s} 1%={doc['ml']['inference']['future.1h.buy10_prediction']} ")
     # print(f"Buy {s} 5%={doc['ml5']['future.1h.buy50_prediction']}")
     inf1 = doc['ml']['inference']
-    inf5 = doc['ml5']
-    buy1 = inf1['future.1h.buy10_prediction']
+    buy1 = inf1['future.1h.buy100_prediction']
     buy1prob = inf1['top_classes'][0]['class_probability']
-    buy5 = inf5['future.1h.buy50_prediction']
-    buy5prob = inf5['top_classes'][0]['class_probability']
     if buy1 == 1:
         print(f"Buy {s} {Fore.YELLOW if buy1 else Fore.WHITE}1%={buy1} {Style.RESET_ALL}name={inf1['top_classes'][0]['class_name']} probability={buy1prob:1.2f}")
-    if buy5 == 1:
-        print(f"Buy {s} {Fore.YELLOW if buy1 else Fore.WHITE}5%={buy5} {Style.RESET_ALL} name={inf5['top_classes'][0]['class_name']} probability={buy5prob:1.2f}")
+    else:
+        print(f"name={inf1['top_classes'][0]['class_name']} probability={buy1prob:1.2f}")
+
 
     # Decide to buy or not
