@@ -10,6 +10,39 @@ python3 DonwloadSymbol.py <BTCUSDT> <1d|4h|1h|15m|5m|1m>
 
 '''
 import sys 
+import time
+import ScientistUtils as su
 
-symbol = sys.argv[1]
-klines = fetch_candles(symbol, ld, "1d", int(delta), end_time=end_time)
+def download_candles(crypto, pair, cs, start_time):
+    symbol = f"{crypto}{pair}"
+
+    # prepare empty result
+    url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={cs}&startTime={start_time}"
+    print(url)
+    lines = None
+    for i in (1,2,3):
+        try:
+            lines = su.call_binance(url)
+            break
+        except ConnectionError as ce:
+            print(f"ConnectionError {ce.strerror}")
+            print("waiting 5 seconds to call binance again")
+            time.sleep(5)
+    
+    return lines
+
+crypto = sys.argv[1]
+pair = sys.argv[2]
+cs = sys.argv[3]
+
+startTime = su.get_ts_yyyymmdd_hhmm("20211101_0000")*1000
+
+klines = download_candles(crypto, pair, cs, startTime)
+for k in klines:
+    print( f"{crypto}{pair}-{cs}-{su.get_iso_datetime(k[0]/1000)} - {k}" )
+    last_time = k[0]
+
+klines = download_candles(crypto, pair, cs, last_time+3600)
+for k in klines:
+    print( f"{crypto}{pair}-{cs}-{su.get_iso_datetime(k[0]/1000)} - {k}" )
+    last_time = k[0]

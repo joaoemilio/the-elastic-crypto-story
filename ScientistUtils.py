@@ -143,6 +143,10 @@ def get_ts_yyyymmdd_hh00(yyyymmdd_hhmm):
     t = f'{yyyymmdd_hhmm[0:4]}-{yyyymmdd_hhmm[4:6]}-{yyyymmdd_hhmm[6:8]}T{yyyymmdd_hhmm[9:11]}:00:00+00:00'
     return int(datetime.timestamp(dtparser.isoparse(t)))
 
+def get_ts_yyyymmdd_hhmm(yyyymmdd_hhmm):
+    t = f'{yyyymmdd_hhmm[0:4]}-{yyyymmdd_hhmm[4:6]}-{yyyymmdd_hhmm[6:8]}T{yyyymmdd_hhmm[9:11]}:{yyyymmdd_hhmm[11:13]}:00+00:00'
+    return int(datetime.timestamp(dtparser.isoparse(t)))
+
 def get_ts2(tiso:str):
     # tiso must be like 2021-06-25T23:53
     tiso = tiso + ":00+00:00"
