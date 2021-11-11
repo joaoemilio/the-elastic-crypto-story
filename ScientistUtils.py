@@ -5,7 +5,7 @@ import logging
 import requests
 from os import listdir
 from os.path import isfile, join
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import time
 import pickle
 import dateutil.parser as dtparser
@@ -155,6 +155,14 @@ def get_ts2(tiso:str):
 def get_iso_datetime_sec(ts):
     dt = datetime.fromtimestamp(ts,tz=timezone.utc)
     return dt.strftime("%Y-%m-%dT%H:%M:%S")
+
+def add_mins_fromtimestamp(ts, num):
+    given_time = datetime.fromtimestamp(ts / 1000)
+    # Add n minutes to datetime object
+    #print(given_time + timedelta(minutes=num))
+    next_time = datetime.timestamp(given_time + timedelta(minutes=num))
+    return str( int(next_time) * 1000 )
+
 
 candle_sizes = {'5m': 5*60, '15m': 15*60, '1h': 3600, '4h': 4*3600, '1d': 24*3600}
 candle_sizes1m = {'1m': 60, '5m': 5*60, '15m': 15*60, '1h': 3600, '4h': 4*3600, '1d': 24*3600}
