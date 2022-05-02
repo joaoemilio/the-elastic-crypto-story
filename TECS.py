@@ -102,7 +102,7 @@ class Crypto(TECS):
             print(f"\n")
             print_fg(Fore.YELLOW, f"Checking S3 for existing objects is complete")
         else:
-            print_fg(Fore.YELLOW, f"First kline does not exist. Downloading everything for {symbol} {cs}. Starting from {ymdHM}")
+            print_fg(Fore.RED, f"First kline does not exist. Downloading everything for {symbol} {cs}. Starting from {ymdHM}")
 
 
 
