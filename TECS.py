@@ -84,9 +84,9 @@ class Crypto(TECS):
         bucket = utils.get_bucket(utils.s3,bucket_name)
 
         # try the start date first to optimize the procedure
-        klines = bapi.get_first_kline(s,cs)
+        klines = bapi.get_first_kline(symbol,cs)
         ymdHM = utils.get_ymdHM( klines[0][0] / 1000 )
-        print_fg(Fore.GREEN, f"first kline is {ymdHM}")
+        print_fg(Fore.GREEN, f"First {symbol} kline is {ymdHM}")
         res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
         if res:
             t = today
@@ -101,6 +101,9 @@ class Crypto(TECS):
                 t -= (candle_sizes[cs])
             print(f"\n")
             print_fg(Fore.YELLOW, f"Checking S3 for existing objects is complete")
+        else:
+            print_fg(Fore.YELLOW, f"First kline does not exist. Downloading everything for {symbol} {cs}. Starting from {ymdHM}")
+
 
 
         # end date is yesterday midnight
