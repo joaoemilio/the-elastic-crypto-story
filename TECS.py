@@ -82,17 +82,23 @@ class Crypto(TECS):
         # determine what is the latest candle available in S3 to pass as start date
         bucket_name = config["tecs_bucket"]
         bucket = utils.get_bucket(utils.s3,bucket_name)
-        t = today
-        while t >= ts_start:
-            ymdHM = utils.get_ymdHM(t)
-            print(f"Checking S3 for existing objects {symbol} {cs} {ymdHM}",end= "\r")
-            res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
-            if res: 
-                ts_start = t
-                break
 
-            t -= (candle_sizes[cs])
-        print(f"Checking S3 for existing objects is complete")
+        # try the start date first to optimize the procedure
+        ymdHM = utils.get_ymdHM(ts_start)
+        res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
+        if res:
+            t = today
+            while t >= ts_start:
+                ymdHM = utils.get_ymdHM(t)
+                print(f"Checking S3 for existing objects {symbol} {cs} {ymdHM}",end= "\r")
+                res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
+                if res: 
+                    ts_start = t
+                    break
+
+                t -= (candle_sizes[cs])
+            print(f"\n")
+            print_fg(Fore.YELLOW, f"Checking S3 for existing objects is complete")
 
 
         # end date is yesterday midnight
@@ -106,7 +112,8 @@ class Crypto(TECS):
                 all_data[k] = data[k]
 
             t += (24*3600)
-        print(f"Download klines from binance is complete")
+        print(f"\n")
+        print_fg(Fore.YELLOW, f"Download klines from binance is complete")
 
         for k in all_data:
             s = all_data[k]["symbol"]
@@ -116,9 +123,10 @@ class Crypto(TECS):
             utils.create_dir(fpath)
             utils.write_json( all_data[k], fname )
             print(f"Uploading to S3 {symbol} {cs} {ymdHM}",end= "\r")
-
+        
             utils.aws_s3_upload( bucket_name=bucket_name, src_file=fname, dest_file=f"/{s}/{cs}/{ymdHM}.json" )
-        print(f"Uploading files to S3 is complete")
+        print(f"\n")
+        print_fg(Fore.YELLOW, "Uploading files to S3 is complete")
 
 
     def usd( self, symbol, usd ):
