@@ -1,0 +1,12 @@
+{
+    "elastic_cloud_id" : "",
+    "elastic_cloud_password" : "",
+    "aug": "/tmp/aug",
+    "logs": "/tmp/logs",
+    "binance_api_key" : "",
+    "binance_api_secret": "",
+    "aws_access_key_id":"",
+    "aws_secret_access_key":"",
+    "tecs_bucket": "elastic-crypto-story",
+    "download_path": "/tmp/download"
+}

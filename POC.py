@@ -1,20 +1,15 @@
-import ScientistUtils as su
+import BinanceAPI as bapi
+from BinanceAPI import Client
+import TECSUtils as utils
 
-symbols = su.read_json("config/symbols.json")
+# symbols = bapi.get_symbols()
+# print(symbols)
 
-total = len(symbols)
-split = int(total/10)
+# for s in symbols:
+#     klines = bapi.client.get_historical_klines(s, Client.KLINE_INTERVAL_1DAY, "1 Jan, 2017")
+#     start = utils.get_yyyymmdd( klines[0][0] / 1000 )
+#     print(f'    "{s}" : {start},')
 
-count = 0
-groups = {}
-group = 1
-for s in symbols:
-    if group not in groups: groups[group] = []
-    groups[group].append(s)
-    count += 1
-    if count > split:
-        group += 1
-        count = 0
-
-for g in groups:
-    su.write_json(groups[g], f"config/symbols-group{g}.json")
+bucket = utils.get_bucket( utils.s3, "elastic-crypto-story")
+res = utils.isfile_s3(bucket, "summary-total.txt")
+print(res)

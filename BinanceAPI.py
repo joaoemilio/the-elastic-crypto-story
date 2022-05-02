@@ -1,7 +1,22 @@
-import ScientistUtils as su
+import TECSUtils as su
 from logging import error
 import logging
 import time
+from binance.client import Client
+
+client = Client()
+def get_symbols():
+    symbols = []
+    list = client.get_exchange_info()  
+    for l in list["symbols"]:
+        asset = l['quoteAsset']
+        if asset == "USDT":
+            symbols.append(l['symbol'])
+
+    return symbols
+
+def get_first_kline(s):
+    return client.get_historical_klines(s, Client.KLINE_INTERVAL_1DAY, "1 Jan, 2017")    
 
 def download_candles(crypto, pair, cs, start_time):
     symbol = f"{crypto}{pair}"
@@ -30,3 +45,4 @@ def download_candles(crypto, pair, cs, start_time):
         results.append(obj)
     
     return results
+

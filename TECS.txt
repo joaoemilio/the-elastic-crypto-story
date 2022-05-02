@@ -1,0 +1,8 @@
+TECS = The Elastic Crypto Story - Command Line Interface
+
+
+# HOW TO SETUP IT UP
+        POWERSHELL => function tecs { python3 .\TECS.py @Args}
+        MAC/LINUX => alias tecs="python3 TECS.py"
+
+        tecs crypto download <all|symbol ex: BTC         // It will only download cryptos that have an USDT pair

@@ -1,11 +1,11 @@
 from elasticsearch import helpers, Elasticsearch
 import elasticsearch
-import ScientistUtils as su 
+import TECSUtils as su 
 import logging
 import time
 
 ############ ELASTICSEARCH ##############
-def es_search( iname, query, es="prophet" ):
+def es_search( iname, query, es="tecs" ):
     results = None
     for i in (1,2,3):
         try:
@@ -17,7 +17,7 @@ def es_search( iname, query, es="prophet" ):
             time.sleep(10)
     return results
 
-def es_exists(iname, id, es="prophet"):
+def es_exists(iname, id, es="tecs"):
     results = None
     for i in (1,2,3):
         try:
@@ -30,7 +30,7 @@ def es_exists(iname, id, es="prophet"):
 
     return results
 
-def es_get(iname, id, es="prophet"):
+def es_get(iname, id, es="tecs"):
     results = None
     for i in (1,2,3):
         try:
@@ -42,7 +42,7 @@ def es_get(iname, id, es="prophet"):
             time.sleep(10)
     return results
 
-def es_create( iname, _id, obj, es="prophet", pipeline=None ):
+def es_create( iname, _id, obj, es="tecs", pipeline=None ):
     res = None
     for i in (1,2,3):
         try:
@@ -58,7 +58,7 @@ def es_create( iname, _id, obj, es="prophet", pipeline=None ):
             time.sleep(10)
     return res
 
-def es_bulk_create_multi_index(index_data, partial=1000, es="prophet"):
+def es_bulk_create_multi_index(index_data, partial=1000, es="tecs"):
     actions = []
     count = 0
     for iname in index_data:
@@ -90,7 +90,7 @@ def es_bulk_create_multi_index(index_data, partial=1000, es="prophet"):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_create(iname, data, partial=100, es="prophet", pipeline=None):
+def es_bulk_create(iname, data, partial=100, es="tecs", pipeline=None):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -124,7 +124,7 @@ def es_bulk_create(iname, data, partial=100, es="prophet", pipeline=None):
             time.sleep(10)
 
 
-def es_bulk_update_multi_index(index_data, partial=500, es="prophet"):
+def es_bulk_update_multi_index(index_data, partial=500, es="tecs"):
     actions = []
     count = 0
     for iname in index_data:
@@ -158,7 +158,7 @@ def es_bulk_update_multi_index(index_data, partial=500, es="prophet"):
             logging.info( "waiting 10s before retry sending docs to elasticsearch")
             time.sleep(10)
 
-def es_bulk_update(iname, data, partial=100, es="prophet"):
+def es_bulk_update(iname, data, partial=100, es="tecs"):
     count = 1
     if not partial: partial = len(data)
     actions = []
@@ -212,12 +212,12 @@ def get_last_n_docs(symbol, cs, ts_start, window_size):
 
     return data
 
-config = su.read_json( f"config/config.json" )
+config = su.read_json( f"../config.json" )
 
 es = Elasticsearch(    
-    cloud_id= config["cloud_id"] ,
-    http_auth=("elastic", config["cloud_password"])
+    cloud_id= config["elastic_cloud_id"] ,
+    http_auth=("elastic", config["elastic_cloud_password"])
 )
 
-elastic = { "prophet": es }
+elastic = { "tecs": es }
 
