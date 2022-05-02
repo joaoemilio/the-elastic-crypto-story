@@ -165,7 +165,7 @@ session = boto3.Session(
     aws_access_key_id=config["aws_access_key_id"],
     aws_secret_access_key=config["aws_secret_access_key"]
 )
-s3 = session.resource('s3', region_name='us-east-1')
+s3 = session.resource('s3', region_name=config["aws_region"])
 
 def aws_s3_upload(bucket_name, src_file, dest_file):
     log(f"aws_s3_upload {src_file}")
