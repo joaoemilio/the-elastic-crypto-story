@@ -15,8 +15,8 @@ def get_symbols():
 
     return symbols
 
-def get_first_kline(s):
-    return client.get_historical_klines(s, Client.KLINE_INTERVAL_1DAY, "1 Jan, 2017")    
+def get_first_kline(s,cs):
+    return client.get_historical_klines(s, cs, "1 Jan, 2017")    
 
 def download_candles(crypto, pair, cs, start_time):
     symbol = f"{crypto}{pair}"

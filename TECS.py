@@ -62,7 +62,7 @@ class Crypto(TECS):
 
         for s in symbols:
             print(f"updating {s}")
-            klines = bapi.get_first_kline(s)
+            klines = bapi.get_first_kline(s,"1d")
             start = utils.get_yyyymmdd( klines[0][0] / 1000 )
             symbols2[s] = start 
         
@@ -84,7 +84,9 @@ class Crypto(TECS):
         bucket = utils.get_bucket(utils.s3,bucket_name)
 
         # try the start date first to optimize the procedure
-        ymdHM = utils.get_ymdHM(ts_start)
+        klines = bapi.get_first_kline(s,cs)
+        ymdHM = utils.get_ymdHM( klines[0][0] / 1000 )
+        print_fg(Fore.GREEN, f"first kline is {ymdHM}")
         res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
         if res:
             t = today
