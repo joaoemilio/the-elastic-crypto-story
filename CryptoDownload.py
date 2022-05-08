@@ -12,7 +12,7 @@ def download_all_you_can(symbol:str, cs:str, ts_start):
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
 
-    r = download_all_you_can_from_binance(symbol, ts_start, cs)
+    r = download_all_you_can_from_binance(symbol, cs, ts_start)
     for o in r:
         ot = su.get_yyyymmdd_hhmm(o['open_time'])
         _id = f"{symbol}_{ot}_{cs}"
