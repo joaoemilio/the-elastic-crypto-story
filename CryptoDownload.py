@@ -75,7 +75,7 @@ def download_all_you_can_from_binance(symbol, cs, start_time):
     # end_time in milliseconds
 
     # prepare empty result
-    url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={cs}&startTime={start_time}"
+    url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={cs}&startTime={start_time*1000}"
     debug(url)
     lines = None
     for i in (1,2,3):
