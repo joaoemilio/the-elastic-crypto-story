@@ -87,6 +87,11 @@ def call_binance(url):
         raise BaseException(err)
     return response.json()   
 
+def get_yesterday_yyyymmdd():
+    t = time.time()
+    yday = get_yyyymmdd(t-3600*24)
+    return yday
+
 def get_yyyymmdd(ts):
     dt = datetime.fromtimestamp(ts,tz=timezone.utc)
     return dt.strftime("%Y%m%d")

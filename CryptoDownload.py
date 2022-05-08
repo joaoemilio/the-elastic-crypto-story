@@ -7,6 +7,21 @@ import TECSUtils as su
 #candle_sizes = {'1m':60, '5m': 5*60, '15m': 15*60, '1h': 3600, '4h': 4*3600, '1d': 24*3600}
 candle_sizes = {'1m':60, '3m': 3*60, '5m': 5*60, '15m': 15*60, '30m': 30*60, '1h': 3600, '2h': 2*3600,  '4h': 4*3600, '6h': 6*3600, '8h': 8*3600, '12h': 12*3600, '1d': 24*3600}
 
+
+def download_all_you_can(symbol:str, cs:str, ts_start, ts_end=None):
+    log(f"Lets fetch {symbol} cs={cs}")
+    data = {}
+
+    periods = int((24*3600)/candle_sizes[cs])
+    r = download_candles(symbol, ts_start, cs, periods, end_time=ts_end)
+    for o in r:
+        ot = su.get_yyyymmdd_hhmm(o['open_time'])
+        _id = f"{symbol}_{ot}_{cs}"
+        o["cs"] = cs
+        data[_id] = o
+
+    return data
+
 def download(symbol:str, cs:str, ts_start, ts_end=None):
     log(f"Lets fetch {symbol} cs={cs}")
     data = {}
