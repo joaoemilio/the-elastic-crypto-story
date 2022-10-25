@@ -195,6 +195,21 @@ def es_bulk_update(iname, data, partial=100, es="tecs"):
             logging.error(f"Could not bulk update documents for {k} and other docs together")
             logging.error(ree)
 
+def es_index( iname, _id, obj, es="tecs", pipeline=None ):
+    res = None
+    for i in (1,2,3):
+        try:
+            if pipeline:
+                res = elastic[es].index( id=_id, body=obj, index=iname, pipeline=pipeline)
+            else:
+                res = elastic[es].index( id=_id, body=obj, index=iname)
+
+            break
+        except elasticsearch.exceptions.ConnectionTimeout as cte:
+            logging.info( f"Try {i}: {cte.error} elasticsearch.exceptions.ConnectionTimeout")
+            logging.info( "waiting 10s before retry sending docs to elasticsearch")
+            time.sleep(10)
+    return res
 
 def get_last_n_docs(symbol, cs, ts_start, window_size):
     periods = {"5m": 60*5,  "15m": 60*15,

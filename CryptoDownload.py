@@ -15,8 +15,9 @@ def download_all_you_can(symbol:str, cs:str, ts_start):
     r = download_all_you_can_from_binance(symbol, cs, ts_start)
     for o in r:
         ot = su.get_yyyymmdd_hhmm(o['open_time'])
-        _id = f"{symbol}_{ot}_{cs}"
+        _id = f"{symbol}_{cs}_{ot}"
         o["cs"] = cs
+        o["ot"] = ot
         data[_id] = o
 
     return data
@@ -29,8 +30,9 @@ def download(symbol:str, cs:str, ts_start, ts_end=None):
     r = download_candles(symbol, ts_start, cs, periods, end_time=ts_end)
     for o in r:
         ot = su.get_yyyymmdd_hhmm(o['open_time'])
-        _id = f"{symbol}_{ot}_{cs}"
+        _id = f"{symbol}_{cs}_{ot}"
         o["cs"] = cs
+        o["ot"] = ot
         data[_id] = o
 
     return data

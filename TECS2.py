@@ -12,7 +12,6 @@ import calendar
 import TECSUtils as utils
 import CryptoDownload as cd
 import BinanceAPI as bapi
-import ElasticSearchUtils as eu
 
 # Pro Elalo
 from zipfile import ZipFile
@@ -51,8 +50,6 @@ class Crypto(TECS):
         for s in symbols:
             for cs in candle_sizes:
                 self.download(s, cs, ymd_yesterday )
-
-    
 
     def download_all(self):
         symbols = utils.read_json("symbols.json")
@@ -93,9 +90,86 @@ class Crypto(TECS):
             print(f"{symbol} is not in our list. Please execute {Fore.YELLOW}tecs crypto update_list{Style.RESET_ALL} and try again.")
             return 
 
+        # convert ymd to ts
+        ts_start = utils.get_ts( ymd_start )
+        today = utils.get_ts(utils.get_yyyymmdd(time.time()))
+
+        # determine what is the latest candle available in S3 to pass as start date
+        ymdHM = utils.get_ymdHM(ts_start)
+        bucket_name = config["tecs_bucket"]
+        bucket = utils.get_bucket(utils.s3,bucket_name)
+
+        # end date is yesterday midnight
+        t = ts_start
+        all_data = {}
+        while t < today:
+            ymdHM = utils.get_ymdHM(t)
+            print(f"Downloading from binance {symbol} {cs} {ymdHM}",end= "\r")
+            data = cd.download_all_you_can( symbol=symbol, cs=cs, ts_start=t)
+            t = None
+            for k in data:
+                all_data[k] = data[k]
+                t = data[k]['open_time']
+                print(f"{utils.get_iso_datetime(t)}")
+            if not t or t == ts_start: break 
+
+        print(f"\n")
+        print_fg(Fore.YELLOW, f"Download klines from binance is complete")
+
+        for k in all_data:
+            s = all_data[k]["symbol"]
+            ymdHM = utils.get_ymdHM(all_data[k]["open_time"])
+            fpath = f'{config["download_path"]}/{s}/{cs}'
+            fname = f'{fpath}/{ymdHM}.json'
+
+            # try the start date first to optimize the procedure
+            res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
+            if not res:
+                utils.create_dir(fpath)
+                utils.write_json( all_data[k], fname )
+                print(f"Uploading to S3 {symbol} {cs} {ymdHM}",end= "\r")
+                utils.aws_s3_upload( bucket_name=bucket_name, src_file=fname, dest_file=f"/{s}/{cs}/{ymdHM}.json" )
+
+        print(f"\n")
+        print_fg(Fore.YELLOW, "Uploading files to S3 is complete")
+
+    def download_from_day_one( self, symbol, cs ):
+        symbols = utils.read_json("symbols.json")
+        # determine if this symbol is already in the list of available symbols
+        if symbol not in symbols: 
+            print(f"{symbol} is not in our list. Please execute {Fore.YELLOW}tecs crypto update_list{Style.RESET_ALL} and try again.")
+            return 
+
         # determine when was the symbol launched in Binance
         ts_start = utils.get_ts( symbols[symbol] )
         today = utils.get_ts(utils.get_yyyymmdd(time.time()))
+
+        # determine what is the latest candle available in S3 to pass as start date
+        bucket_name = config["tecs_bucket"]
+        bucket = utils.get_bucket(utils.s3,bucket_name)
+
+        # try the start date first to optimize the procedure
+        klines = bapi.get_first_kline(symbol,cs)
+        ymdHM = utils.get_ymdHM( klines[0][0] / 1000 )
+        print_fg(Fore.GREEN, f"First {symbol} kline is {ymdHM}")
+        res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
+        if res:
+            t = today
+            while t >= ts_start:
+                ymdHM = utils.get_ymdHM(t)
+                print(f"Checking S3 for existing objects {symbol} {cs} {ymdHM}",end= "\r")
+                res = utils.isfile_s3(bucket, f"/{symbol}/{cs}/{ymdHM}.json")
+                if res: 
+                    ts_start = t
+                    break
+
+                t -= (candle_sizes[cs])
+            print(f"\n")
+            print_fg(Fore.YELLOW, f"Checking S3 for existing objects is complete")
+        else:
+            print_fg(Fore.RED, f"First kline does not exist. Downloading everything for {symbol} {cs}. Starting from {ymdHM}")
+
+
 
         # end date is yesterday midnight
         t = ts_start
@@ -105,28 +179,25 @@ class Crypto(TECS):
             print(f"Downloading from binance {symbol} {cs} {ymdHM}",end= "\r")
             data = cd.download( symbol=symbol, cs=cs, ts_start=t)
             for k in data:
-                o = data[k]
-                fpath = f'{config["download_path"]}/{symbol}/{cs}'
-                fname = f'{fpath}/{ymdHM}.json'
-                utils.create_dir(fpath)
-                print(f"Creating json file {symbol} {cs} {ymdHM}",end= "\r")
-                utils.write_json( o, fname )
-            
-                print(f"Uploading to Elasticsearch {symbol} {cs} {ymdHM}",end= "\r")
-                eu.es_index(f"crypto-{symbol.lower()}-{cs}", k, o)
+                all_data[k] = data[k]
 
-            t += (candle_sizes[cs])
+            t += (24*3600)
         print(f"\n")
         print_fg(Fore.YELLOW, f"Download klines from binance is complete")
 
-    def download_from_day_one( self, symbol, cs ):
-        symbols = utils.read_json("symbols.json")
-        # determine if this symbol is already in the list of available symbols
-        if symbol not in symbols: 
-            print(f"{symbol} is not in our list. Please execute {Fore.YELLOW}tecs crypto update_list{Style.RESET_ALL} and try again.")
-            return 
+        for k in all_data:
+            s = all_data[k]["symbol"]
+            ymdHM = utils.get_ymdHM(all_data[k]["open_time"])
+            fpath = f'{config["download_path"]}/{s}/{cs}'
+            fname = f'{fpath}/{ymdHM}.json'
+            utils.create_dir(fpath)
+            utils.write_json( all_data[k], fname )
+            print(f"Uploading to S3 {symbol} {cs} {ymdHM}",end= "\r")
+        
+            utils.aws_s3_upload( bucket_name=bucket_name, src_file=fname, dest_file=f"/{s}/{cs}/{ymdHM}.json" )
+        print(f"\n")
+        print_fg(Fore.YELLOW, "Uploading files to S3 is complete")
 
-        self.download(symbol, cs, symbols[symbol] )
 
     def usd( self, symbol, usd ):
         answer = self.confirm( Fore.WHITE + f"Confirm: buying ${usd:1.3f} of {symbol} for {self.customer_key}?" )
