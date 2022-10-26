@@ -94,7 +94,7 @@ class Crypto(TECS):
             return 
 
         # determine when was the symbol launched in Binance
-        ts_start = utils.get_ts( symbols[symbol] )
+        ts_start = utils.get_ts( ymd_start )
         today = utils.get_ts(utils.get_yyyymmdd(time.time()))
 
         # end date is yesterday midnight
